@@ -20,7 +20,7 @@ include("../includes/sidebar.php");
   <!-- Search and Add New Store -->
   <div class="store-actions">
     <input type="text" placeholder="Rechercher un Produit..." class="search-store">
-    <button id="addButton" class="add-store-btn">Ajouter un Produit</button>
+    <button id="addButton" class="add-store-btn" onclick="openModalProduit()">Ajouter un Produit</button>
   </div>
   
   <!-- Stores Table -->
@@ -46,8 +46,8 @@ include("../includes/sidebar.php");
           <td>50</td>
           <td>
             <!--<button class="view-btn">Voir</button>-->
-            <button class="edit-btn">Éditer</button>
-            <button class="delete-btn">Supprimer</button>
+            <button class="edit-btn"onclick="openEditModalProduit('ProduitA', 'prodA', '500', '250')">Éditer</button>
+            <button class="delete-btn" onclick="openValidationModal()">Supprimer</button>
           </td>
         </tr>
         <!-- Ajouter d'autres lignes pour chaque Produit -->
@@ -58,37 +58,67 @@ include("../includes/sidebar.php");
   
 </main>
 
+
 <div id="productModal" class="modal">
   <div class="modal-content">
-    <span class="close-button">&times;</span>
-    <h2>Ajouter un produit</h2>
+    <span class="close-button" onclick="closeModal()">&times;</span>
+    <h2 id="modalTitle">Ajouter un produit</h2>
     
     <!-- Formulaire avec les champs du magasin, date, commercial et OK -->
     <div class="form-col">
       <div>
         <label for="store">Nom Commercial</label>
-        <input name="NomCommercial" type="text" class="form-input-text" placeholder="Noms Commercial...">
+        <input id="commercialName" name="NomCommercial" type="text" class="form-input-text" placeholder="Noms Commercial...">
       </div>
       
       <div>
       <label for="store">Noms Descriptif</label>
-      <input name="Noms Descriptif" type="text" class="form-input-text" placeholder="Noms Descriptif...">
+      <input id="descripName" name="Noms Descriptif" type="text" class="form-input-text" placeholder="Noms Descriptif...">
       </div>
       <div>
           <label for="Prix">Prix(Fcfa)</label>
-          <input name="prix" type="number">
+          <input id="prix" name="prix" type="number">
       </div>
       <div>
           <label for="Poids">Poids(l/g)</label>
-          <input name="poids" type="number">
+          <input id="poid" name="poids" type="number">
       </div>
     </div>
     <!-- Bouton Ajouter en bas -->
-    <button class="add-button">Ajouter</button>
+    <button type="submit" class="add-button">Ajouter</button>
 
   </div>
 </div>
 
+<style>
+  .validationModal{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+  }
+  .btn-container-val{
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+  }
+</style>
 
+<div id="validationModal" class="modal">
+  <div class="modal-content validationModal">
+    <span class="close-button" onclick="closeModal()">&times;</span>
+    <div class="image">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20 7L9.00004 18L3.99994 13" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+    </div>
+    Confirmer la supression!
+    <!-- Bouton Ajouter en bas -->
+    <div class="btn-container-val">
+        <button  type="submit" class="add-button">Oui</button>
+        <button  type="submit" class="add-button">Non</button>
+    </div>
+  </div>
+</div>
 
 <?php include("../includes/footer.php"); ?>

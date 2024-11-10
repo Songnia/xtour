@@ -98,7 +98,7 @@ include("../includes/sidebar-com.php");
 <!-- Pop-up Modal add visite -->
 <div id="productModal" class="modal">
     <div class="modal-content">
-        <span class="close-button">&times;</span>
+        <span class="close-button" onclick="closeModal()">&times;</span>
         <h2>Ajouter une Tournée</h2>
         
         <!-- Formulaire avec les champs du magasin, date, commercial et OK -->
@@ -138,7 +138,7 @@ include("../includes/sidebar-com.php");
 
 <div id="productModal2" class="modal">
     <div class="modal-content">
-        <span class="close-button2">&times;</span>
+        <span class="close-button2" onclick="closeModal()">&times;</span>
         <h2>Modifier</h2>
         
         <!-- Formulaire avec les champs du magasin, date, commercial et OK -->

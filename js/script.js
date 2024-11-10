@@ -3,22 +3,70 @@ const modal = document.getElementById("productModal");
 const addButton = document.getElementById("addButton");
 const closeButtons = document.querySelectorAll(".close-button");
 
-// Afficher le modal lors du clic sur "Ajouter un produit"
-addButton.addEventListener("click", () => {
-  modal.style.display = "flex";
-});
+const modalTitle = document.getElementById("modalTitle");
+const userIdField = document.getElementById("user_id");
+const usernameField = document.getElementById("username");
+const roleField = document.getElementById("role");
+const datecomField = document.getElementById("datecom");
+const commercialnameField = document.getElementById("commercialName");
+const descriptnameField = document.getElementById("descripName");
+const prixField= document.getElementById("prix");
+const poidField = document.getElementById("poid");
 
-// Masquer les modals lors du clic sur les boutons de fermeture
-closeButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-});
+
+
+
+
+
+function openModalUser(){
+  modalTitle.textContent = "Ajouter l’utilisateur";
+  modal.style.display = "flex"
+}
+
+
+// Fonction pour afficher le modal en mode édition
+function openEditModalUser(username, role, date) {
+  modalTitle.textContent = "Modifier l’utilisateur";
+  usernameField.value = username;   // Remplir le champ nom d'utilisateur
+  roleField.value = role;         // Remplir le champ role
+  datecomField.value = date;
+  modal.style.display = "flex";     // Afficher le modal
+}
+
+
+function openModalProduit(){
+  modalTitle.textContent = "Ajouter le produit";
+  modal.style.display = "flex"
+}
+
+
+function openEditModalProduit(commercialname, descriptname, prix, poid) {
+  modalTitle.textContent = "Modifier le produit";
+  commercialnameField.value = commercialname;   // Remplir le champ nom d'utilisateur
+  descriptnameField.value = descriptname;         // Remplir le champ role
+  prixField.value = prix;
+  poidField.value = poid;
+  modal.style.display = "flex";     // Afficher le modal
+}
+
+function openvalidationModal(){
+  document.getElementById("validationModal").style.display = "flex";
+}
+
+function closeModal(){
+  modal.style.display = "none";
+  document.getElementById("validationModal").style.display = "none";
+}
 
 // Masquer le modal lors du clic à l'extérieur de celui-ci
 window.addEventListener("click", (event) => {
   if (event.target === modal) {
     modal.style.display = "none";
+  }
+});
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    document.getElementById("validationModal").style.display = "none";
   }
 });
 

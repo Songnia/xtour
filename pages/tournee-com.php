@@ -100,7 +100,7 @@ include("../includes/sidebar-com.php");
     <!-- Pop-up Modal add tournees -->
     <div id="productModal" class="modal">
     <div class="modal-content">
-        <span class="close-button">&times;</span>
+        <span class="close-button" onclick="closeModal()">&times;</span>
         <h2>Ajouter un Magasin</h2>
         
         <!-- Formulaire avec les champs du magasin, date, commercial et OK -->
@@ -141,7 +141,7 @@ include("../includes/sidebar-com.php");
     <!-- Pop-up Modal edit tournee -->
     <div id="productModal2" class="modal">
     <div class="modal-content">
-        <span class="close-button2">&times;</span>
+        <span class="close-button2" onclick="closeModal()">&times;</span>
         <h2>Ajouter un Magasin</h2>
         
         <!-- Formulaire avec les champs du magasin, date, commercial et OK -->

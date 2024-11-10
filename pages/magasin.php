@@ -20,7 +20,7 @@ include_once("../includes/sidebar.php");
             <h3>Magasins</h3>
             <div class="sort-filter">
                 <span>Trier par:</span>
-                <button id="addButton" class="btn btn-green">Ajouter Magasin</button>
+                <button id="addButton" onclick="openModal()" class="btn btn-green">Ajouter Magasin</button>
             </div>
         </div>
 
@@ -100,7 +100,7 @@ include_once("../includes/sidebar.php");
 <!-- Pop-up Modal add magasin -->
 <div id="productModal" class="modal">
     <div class="modal-content">
-        <span class="close-button">&times;</span>
+        <span class="close-button" onclick="closeModal()">&times;</span>
         <h2>Ajouter un Magasin</h2>
         
         <!-- Formulaire avec les champs du magasin, date, commercial et OK -->
@@ -129,7 +129,7 @@ include_once("../includes/sidebar.php");
 
 <div id="productModal2" class="modal">
     <div class="modal-content">
-        <span class="close-button2">&times;</span>
+        <span class="close-button2" onclick="closeModal()">&times;</span>
         <h2>Ajouter un Produi</h2>
         
         <!-- Formulaire avec les champs du magasin, date, commercial et OK -->
