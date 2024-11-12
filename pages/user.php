@@ -19,7 +19,7 @@ include("../includes/sidebar.php");
   <!-- Search and Add New Store -->
   <div class="store-actions">
     <input type="text" placeholder="Rechercher un Utilisateur..." class="search-store">
-    <button id="addButton" class="add-store-btn" onclick="openModal()" >Ajouter un Utilisateur</button>
+    <button id="addButton" class="add-store-btn" onclick="openModalProduit()" >Ajouter un Utilisateur</button>
   </div>
   
   <!-- Stores Table -->
@@ -45,8 +45,8 @@ include("../includes/sidebar.php");
           <td>Ampiat, Santa Loucia</td>
           <td>
             <!--<button class="view-btn">Voir</button> -->
-            <button class="edit-btn" onclick="openEditModalUser('Paul', 'Commercial', '13-10-2023')">Éditer</button>
-            <button class="delete-btn" onclick="openvalidationModal()">Supprimer</button>
+            <button class="edit-btn">Éditer</button>
+            <button class="delete-btn">Supprimer</button>
           </td>
         </tr>
         <!-- Ajouter d'autres lignes pour chaque Utilisateur -->
@@ -110,7 +110,7 @@ include("../includes/sidebar.php");
 
 </style>
 
-<div id="validationModal" class="modal">
+<div id="modal3" class="modal">
   <div class="modal-content validationModal">
     <span class="close-button" onclick="closeModal()">&times;</span>
     <div class="image">

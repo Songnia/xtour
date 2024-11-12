@@ -46,8 +46,8 @@ include("../includes/sidebar.php");
           <td>50</td>
           <td>
             <!--<button class="view-btn">Voir</button>-->
-            <button class="edit-btn"onclick="openEditModalProduit('ProduitA', 'prodA', '500', '250')">Éditer</button>
-            <button class="delete-btn" onclick="openValidationModal()">Supprimer</button>
+            <button class="edit-btn">Éditer</button>
+            <button class="delete-btn">Supprimer</button>
           </td>
         </tr>
         <!-- Ajouter d'autres lignes pour chaque Produit -->
@@ -106,7 +106,7 @@ include("../includes/sidebar.php");
   }
 </style>
 
-<div id="validationModal" class="modal">
+<div id="modal3" class="modal">
   <div class="modal-content validationModal">
     <span class="close-button" onclick="closeModal()">&times;</span>
     <div class="image">

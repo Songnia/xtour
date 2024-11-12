@@ -65,7 +65,7 @@ include("../includes/sidebar-com.php");
         
         <div class="toolbar">
         <div>
-            <button class="btn btn-green">Modifier</button>
+            <button class="addButton2 btn btn-green">Modifier</button>
         </div>
     </div>
         <table class="table">

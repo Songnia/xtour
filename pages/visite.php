@@ -32,6 +32,14 @@ include("../includes/header.php");
                 </div>
 
                 <div class="question">
+                    <p>L'hotes est elle presente ?</p>
+                    <div class="reponse">
+                        <label><input type="radio" name="labels" value="yes" required> Oui</label>
+                        <label><input type="radio" name="labels" value="no" required> Non</label>
+                    </div>
+                </div>
+
+                <div class="question">
                     <p>Les vendeurs connaissent l'emplacement des produits ?</p>
                     <div class="reponse">
                         <label><input type="radio" name="vendors_knowledge" value="yes" required> Oui</label>

@@ -20,7 +20,7 @@ include_once("../includes/sidebar.php");
             <h3>Magasins</h3>
             <div class="sort-filter">
                 <span>Trier par:</span>
-                <button id="addButton" onclick="openModal()" class="btn btn-green">Ajouter Magasin</button>
+                <button id="addButton" class="btn btn-green">Ajouter Magasin</button>
             </div>
         </div>
 

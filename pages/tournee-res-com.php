@@ -61,7 +61,7 @@ include("../includes/sidebar-com.php");
         <h3>Tournée 1 - Nom Commercial</h3>
         <div class="toolbar">
         <div>
-            <button class="btn btn-green">Modifier</button>
+            <button class="addButton2 btn btn-green">Modifier</button>
             <button class="buttonValider btn btn-green">Valider</button>
         </div>
     </div>
@@ -132,7 +132,7 @@ include("../includes/sidebar-com.php");
         </div>
     
         <!-- Bouton Ajouter en bas -->
-        <button class="add-button">Ajouter</button>
+        <button class="add-button" onclick="openModalProduit()">Ajouter</button>
     </div>
 </div>  
 
