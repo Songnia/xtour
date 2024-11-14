@@ -3,6 +3,7 @@
 // Insérer le header
 include_once("../includes/header.php");
 ?>
+<link rel="stylesheet" href="css/style.css">
 <main class="main-connexion">
     <form class="form-connexion">
         <p class="title-form-connexion">Connexion </p>
@@ -28,7 +29,7 @@ include_once("../includes/header.php");
             <input required="" placeholder="" type="password" class="input">
             <span>Password</span>
         </label>
-        <a href="dashboard.php"><button class="submit">Submit</button></a>
+        <button class="submit"><a href="pages/dashboard.php">Submit</a></button>
     </form>
 </main>
 

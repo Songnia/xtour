@@ -1,4 +1,5 @@
 <?php
+
 $titre = "produit";
 include("../includes/sidebar-mobile.php");
 
@@ -7,8 +8,9 @@ include("../includes/header.php");
 
 // Inserer la Sidebar
 include("../includes/sidebar.php");
-?>
+include("../includes/config.php");
 
+?>
 
 <!-- Main Content -->
 <main class="main-content1">
@@ -55,7 +57,6 @@ include("../includes/sidebar.php");
     </table>
   </div>
   </div>
-  
 </main>
 
 
@@ -65,27 +66,28 @@ include("../includes/sidebar.php");
     <h2 id="modalTitle">Ajouter un produit</h2>
     
     <!-- Formulaire avec les champs du magasin, date, commercial et OK -->
-    <div class="form-col">
+    <form method="POST" action="../includes/classes/produit_method/create_product.php"  class="form-col">
       <div>
-        <label for="store">Nom Commercial</label>
-        <input id="commercialName" name="NomCommercial" type="text" class="form-input-text" placeholder="Noms Commercial...">
+        <label for="nom_commercial">Nom Commercial</label>
+        <input id="commercialName" name="nom_commercial" type="text" class="form-input-text" placeholder="Noms Commercial...">
       </div>
       
       <div>
-      <label for="store">Noms Descriptif</label>
-      <input id="descripName" name="Noms Descriptif" type="text" class="form-input-text" placeholder="Noms Descriptif...">
+      <label for="nom_descriptif">Noms Descriptif</label>
+      <input id="descripName" name="nom_descriptif" type="text" class="form-input-text" placeholder="Noms Descriptif...">
       </div>
       <div>
-          <label for="Prix">Prix(Fcfa)</label>
+          <label for="prix">Prix(Fcfa)</label>
           <input id="prix" name="prix" type="number">
       </div>
       <div>
-          <label for="Poids">Poids(l/g)</label>
-          <input id="poid" name="poids" type="number">
+          <label for="poids">Poids(l/g)</label>
+          <input id="poids" name="poids" type="number">
       </div>
-    </div>
-    <!-- Bouton Ajouter en bas -->
-    <button type="submit" class="add-button">Ajouter</button>
+      <!-- Bouton Ajouter en bas -->
+      <button type="submit" class="add-button">Ajouter</button>
+    </form>
+
 
   </div>
 </div>
