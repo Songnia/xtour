@@ -33,15 +33,15 @@
 
     // Lire les produits
     public function read(){
-      $query = "SELECT * FROM " . $this->table_name;
+      $query = "SELECT * FROM " . $this->table_name. " ORDER BY id_produit DESC";
       $stmt = $this->conn->prepare($query);
       $stmt->execute();
-      return $stmt;
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Mettre a jour un produit
     public function update(){
-      $query = "UPDATE ".$this->table_name . "SET nom_commercial=:nom_commercial, nom_descriptif=:nom_descriptif, prix=:prix, poids=:poids WHERE id_produit = :id";
+      $query = "UPDATE ".$this->table_name . " SET nom_commercial=:nom_commercial, nom_descriptif=:nom_descriptif, prix=:prix, poids=:poids WHERE id_produit = :id";
       $stmt = $this->conn->prepare($query);
 
       // Liaison des parametres
@@ -61,7 +61,7 @@
     // Supprimer un produit
 
     public function delete(){
-      $query = "DELETE FROM ". $this->table_name . "WHERE id_produit = ?";
+      $query = "DELETE FROM ". $this->table_name . " WHERE id_produit = ?";
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(1, $this->id_produit);
 

@@ -9,6 +9,24 @@ include("../includes/header.php");
 // Inserer la Sidebar
 include("../includes/sidebar.php");
 include("../includes/config.php");
+echo "Hello";
+//include("../includes/classes/produit_method/read_product.php");
+
+
+include_once("../includes/classes/Database.php");
+include_once("../includes/classes/Produit.php");
+
+$database = new Database();
+$db = $database->getConnection();
+
+$produit = new Produit($db);
+
+// Lecture des produits
+$prods = $produit->read();
+/*echo"<pre>";
+var_dump($prods);
+echo"</pre>";*/
+
 
 ?>
 
@@ -40,18 +58,20 @@ include("../includes/config.php");
         </tr>
       </thead>
       <tbody>
+      <?php foreach($prods as $prod): ?>
         <tr>
-          <td>1</td>
-          <td>Produit A</td>
-          <td>Location A</td>
-          <td>Location A</td>
-          <td>50</td>
+          <td><?php echo htmlspecialchars($prod['id_produit']); ?></td>
+          <td><?php echo htmlspecialchars($prod['nom_commercial']); ?></td>
+          <td><?php echo htmlspecialchars($prod['nom_descriptif']); ?></td>
+          <td><?php echo htmlspecialchars($prod['prix']); ?></td>
+          <td><?php echo htmlspecialchars($prod['poids']); ?></td>
           <td>
-            <!--<button class="view-btn">Voir</button>-->
-            <button class="edit-btn">Éditer</button>
+      <!-- ❌❌❌❌❌❌❌❌UPDATE NE FONCTIONNE PAS ENCORE CORRECTEMENT❌❌❌❌❌❌❌❌❌❌❌❌❌❌ -->
+            <button class="edit-btn" onclick="openEditModalProduit('<?php echo $prod['id_produit']; ?>','<?php echo $prod['nom_commercial']; ?>', '<?php echo $prod['nom_descriptif']; ?>', '<?php echo $prod['prix']; ?>', '<?php echo $prod['poids']; ?>')">Éditer</button>
             <button class="delete-btn">Supprimer</button>
           </td>
         </tr>
+      <?php endforeach; ?>
         <!-- Ajouter d'autres lignes pour chaque Produit -->
       </tbody>
     </table>
@@ -67,6 +87,8 @@ include("../includes/config.php");
     
     <!-- Formulaire avec les champs du magasin, date, commercial et OK -->
     <form method="POST" action="../includes/classes/produit_method/create_product.php"  class="form-col">
+      <!-- Champ caché pour identifier l'édition d'un produit -->
+      <input type="hidden" name="product_id" id="product_id">
       <div>
         <label for="nom_commercial">Nom Commercial</label>
         <input id="commercialName" name="nom_commercial" type="text" class="form-input-text" placeholder="Noms Commercial...">

@@ -4,7 +4,7 @@
     private $host = "localhost";
     private $db_name = "xtour_db";
     private $username = "root";
-    private $password = "";
+    private $password = "ton_mot_de_passe";
     private $conn;
 
 
@@ -15,9 +15,9 @@
             $this->conn->exec("set names utf8");
         } catch(PDOException $exception) {
             echo "Erreur de connexion : " . $exception->getMessage();
+            exit();
         }
         return $this->conn;
       }
     }
-
 ?>

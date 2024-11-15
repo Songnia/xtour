@@ -4,8 +4,7 @@ const addButton = document.getElementById("addButton");
 const closeButtons = document.querySelectorAll(".close-button");
 
 const editButton = document.querySelectorAll(".edit-btn");
-const buttonSupprimer = document.querySelectorAll(".delete-btn")
-
+const buttonSupprimer = document.querySelectorAll(".delete-btn");
 
 const modalTitle = document.getElementById("modalTitle");
 const userIdField = document.getElementById("user_id");
@@ -18,8 +17,7 @@ const prixField = document.getElementById("prix");
 const poidField = document.getElementById("poid");
 const validationModal = document.getElementById("validationModal");
 
-
-addButton.addEventListener("click", ()=>{
+addButton.addEventListener("click", () => {
   modal.style.display = "flex";
 });
 
@@ -34,22 +32,22 @@ function openEditModalUser(username, role, date) {
   usernameField.value = username; // Remplir le champ nom d'utilisateur
   roleField.value = role; // Remplir le champ role
   datecomField.value = date;
- // Afficher le modal
+  // Afficher le modal
 }
-
-
 
 function openModalProduit() {
   modalTitle.textContent = "Ajouter le produit";
   modal.style.display = "flex";
 }
 
-function openEditModalProduit(commercialname, descriptname, prix, poid) {
-  modalTitle.textContent = "Modifier le produit";
-  commercialnameField.value = commercialname; // Remplir le champ nom d'utilisateur
-  descriptnameField.value = descriptname; // Remplir le champ role
-  prixField.value = prix;
-  poidField.value = poid;
+function openEditModalProduit(id, nomCommercial, nomDescriptif, prix, poids) {
+  document.getElementById("modalTitle").textContent = "Modifier le produit";
+  document.getElementById("product_id").value = id;
+  //document.getElementById('commercialName').value = nomCommercial;
+  //document.getElementById('descripName').value = nomDescriptif;
+  //document.getElementById('prix').value = prix;
+  document.getElementById("poids").value = poids;
+  document.getElementById("productModal").style.display = "flex";
 }
 
 // Afficher le modal lors du clic sur "edit"
@@ -124,8 +122,6 @@ buttonValider.forEach((button) => {
     modal3.style.display = "flex";
   });
 });
-
-
 
 // Masquer les modals lors du clic sur les boutons de fermeture
 acceptButton.forEach((button) => {
