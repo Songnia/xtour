@@ -9,7 +9,7 @@ include("../includes/header.php");
 // Inserer la Sidebar
 include("../includes/sidebar.php");
 include("../includes/config.php");
-echo "Hello";
+
 //include("../includes/classes/produit_method/read_product.php");
 
 
@@ -58,20 +58,19 @@ echo"</pre>";*/
         </tr>
       </thead>
       <tbody>
-      <?php foreach($prods as $prod): ?>
-        <tr>
-          <td><?php echo htmlspecialchars($prod['id_produit']); ?></td>
-          <td><?php echo htmlspecialchars($prod['nom_commercial']); ?></td>
-          <td><?php echo htmlspecialchars($prod['nom_descriptif']); ?></td>
-          <td><?php echo htmlspecialchars($prod['prix']); ?></td>
-          <td><?php echo htmlspecialchars($prod['poids']); ?></td>
-          <td>
-      <!-- ❌❌❌❌❌❌❌❌UPDATE NE FONCTIONNE PAS ENCORE CORRECTEMENT❌❌❌❌❌❌❌❌❌❌❌❌❌❌ -->
-            <button class="edit-btn" onclick="openEditModalProduit('<?php echo $prod['id_produit']; ?>','<?php echo $prod['nom_commercial']; ?>', '<?php echo $prod['nom_descriptif']; ?>', '<?php echo $prod['prix']; ?>', '<?php echo $prod['poids']; ?>')">Éditer</button>
-            <button class="delete-btn">Supprimer</button>
-          </td>
-        </tr>
-      <?php endforeach; ?>
+        <?php foreach($prods as $prod): ?>
+          <tr>
+            <td><?php echo htmlspecialchars($prod['id_produit']); ?></td>
+            <td><?php echo htmlspecialchars($prod['nom_commercial']); ?></td>
+            <td><?php echo htmlspecialchars($prod['nom_descriptif']); ?></td>
+            <td><?php echo htmlspecialchars($prod['prix']); ?></td>
+            <td><?php echo htmlspecialchars($prod['poids']); ?></td>
+            <td>
+              <button class="edit-btn" onclick="openEditModalProduit('<?php echo $prod['id_produit']; ?>','<?php echo $prod['nom_commercial']; ?>', '<?php echo $prod['nom_descriptif']; ?>', '<?php echo $prod['prix']; ?>', '<?php echo $prod['poids']; ?>')">Éditer</button>
+              <button class="delete-btn" onclick="openDeleteModal('<?php echo $prod['id_produit']; ?>')">Supprimer</button>
+            </td>
+          </tr>
+        <?php endforeach; ?>
         <!-- Ajouter d'autres lignes pour chaque Produit -->
       </tbody>
     </table>
@@ -132,16 +131,20 @@ echo"</pre>";*/
 
 <div id="modal3" class="modal">
   <div class="modal-content validationModal">
-    <span class="close-button" onclick="closeModal()">&times;</span>
+    <span class="close-button" onclick="closeModalValidation()">&times;</span>
     <div class="image">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20 7L9.00004 18L3.99994 13" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
     </div>
     Confirmer la supression!
     <!-- Bouton Ajouter en bas -->
-    <div class="btn-container-val">
-        <button  type="submit" class="add-button">Oui</button>
-        <button  type="submit" class="add-button">Non</button>
-    </div>
+
+    <form method="POST" action="../includes/classes/produit_method/delete_product.php" class="btn-container-val">
+        <!-- Champ caché pour identifier l'édition d'un produit--> 
+        <input type="hidden" name="product_id" id="delete_product_id">
+        <button type="submit" id="delete"class="add-button">Supprimer</button> <?php //buton qui vas executer la fonction delete?>
+        <button class="add-button" onclick="closeModalValidation()">Non</button>
+    </form>
+
   </div>
 </div>
 

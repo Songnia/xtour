@@ -35,7 +35,6 @@ body {
   margin-bottom: 20px;
 }
 
-
 .nav {
   width: 100%;
   margin-bottom: auto;
@@ -53,11 +52,11 @@ body {
   transition: 400ms;
 }
 
-.nav-link:hover{
+.nav-link:hover {
   transform: scale(1.1, 1.1);
 }
 
-.nav:hover > .nav-link:not(:hover){
+.nav:hover > .nav-link:not(:hover) {
   filter: blur(10px);
   transform: scale(0.9, 0.9);
 }
@@ -91,7 +90,7 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 35%;
+  height: 100vh;
 }
 
 .header {
@@ -115,7 +114,7 @@ body {
 
 .notification-icon {
   font-size: 24px;
- /* Ajustez la taille de l'icône si nécessaire */
+  /* Ajustez la taille de l'icône si nécessaire */
 }
 
 .notification-count {
@@ -129,8 +128,6 @@ body {
   font-size: 12px;
   font-weight: bold;
 }
-
-
 
 .header-right input {
   padding: 5px;
@@ -182,8 +179,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.stat-box:before{
-  content: '';
+.stat-box:before {
+  content: "";
   position: absolute;
   z-index: -1;
   top: -16px;
@@ -210,7 +207,6 @@ body {
   transition: all 0.5s ease-out;
   color: #ffffff;
 }
-
 
 .stat-icon {
   font-size: 2em;
@@ -246,7 +242,6 @@ body {
   font-family: courier, sans;
 }
 
-
 /* Table */
 .container-scroll {
   overflow-x: auto; /* Ajoute un défilement horizontal */
@@ -259,7 +254,8 @@ body {
   border-radius: 5px;
 }
 
-.table-section th, .table-section td {
+.table-section th,
+.table-section td {
   padding: 10px;
   text-align: left;
   border: 1px solid #ddd;
@@ -497,7 +493,7 @@ th {
   color: #888;
   font-style: italic;
 }
-.image-placeholder img{
+.image-placeholder img {
   width: 100%;
   height: 100%;
 }
@@ -581,17 +577,17 @@ th {
   justify-content: center;
 }
 
-.form-col{
+.form-col {
   padding: 15px;
 }
 
 .form-col div,
 .form-col label,
 .form-row div,
-.form-row label{
+.form-row label {
   margin: 5px;
 }
-.form-col div{
+.form-col div {
   margin: 10px;
 }
 
@@ -613,8 +609,8 @@ input[type="number"] {
   height: 50px;
 }
 
-/* From Uiverse.io by cbolson */ 
-.my-form-container{
+/* From Uiverse.io by cbolson */
+.my-form-container {
   padding: 15px;
 }
 .my-form {
@@ -682,7 +678,6 @@ input[type="number"] {
 .my-form input[type="checkbox"]:checked::after {
   opacity: 1;
 }
-
 
 .ok-button {
   padding: 10px 10px;
@@ -849,7 +844,6 @@ input[type="number"] {
   }
 }
 
-
 /* Sign Out */
 .sidebar .signout {
   margin: 20px;
@@ -928,7 +922,8 @@ input[type="number"] {
   margin-top: 10px;
 }
 
-.table th, .table td {
+.table th,
+.table td {
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid #eee;
@@ -948,10 +943,8 @@ input[type="number"] {
   color: #555;
 }
 
-
-
 /*Pop Up valider*/
-/* From Uiverse.io by 00Kubi */ 
+/* From Uiverse.io by 00Kubi */
 .card {
   width: 300px;
   height: 220px;
@@ -1001,40 +994,40 @@ input[type="number"] {
   width: 80px;
   height: 30px;
   background-color: #7b57ff;
-  transition-duration: .2s;
+  transition-duration: 0.2s;
   border: none;
   color: rgb(241, 241, 241);
   cursor: pointer;
   font-weight: 600;
   border-radius: 20px;
   box-shadow: 0 4px 6px -1px #977ef3, 0 2px 4px -1px #977ef3;
-  transition: all .6s ease;
+  transition: all 0.6s ease;
 }
 
 .declineButton {
   width: 80px;
   height: 30px;
   background-color: #dadada;
-  transition-duration: .2s;
+  transition-duration: 0.2s;
   color: rgb(46, 46, 46);
   border: none;
   cursor: not-allowed;
   font-weight: 600;
   border-radius: 20px;
   box-shadow: 0 4px 6px -1px #bebdbd, 0 2px 4px -1px #bebdbd;
-  transition: all .6s ease;
+  transition: all 0.6s ease;
 }
 
 .declineButton:hover {
   background-color: #ebebeb;
   box-shadow: 0 10px 15px -3px #bebdbd, 0 4px 6px -2px #bebdbd;
-  transition-duration: .2s;
+  transition-duration: 0.2s;
 }
 
 .acceptButton:hover {
   background-color: #9173ff;
   box-shadow: 0 10px 15px -3px #977ef3, 0 4px 6px -2px #977ef3;
-  transition-duration: .2s;
+  transition-duration: 0.2s;
 }
 
 .image {
@@ -1048,8 +1041,8 @@ input[type="number"] {
   width: 3rem;
   height: 3rem;
   border-radius: 9999px;
-  animation: animate .6s linear alternate-reverse infinite;
-  transition: .6s ease;
+  animation: animate 0.6s linear alternate-reverse infinite;
+  transition: 0.6s ease;
 }
 
 .image svg {
@@ -1057,7 +1050,6 @@ input[type="number"] {
   width: 2rem;
   height: 2rem;
 }
-
 
 /* sidebarMobile */
 /* header-mobile */
@@ -1074,14 +1066,14 @@ input[type="number"] {
   font-size: 24px;
 }
 
-.menu-btn, .close-btn {
+.menu-btn,
+.close-btn {
   font-size: 24px;
   background: none;
   border: none;
   color: #fff;
   cursor: pointer;
 }
-
 
 /* sidebarMobile */
 .sidebarMobile {
@@ -1118,7 +1110,8 @@ input[type="number"] {
 }
 
 /* Boutons des outils */
-.tool-btn, .sign-out-btn {
+.tool-btn,
+.sign-out-btn {
   width: 100%;
   display: block;
   margin: 15px 0;
@@ -1133,17 +1126,16 @@ input[type="number"] {
   transition: background 0.3s ease;
 }
 
-.tool-btn:hover, .sign-out-btn:hover {
+.tool-btn:hover,
+.sign-out-btn:hover {
   background-color: #1abc9c; /* Changement de couleur au survol */
 }
-
 
 .header-mobile h1 {
   text-align: center;
   color: #ecf0f1;
   font-size: 1.2em;
-} 
-
+}
 
 /* Main Container */
 .container {
@@ -1166,26 +1158,34 @@ label {
   margin: 5px 0;
   font-weight: bold;
 }
-.question{
+.question {
   margin-top: 5px;
 }
-.reponse{
+.reponse {
   display: flex;
   gap: 20%;
 }
-.reponse label{
+.reponse label {
   padding: 15px;
   border-radius: 8px;
   background-color: #e0e0e07a;
 }
 
-input[type="text"], input[type="date"], input[type="number"], textarea, select {
+input[type="text"],
+input[type="date"],
+input[type="number"],
+textarea,
+select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-.store-actions input[type="text"], .store-actions input[type="date"], .store-actions input[type="number"], .store-actions textarea, .store-actions select {
+.store-actions input[type="text"],
+.store-actions input[type="date"],
+.store-actions input[type="number"],
+.store-actions textarea,
+.store-actions select {
   width: 80%;
 }
 
@@ -1193,7 +1193,7 @@ textarea {
   height: 60px;
 }
 
-/* From Uiverse.io by Yaya12085 */ 
+/* From Uiverse.io by Yaya12085 */
 .custum-file-upload {
   height: 200px;
   width: 100%;
@@ -1208,7 +1208,7 @@ textarea {
   background-color: rgba(255, 255, 255, 1);
   padding: 1.5rem;
   border-radius: 10px;
-  box-shadow: 0px 48px 35px -48px rgba(0,0,0,0.1);
+  box-shadow: 0px 48px 35px -48px rgba(0, 0, 0, 0.1);
 }
 
 .custum-file-upload .icon {
@@ -1237,12 +1237,13 @@ textarea {
   display: none;
 }
 
-.stock-info, .infoQuantite{
+.stock-info,
+.infoQuantite {
   display: flex;
   gap: 2%;
 }
 
-.infoProduit{
+.infoProduit {
   width: 100%;
 }
 
@@ -1271,70 +1272,69 @@ textarea {
   cursor: pointer;
 }
 
-
-
-
-
 @media (max-width: 576px) {
   body {
-      flex-direction: column;
+    flex-direction: column;
   }
-  .report-card{
+  .report-card {
     flex-direction: column;
     width: 100%;
   }
-  .image-placeholder{
+  .image-placeholder {
     width: 100%;
     height: 250px;
   }
-  .sidebar{
+  .sidebar {
     display: none;
   }
-  .stats{
+  .stats {
     grid-template-columns: repeat(2, 1fr);
   }
-  .page-container,.main-content1 {
+  .page-container,
+  .main-content1 {
     margin-left: 0;
     padding: 1px;
-}
-.store-actions {
-  align-items: flex-start;
-  flex-direction: column;
-}
-.stat-box {
-  margin: 0;
-}
-.page-container-report {
-  padding: 0;
-}
-.feedback-placeholder {
-  background-color: #e0e0e04a;
-  margin-top: 0;
-}
-.main-content {
-  padding: 10px;
-}
-.modal-content{
-  width: 350px;
-}
-.form-connexion {
-  max-width: 350px;
-}
+  }
+  .store-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .stat-box {
+    margin: 0;
+  }
+  .page-container-report {
+    padding: 0;
+  }
+  .feedback-placeholder {
+    background-color: #e0e0e04a;
+    margin-top: 0;
+  }
+  .main-content {
+    padding: 10px;
+  }
+  .modal-content {
+    width: 350px;
+  }
+  .form-connexion {
+    width: 90%;
+  }
 
-input[type="text"], input[type="date"], input[type="number"], textarea, select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom:10px ;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-}
-
-
-@media (min-width: 576px) { /* 768px est une largeur commune pour les tablettes */
-  .header-mobile {
-      display: none; /* Cacher sur les écrans de 768px et plus */
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
   }
 }
 
+@media (min-width: 576px) {
+  /* 768px est une largeur commune pour les tablettes */
+  .header-mobile {
+    display: none; /* Cacher sur les écrans de 768px et plus */
+  }
+}

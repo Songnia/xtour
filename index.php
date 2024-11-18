@@ -1,9 +1,7 @@
 <?php 
-
 // Insérer le header
-include_once("../includes/header.php");
+    include_once("includes/header.php");
 ?>
-<link rel="stylesheet" href="css/style.css">
 <main class="main-connexion">
     <form class="form-connexion">
         <p class="title-form-connexion">Connexion </p>
@@ -33,4 +31,4 @@ include_once("../includes/header.php");
     </form>
 </main>
 
-<?php include_once("../includes/footer.php"); ?>
+<?php //include_once("../includes/footer.php"); ?>

@@ -16,6 +16,8 @@ const descriptnameField = document.getElementById("descripName");
 const prixField = document.getElementById("prix");
 const poidField = document.getElementById("poid");
 const validationModal = document.getElementById("validationModal");
+const modal3 = document.getElementById("modal3");
+
 
 addButton.addEventListener("click", () => {
   modal.style.display = "flex";
@@ -35,6 +37,8 @@ function openEditModalUser(username, role, date) {
   // Afficher le modal
 }
 
+
+//GERER PRODUITS
 function openModalProduit() {
   modalTitle.textContent = "Ajouter le produit";
   modal.style.display = "flex";
@@ -43,19 +47,28 @@ function openModalProduit() {
 function openEditModalProduit(id, nomCommercial, nomDescriptif, prix, poids) {
   document.getElementById("modalTitle").textContent = "Modifier le produit";
   document.getElementById("product_id").value = id;
-  //document.getElementById('commercialName').value = nomCommercial;
-  //document.getElementById('descripName').value = nomDescriptif;
-  //document.getElementById('prix').value = prix;
+  document.getElementById("commercialName").value = nomCommercial;
+  document.getElementById("descripName").value = nomDescriptif;
+  document.getElementById("prix").value = prix;
   document.getElementById("poids").value = poids;
   document.getElementById("productModal").style.display = "flex";
 }
 
-// Afficher le modal lors du clic sur "edit"
+function openDeleteModal(id){
+  document.getElementById("product_id").value = id;
+  document.getElementById("delete_product_id").value = document.getElementById("product_id").value;
+}
+//GERER PRODUITS
+
+
+
+/*// Afficher le modal lors du clic sur "edit"
 editButton.forEach((button) => {
   button.addEventListener("click", () => {
     modal.style.display = "flex";
   });
 });
+*/
 
 // Afficher le modal lors du clic sur "Supprimer"
 buttonSupprimer.forEach((button) => {
@@ -64,13 +77,12 @@ buttonSupprimer.forEach((button) => {
   });
 });
 
-function openvalidationModal() {
-  validationModal.style.display = "flex";
-}
 
 function closeModal() {
   modal.style.display = "none";
-  validationModal.style.display = "none";
+}
+function closeModalValidation() {
+  modal3.style.display = "none";
 }
 
 // Masquer le modal lors du clic à l'extérieur de celui-ci
@@ -90,12 +102,7 @@ const modal2 = document.getElementById("productModal2");
 const addButton2 = document.querySelectorAll(".addButton2");
 const closeButtons2 = document.querySelectorAll(".close-button2");
 
-// Afficher le modal lors du clic sur "Ajouter un produit"
-addButton2.forEach((button) => {
-  button.addEventListener("click", () => {
-    modal2.style.display = "flex";
-  });
-});
+
 
 // Masquer les modals lors du clic sur les boutons de fermeture
 closeButtons2.forEach((button) => {
@@ -112,7 +119,6 @@ window.addEventListener("click", (event) => {
 });
 
 const buttonValider = document.querySelectorAll(".buttonValider");
-const modal3 = document.getElementById("modal3");
 const acceptButton = document.querySelectorAll(".acceptButton");
 const declineButton = document.querySelectorAll(".declineButton");
 

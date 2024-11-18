@@ -15,10 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Vérifie si product_id est défini pour déterminer l'édition
     if (!empty($_POST['product_id'])) {
         $produit->id_produit = $_POST['product_id'];
-        echo"Hello1";
         if ($produit->update()) {
             header("Location: ../../../pages/produit.php");
-            echo"Hello1";
         } else {
             echo "Erreur lors de la mise à jour du produit";
         }
