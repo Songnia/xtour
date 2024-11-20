@@ -10,15 +10,11 @@ include("../includes/header.php");
 include("../includes/sidebar.php");
 include("../includes/config.php");
 
-//include("../includes/classes/produit_method/read_product.php");
-
-
 include_once("../includes/classes/Database.php");
 include_once("../includes/classes/Produit.php");
 
 $database = new Database();
 $db = $database->getConnection();
-
 $produit = new Produit($db);
 
 // Lecture des produits
@@ -56,6 +52,7 @@ echo"</pre>";*/
           <th>Poids (l/g)</th>
           <th>Actions</th>
         </tr>
+        <td><?php echo htmlspecialchars($prod['id_produit']); ?></td>
       </thead>
       <tbody>
         <?php foreach($prods as $prod): ?>
@@ -90,20 +87,20 @@ echo"</pre>";*/
       <input type="hidden" name="product_id" id="product_id">
       <div>
         <label for="nom_commercial">Nom Commercial</label>
-        <input id="commercialName" name="nom_commercial" type="text" class="form-input-text" placeholder="Noms Commercial...">
+        <input required="" id="commercialName" name="nom_commercial" type="text" class="form-input-text" placeholder="Noms Commercial...">
       </div>
       
       <div>
       <label for="nom_descriptif">Noms Descriptif</label>
-      <input id="descripName" name="nom_descriptif" type="text" class="form-input-text" placeholder="Noms Descriptif...">
+      <input required="" id="descripName" name="nom_descriptif" type="text" class="form-input-text" placeholder="Noms Descriptif...">
       </div>
       <div>
           <label for="prix">Prix(Fcfa)</label>
-          <input id="prix" name="prix" type="number">
+          <input required="" id="prix" name="prix" type="number">
       </div>
       <div>
           <label for="poids">Poids(l/g)</label>
-          <input id="poids" name="poids" type="number">
+          <input required="" id="poids" name="poids" type="number">
       </div>
       <!-- Bouton Ajouter en bas -->
       <button type="submit" class="add-button">Ajouter</button>

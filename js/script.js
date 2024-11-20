@@ -7,8 +7,8 @@ const editButton = document.querySelectorAll(".edit-btn");
 const buttonSupprimer = document.querySelectorAll(".delete-btn");
 
 const modalTitle = document.getElementById("modalTitle");
-const userIdField = document.getElementById("user_id");
-const usernameField = document.getElementById("username");
+const userIdField = document.getElementById("utilisateur_id");
+const usernameField = document.getElementById("nom");
 const roleField = document.getElementById("role");
 const datecomField = document.getElementById("datecom");
 const commercialnameField = document.getElementById("commercialName");
@@ -29,12 +29,20 @@ function openModalUser() {
 }
 
 // Fonction pour afficher le modal en mode édition
-function openEditModalUser(username, role, date) {
+function openEditModalUser(id, nom, prenom, role, date_arrive_dans_entreprise) {
+  modal.style.display = "flex";
   modalTitle.textContent = "Modifier l’utilisateur";
-  usernameField.value = username; // Remplir le champ nom d'utilisateur
-  roleField.value = role; // Remplir le champ role
-  datecomField.value = date;
+  document.getElementById("utilisateur_id").value = id;
+  document.getElementById("utilisateur_nom").value = nom;
+  document.getElementById("utilisateur_prenom").value = prenom;
+  document.getElementById("utilisateur_role").value = role;
+  document.getElementById("utilisateur_date_arrive_dans_entreprise").value = date_arrive_dans_entreprise;
   // Afficher le modal
+}
+
+function openDeleteModal_utilisateur(id){
+  document.getElementById("utilisateur_id").value = id;
+  document.getElementById("delete_utilisateur_id").value = document.getElementById("utilisateur_id").value;
 }
 
 

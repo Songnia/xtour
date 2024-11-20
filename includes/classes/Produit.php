@@ -14,7 +14,7 @@
       $this->conn = $db;
     }
 
-    //cree un utilisateur
+    //cree un produit 
     public function create(){
       $query = "INSERT INTO " . $this->table_name. " SET nom_commercial=:nom_commercial, nom_descriptif=:nom_descriptif, prix=:prix, poids=:poids ";
       $stmt = $this->conn->prepare($query);
@@ -28,8 +28,10 @@
       if($stmt->execute()){
         return true;
       }
+      error_log($stmt->errorInfo()[2]); // Journaliser l'erreur
       return false;
     }
+
 
     // Lire les produits
     public function read(){
@@ -55,6 +57,7 @@
       if($stmt->execute()){
         return true;
       }
+      error_log($stmt->errorInfo()[2]); // Journaliser l'erreur
       return false;
     }
 
@@ -68,6 +71,7 @@
       if($stmt->execute()){
         return true;
       }
+      error_log($stmt->errorInfo()[2]); // Journaliser l'erreur
       return false;
     }
     

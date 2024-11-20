@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $produit->nom_descriptif = htmlspecialchars(trim($_POST["nom_descriptif"]));
     $produit->prix = htmlspecialchars(trim($_POST["prix"]));
     $produit->poids = htmlspecialchars(trim($_POST["poids"]));
-
+    
     // Vérifie si product_id est défini pour déterminer l'édition
     if (!empty($_POST['product_id'])) {
         $produit->id_produit = $_POST['product_id'];
