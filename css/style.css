@@ -245,7 +245,7 @@ body {
 /* Table */
 .container-scroll {
   overflow-x: auto; /* Ajoute un défilement horizontal */
-  max-width: 100%;
+  max-width: 1012.81px;
   background-color: white; /* Assure que le conteneur ne dépasse pas la largeur de l'écran */
 }
 .table-section {
@@ -302,6 +302,7 @@ th {
 }
 
 .search-store {
+  width: 100%;
   padding: 8px;
   font-size: 16px;
   border: 1px solid #ddd;
@@ -362,7 +363,6 @@ th {
 /* Styles généraux pour la page */
 .page-container {
   margin-left: 25px; /* Ajuster en fonction de la largeur de la sidebar */
-  padding: 20px;
 }
 
 .content-header h1 {
@@ -376,6 +376,8 @@ th {
 }
 
 .content-body {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 50px;
   padding: 2%;
   background-color: white;
@@ -386,6 +388,7 @@ th {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .sort-filter span {
@@ -440,8 +443,12 @@ th {
 .page-container-report {
   /*margin-left: 250px;  Ajuster en fonction de la largeur de la sidebar */
   padding: 20px;
+  
 }
-
+.content-header-report{
+  display: flex;
+  justify-content: space-between;
+}
 .content-header-report h1 {
   font-size: 2em;
   margin: 0;
@@ -450,6 +457,7 @@ th {
 .content-header-report h2 {
   font-size: 1.5em;
   color: #4caf50; /* Vert foncé pour le titre de la section */
+
 }
 
 .content-body-report {
@@ -1171,7 +1179,7 @@ label {
   background-color: #e0e0e07a;
 }
 
-input[type="text"],
+
 input[type="date"],
 input[type="number"],
 textarea,
@@ -1181,7 +1189,7 @@ select {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-.store-actions input[type="text"],
+
 .store-actions input[type="date"],
 .store-actions input[type="number"],
 .store-actions textarea,
@@ -1272,6 +1280,43 @@ textarea {
   cursor: pointer;
 }
 
+.infoPMagasin{
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+}
+
+.infoPMagasin input, .infoPMagasin select{
+  width: 250px;
+  height: 45px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1.5px solid lightgrey;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0px 0px 20px -18px;
+}
+
+.infoPMagasin input:hover, .infoPMagasin select:hover{
+    border: 2px solid lightgrey;
+    box-shadow: 0px 0px 20px -17px;
+}
+.infoPMagasin input:active, .infoPMagasin select:active{
+  transform: scale(0.95);
+}
+.infoPMagasin input:focus, .infoPMagasin select:focus{
+  border: 2px solid #4caf50;
+}
+.infoPMagasin select{
+  width: 250px;
+}
+.close-containerFilter{
+  color: red;
+  margin-left: 95%;
+  font-size: larger;
+  cursor: pointer;
+}
+
 @media (max-width: 576px) {
   body {
     flex-direction: column;
@@ -1318,18 +1363,33 @@ textarea {
   .form-connexion {
     width: 90%;
   }
-
+  .page-controls{
+    flex-wrap: wrap-reverse;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  #maga-h3{
+    display: none;
+  }
   input[type="text"],
   input[type="date"],
   input[type="number"],
   textarea,
   select {
-    width: 100%;
+    width: 95%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
+}
+.icon{
+  right: 2rem;
+  margin: 0 10px 5px 5px;
+}
+.group1{
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 @media (min-width: 576px) {

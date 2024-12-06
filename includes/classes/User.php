@@ -75,7 +75,7 @@ class Utilisateur{
   }
 
 
-  public function setRole($role) {
+  /*public function setRole($role) {
     $query = "UPDATE users SET role = :role WHERE id = :id";
     $stmt = $this->conn->prepare($query);
 
@@ -90,7 +90,7 @@ class Utilisateur{
     $stmt->bindParam(':id', $this->id_utilisateur);
 
     return $stmt->execute();
-}
+}*/
   /**$user = new User($db);
   $user->id = 1; // ID de l'utilisateur à mettre à jour
   try {
@@ -102,7 +102,7 @@ class Utilisateur{
   * 
   */
 
-  public function getUsersByRole($role) {
+  /*public function getUsersByRole($role) {
     $query = "SELECT * FROM users WHERE role = :role";
     $stmt = $this->conn->prepare($query);
 
@@ -116,7 +116,7 @@ class Utilisateur{
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+}*/
   /**$users = $user->getUsersByRole('Commercial');
   foreach ($users as $user) {
       echo $user['nom'] . " - " . $user['email'] . "\n";

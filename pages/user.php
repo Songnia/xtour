@@ -26,10 +26,69 @@ $users = $utilisateur->read();
   
   <!-- Search and Add New Store -->
   <div class="store-actions">
-    <input type="text" placeholder="Rechercher un Utilisateur..." class="search-store">
-    <button id="addButton" class="add-store-btn" onclick="openModalProduit()" >Ajouter un Utilisateur</button>
+  <div class="group1" style="width: 80%">
+        <input type="text" placeholder="Rechercher" class="search-store" id="searchInput"  >
+        <svg id="go" class="icon" aria-hidden="true" viewBox="0 0 24 24"><g><path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path></g></svg>
+  </div>    
+  <button id="addButton" class="add-store-btn" onclick="openModalProduit()" >Ajouter un Utilisateur</button>
   </div>
-  
+  <div id="containterFilter">
+  <div id="elementsFilter">
+    <!-- Filtre Par Magasin -->
+    <div class="divFilter">
+        <label for="filter_magasin">Par Magasin :</label>
+        <div class="radio-inputs">
+            <label class="radio" for="magasin1">
+                <input id="magasin1" type="radio" name="radio_magasin" value="magasin1" checked="">
+                <span class="name">Magasin1</span>
+            </label>
+            <label class="radio" for="magasin2">
+                <input id="magasin2" type="radio" name="radio_magasin" value="magasin2">
+                <span class="name">Magasin2</span>
+            </label>
+            <label class="radio" for="magasin3">
+                <input id="magasin3" type="radio" name="radio_magasin" value="magasin3">
+                <span class="name">Magasin3</span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Filtre Par Produit -->
+    <div class="divFilter">
+        <label for="filter_produit">Par Produit :</label>
+        <div class="radio-inputs">
+            <label class="radio" for="produit1">
+                <input id="produit1" type="radio" name="radio_produit" value="produit1" checked="">
+                <span class="name">Produit1</span>
+            </label>
+            <label class="radio" for="produit2">
+                <input id="produit2" type="radio" name="radio_produit" value="produit2">
+                <span class="name">Produit2</span>
+            </label>
+            <label class="radio" for="produit3">
+                <input id="produit3" type="radio" name="radio_produit" value="produit3">
+                <span class="name">Produit3</span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Filtre Par Date -->
+    <div class="divFilter">
+        <label for="filter_date">Par Date :</label>
+        <div class="radio-inputs">
+            <label class="radio" for="recent">
+                <input id="recent" type="radio" name="radio_date" value="recent" checked="">
+                <span class="name">Plus récent d'abord</span>
+            </label>
+            <label class="radio" for="moins_recent">
+                <input id="moins_recent" type="radio" name="radio_date" value="moins_recent">
+                <span class="name">Moins récent d'abord</span>
+            </label>
+        </div>
+    </div>
+</div>
+
+  </div>
   <!-- Stores Table -->
   <div class="container-scroll">
     <div class="table-section">
@@ -87,7 +146,7 @@ $users = $utilisateur->read();
       <select  id="utilisateur_role" name="role">
           <option vrequired=""alue="Admin">Admin</option>
           <option value="Commercial">Commercial</option>
-          <option value="Responsable Commercial">Responsable Commercial</option>
+          <option value="responsable_commercial">Responsable Commercial</option>
           <!-- Autres options ici -->
       </select>
       </div>

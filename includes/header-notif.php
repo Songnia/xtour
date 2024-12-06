@@ -59,6 +59,137 @@
   flex-direction: column;
   gap: 10px;
 }
+/* From Uiverse.io by alexruix */ 
+.group1 {
+  display: flex;
+  line-height: 28px;
+  align-items: center;
+  justify-content:space-between;
+  min-width: 400px;
+  position: relative;
+}
+
+.input {
+  height: 40px;
+  line-height: 28px;
+  padding: 0 1rem;
+  width: 500px;
+  padding-left: 2.5rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  outline: none;
+  background-color: #D9E8D8;
+  color: #0d0c22;
+  box-shadow: 0 0 5px #C1D9BF, 0 0 0 10px #f5f5f5eb;
+  transition: 0.3s ease-in-out;
+}
+
+
+.search-store:focus {
+    border-color: #4CAF50;
+}
+
+.input::placeholder {
+  color: #777;
+}
+
+.icon {
+  fill: #777;
+  width: 1rem;
+  height: 1rem;
+  position: absolute;
+  right: 1.5rem;
+  cursor:pointer;
+}
+
+/*#containterFilter{
+  display: flex;
+  justify-content: flex-end;
+  max-height: 0;  Pas de hauteur visible 
+  display: none; 
+  transition: max-height 0.4s ease-out; 
+  border-radius: 5px;
+  padding: 0 10px;
+}*/
+#containterFilter{
+  display: flex;
+  justify-content: center;
+  max-height: 0; /* Pas de hauteur visible */
+  overflow: hidden; /* Masque le contenu qui dépasse */
+  transition: max-height 0.4s ease-out; /* Animation d'ouverture */
+  border-radius: 5px;
+  padding: 0 10px;
+}
+#containterFilter.active {
+  min-height: 230px; /* Ajustez la hauteur maximale en fonction du contenu */
+}
+
+#elementsFilter{
+  width: 490px;
+  min-height: 100px;
+  ine-height: 28px;
+  padding: 1rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background-color:#D9E8D8 ;
+  /*float: right;*/
+  margin-right: 80px;
+  display: flex;
+  flex-direction:column;
+  gap: 10px;
+}
+
+/* From Uiverse.io by Yaya12085 */ 
+.radio-inputs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
+  padding: 0.25rem;
+  width: 300px;
+  font-size: 14px;
+}
+
+.radio-inputs .radio {
+  flex: 1 1 auto;
+  text-align: center;
+
+}
+
+.radio-inputs .radio input {
+  display: none;
+}
+
+.radio-inputs .radio .name {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: none;
+  padding: .5rem 0;
+  color: rgba(51, 65, 85, 1);
+  transition: all .15s ease-in-out;
+}
+/*P080417288189N  785894 */
+.radio-inputs .radio input:checked + .name {
+  background-color: #fff;
+  font-weight: 600;
+}
+
+.divFilter{
+  display: flex;
+  gap: 5px;
+  justify-content: space-around;
+}
+label{
+  margin: 0;
+  font-weight: unset;
+}
+
 
 </style>
 <div class="header">
