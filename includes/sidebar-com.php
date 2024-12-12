@@ -9,6 +9,7 @@
     <nav class="nav">
       <a href="../pages/tournee-com.php" class="nav-link active">Overview</a>
       <a href="../pages/visite.php" class="nav-link">Visite</a>
+      <a href="../pages/livraison.php" class="nav-link">Livraison</a>
     </nav>
     <div class="sign-out">
       <a href="../pages/connexion.php">Sign Out</a>

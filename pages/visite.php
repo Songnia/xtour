@@ -11,108 +11,199 @@ include("../includes/header.php");
     <!-- Page Content -->
     <main class="container">
         <h1>Tournées</h1>
-        <form id="productForm" method="POST" action="enregistrerProduit.php" enctype="multipart/form-data">
+        <form id="productForm" method="POST" action="../includes/classes/enregistrerVisite.php" enctype="multipart/form-data">
             <!-- Vérification générale -->
             <section class="section">
                 <h2>Vérification générale</h2>
-                <hr>
-                
-                <label for="store">Magasin</label>
-                <select id="magasin" name="magasinName" required>
-                    <option value="kara">Ampiat</option>
-                    <!-- Ajoutez d'autres magasins si nécessaire -->
-                </select>
 
-                <div class="question">
-                    <p>Les étiquettes correspondent à l'emplacement du produit ?</p>
-                    <div class="reponse">
-                        <label><input type="radio" name="labels" value="yes" required> Oui</label>
-                        <label><input type="radio" name="labels" value="no" required> Non</label>
+                    <div>
+                        <hr>
+                    </div>                    
+                    <div class="question"><label for="Ville">Ville</label>
+
+                        <select name="ville" id="">
+                            <option value="Douala">Douala</option>
+                            <option value="Yaounde">Yaounde</option>
+                        </select>
                     </div>
-                </div>
+                    <div class="question">
+                        <label for="store">Magasin</label>
+                        <select name="nom" id="store">
+                        <option value="">Sélectionnez un magasin</option>
+                            <optgroup label="Douala">
+                                <option value="santa-lucia-akwa">Santa Lucia Akwa</option>
+                                <option value="santa-lucia-a-nord">Santa Lucia A Nord</option>
+                                <option value="santa-lucia-bberi">Santa Lucia Bberi</option>
+                                <option value="santa-lucia-bssadi">Santa Lucia Bssadi</option>
+                                <option value="santa-lucia-c-cicam">Santa Lucia C Cicam</option>
+                                <option value="santa-lucia-nkolbong">Santa Lucia Nkolbong</option>
+                                <option value="santa-lucia-palmier">Santa Lucia Palmier</option>
+                                <option value="santa-lucia-dla-bercy">Santa Lucia Dla-Bercy</option>
+                                <option value="ma-sarl-douala">Ma Sarl Douala</option>
+                                <option value="paul-gaby-sarl">Paul Gaby Sarl</option>
+                                <option value="vinny-akwa-1">Vinny Akwa 1</option>
+                                <option value="vinny-akwa-2">Vinny Akwa 2</option>
+                                <option value="mahima-bssadi">Mahima Bssadi</option>
+                                <option value="mahima-akwa">Mahima Akwa</option>
+                                <option value="fortune-cosmetics">Fortune cosmetics</option>
+                                <option value="parfumerie-jp">Parfumerie JP</option>
+                                <option value="precision-pressing">Precision Pressing</option>
+                            </optgroup>
+                            <optgroup label="Yaoundé">
+                                <option value="mieux-vivre">Mieux Vivre</option>
+                                <option value="sesame-market">Sesame Market</option>
+                                <option value="vitrine-du-cameroun-yde">Vitrine du Cameroun Yde</option>
+                                <option value="vitalia">Vitalia</option>
+                                <option value="ma-sarl-tsinga">Ma Sarl Tsinga</option>
+                                <option value="ma-sarl-mvolye">Ma Sarl Mvolye</option>
+                                <option value="ma-min-commerce">Ma Min Commerce</option>
+                                <option value="ma-bastos">Ma Bastos</option>
+                                <option value="la-sama">La Sama</right>
+                            </optgroup>
+                        </select> 
+                    </div>  
+                    <div class="question">
+                        <label for="product">Produit</label>
+                        <select id="product" name="product" required>
+                            <option value="kara">Kara</option>
+                            <!-- Ajoutez d'autres options de produit si nécessaire -->
+                        </select>
+                    </div>         
 
-                <div class="question">
-                    <p>L'hotes est elle presente ?</p>
-                    <div class="reponse">
-                        <label><input type="radio" name="labels" value="yes" required> Oui</label>
-                        <label><input type="radio" name="labels" value="no" required> Non</label>
+                    <div class="question">
+                        <p>Es ce que le produit est bienplacer et bien visible ?</p>
+                        <div class="reponse">
+                            <label><input type="radio" name="visibiliter" value="yes" required> Oui</label>
+                            <label><input type="radio" name="visibiliter" value="no" required> Non</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="question">
-                    <p>Les vendeurs connaissent l'emplacement des produits ?</p>
-                    <div class="reponse">
-                        <label><input type="radio" name="vendors_knowledge" value="yes" required> Oui</label>
-                        <label><input type="radio" name="vendors_knowledge" value="no" required> Non</label>
+                    <div class="question">
+                        <p>Es ce que l'étiquettes correspondent à l'emplacement du produit ?</p>
+                        <div class="reponse">
+                            <label><input type="radio" name="etiquette" value="yes" required> Oui</label>
+                            <label><input type="radio" name="etiquette" value="no" required> Non</label>
+                        </div>
                     </div>
-                </div>
 
-                <label for="feedback">Feedbacks</label>
-                <textarea id="feedback" name="feedback" placeholder="Feedback..."></textarea>
-            </section>
+                    <div>
+                        <p>Quel est le prix afficher sur l'etiquette du produit ?</p>
+                        <input type="number" name="prix" placeholder="prix..." class="prix">
+                    </div>
 
-            <!-- Gestion des stocks -->
-            <section class="section">
+                     <div id="espace">
+                        <hr>
+                     </div>
+
+                    <div class="infoProduit" class="question">
+                        <label for="etat">État du Produit</label>
+                        <select id="etat" name="etat" required>
+                            <option value="bon">Bon</option>
+                            <option value="moyen">Moyen</option>
+                            <option value="mauvais">Mauvais</option>
+                        </select>
+                    </div>
+                    <div class="stock-info" class="question">
+                        <div class="infoProduit">
+                            <label for="dateFab">Date de fabrication</label>
+                            <input type="date" id="dateFab" name="dateFab" required>
+                        </div>
+                        <div class="infoProduit">
+                            <label for="dateExp">Date d'expiration</label>
+                            <input type="date" id="dateExp" name="dateExp" required>
+                        </div>
+                    </div>
+
+                    <div id="InformationProduit" class="question" style="margin-bottom:10px;margin-top:10px">
+                        <div class="question">
+                            <label for="quantityRayon" style="margin-top:10px">Quantité en rayon</label>
+                            <div class="infoQuantite" >
+                                <input type="number" id="quantityRayon" name="quantiteRayon" placeholder="Entrez la quantité en rayon" >
+                                <label><input type="radio" name="quantiteRayonQTS" value="QTS"> QTS</label>
+                                <label><input type="radio" name="quantiteRayonQTS" value="NA"> NA</label>
+                            </div>  
+                        </div>
+                        
+                        <div class="question">
+                            <label for="quantityStock" style="margin-top:10px">Quantité en stock</label>
+                            <span class="detailqs">QTS = Quantiter suffisante</span>
+                            <div class="infoQuantite" >
+                                <input type="number" id="quantityStock" name="quantiteStock" placeholder="Entrez la quantité en stock">
+                                <label><input type="radio" name="quantiteStockQTS" value="QTS"> QTS</label>
+                            </div>
+                            <span class="detailqs">NA = Non accessible</span>
+                        </div>
+
+                    </div>
+                    
+                    <div>
+                        <hr>
+                    </div>
+
+                    <div class="question" style="margin-bottom:10px,margin-top:40px">
+                        <p>Les vendeurs connaissent l'emplacement des produits ?</p>
+                        <div class="reponse">
+                            <label><input type="radio" name="emplacement" value="yes" required> Oui</label>
+                            <label><input type="radio" name="emplacement" value="no" required> Non</label>
+                        </div>
+                    </div>
+
+
+                    <div class="question">
+                        <p>Le magasin a t-il une promotrice ?</p>
+                        <div class="reponse">
+                            <label><input type="radio" name="hotes" value="yes" oninput="openPromotrice()" required> Oui</label>
+                            <label><input type="radio" name="hotes" value="no" required oninput="hiddenPromotrice()"> Non</label>
+                        </div>
+                    </div>
+
+                    <div class="question" id="promotrice">
+                        <p>La promotrice est elle presente ?</p>
+                        <div class="reponse">
+                            <label><input type="radio" name="hotes" value="yes" required> Oui</label>
+                            <label><input type="radio" name="hotes" value="no" required> Non</label>
+                        </div>
+                    </div>
+                    <div class="question">
+                        <div class="FeedLabel">
+                            <label for="feedback">Feedbacks</label>
+                            <select name="Bon" id="" class="evaluation">
+                                <option value="TBon">Bon</option>
+                                <option value="Tres Bon">Tres bon</option>
+                            </select>
+                            <select name="Moyen" id="" class="evaluation">
+                                <option value="moyen">Moyen</option>
+                                <option value="pas bon">Pas bon</option>
+                            </select>
+                        </div>
+                        <textarea id="feedback" name="decription" placeholder="Feedback..."></textarea>                        
+                    </div>
+
+                </section>
+
+                <!-- Gestion des stocks -->
+                <section class="section">
                 <!--<h2>Gérer les stocks</h2>-->
                 <hr>
-
-                <label for="product">Produit</label>
-                <select id="product" name="product" required>
-                    <option value="kara">Kara</option>
-                    <!-- Ajoutez d'autres options de produit si nécessaire -->
-                </select>
-
-                <div class="stock-info">
-                    <div class="infoProduit">
-                        <label for="dateFab">Date de fabrication</label>
-                        <input type="date" id="dateFab" name="dateFab" required>
-                    </div>
-                    <div class="infoProduit">
-                        <label for="dateExp">Date d'expiration</label>
-                        <input type="date" id="dateExp" name="dateExp" required>
-                    </div>
-                </div>
-
-                <div class="infoProduit">
-                    <label for="etat">État</label>
-                    <select id="etat" name="etat" required>
-                        <option value="bon">Bon</option>
-                        <option value="moyen">Moyen</option>
-                        <option value="mauvais">Mauvais</option>
-                    </select>
-                </div>
-
-                <div id="InformationProduit" style="margin-bottom:10px">
-                    <label for="quantityRayon">Quantité en rayon</label>
-                    <div class="infoQuantite">
-                        <input type="number" id="quantityRayon" name="quantityRayon" required>
-                        <label><input type="checkbox" name="quantityRayonQTS" value="QTS"> QTS</label>
-                    </div>
-                        
-                    <label for="quantityStock">Quantité en stock</label>
-                    <div class="infoQuantite">
-                        <input type="number" id="quantityStock" name="quantityStock" required>
-                        <label><input type="checkbox" name="quantityStockQTS" value="QTS"> QTS</label>
-                    </div>
-                </div>
+                
+                <section class="section">
+                        <label for="imageUpload">Importer l'image</label>
+                        <label class="custum-file-upload" for="file">
+                            <div class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24"><g stroke-width="0" id="SVGRepo_bgCarrier"></g><g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"> <path fill="" d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z" clip-rule="evenodd" fill-rule="evenodd"></path> </g></svg>
+                            </div>
+                            <div class="text">
+                            <span>Click to upload image</span>
+                            </div>
+                            <input type="file" id="file" name="image">
+                        </label> 
+                </section>
             </section>
-            <section class="section">
-            <label for="imageUpload">Importer l'image</label>
-                    <label class="custum-file-upload" for="file">
-                        <div class="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24"><g stroke-width="0" id="SVGRepo_bgCarrier"></g><g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"> <path fill="" d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z" clip-rule="evenodd" fill-rule="evenodd"></path> </g></svg>
-                        </div>
-                        <div class="text">
-                        <span>Click to upload image</span>
-                        </div>
-                        <input type="file" id="file" name="image">
-                    </label> 
-            </section>
+
 
             <!-- Bouton de soumission -->
             <button type="submit" class="submit-btn">Enregistrer</button>
         </form> 
-        <button id="addButton"></button>
         <?php include("../includes/footer.php"); ?>
     </main>
         

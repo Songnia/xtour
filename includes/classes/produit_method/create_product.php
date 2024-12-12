@@ -7,6 +7,9 @@ $db = $database->getConnection();
 $produit = new Produit($db);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    echo"<pre>";
+    var_dump($_POST);
+    echo"</pre>";
     $produit->nom_commercial = htmlspecialchars(trim($_POST["nom_commercial"]));
     $produit->nom_descriptif = htmlspecialchars(trim($_POST["nom_descriptif"]));
     $produit->prix = htmlspecialchars(trim($_POST["prix"]));

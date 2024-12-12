@@ -16,21 +16,29 @@
 
     //cree un produit 
     public function create(){
-      $query = "INSERT INTO " . $this->table_name. " SET nom_commercial=:nom_commercial, nom_descriptif=:nom_descriptif, prix=:prix, poids=:poids ";
-      $stmt = $this->conn->prepare($query);
+      try{
+          $query = "INSERT INTO " . $this->table_name. " SET nom_commercial=:nom_commercial, nom_descriptif=:nom_descriptif, prix=:prix, poids=:poids ";
+          $stmt = $this->conn->prepare($query);
 
-      // Liaison des parametres
-      $stmt->bindParam(":nom_commercial", $this->nom_commercial);
-      $stmt->bindParam(":nom_descriptif", $this->nom_descriptif);
-      $stmt->bindParam(":prix", $this->prix);
-      $stmt->bindParam(":poids", $this->poids);
+          // Liaison des parametres
+          $stmt->bindParam(":nom_commercial", $this->nom_commercial);
+          $stmt->bindParam(":nom_descriptif", $this->nom_descriptif);
+          $stmt->bindParam(":prix", $this->prix);
+          $stmt->bindParam(":poids", $this->poids);
 
-      if($stmt->execute()){
-        return true;
-      }
-      error_log($stmt->errorInfo()[2]); // Journaliser l'erreur
-      return false;
+          if($stmt->execute()){
+            return true;
+          }
+          error_log($stmt->errorInfo()[2]); // Journaliser l'erreur
+          return false;
+        }catch (Exception $e) {
+        // Annuler la transaction en cas d'erreur
+        error_log($e->getMessage());
+        echo "Erreur capturée : " . $e->getMessage();
+        return false;
     }
+  }
+
 
 
     // Lire les produits

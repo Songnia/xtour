@@ -37,11 +37,13 @@ class Magasin{
         // Requête SQL
         $query = "INSERT INTO " . $this->name_table . " SET 
                   nom = :nom,
+                  type = :type,
                   chef_magasin = :chef_magasin,
                   contacts = :contacts";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":nom", $this->nom);
+        $stmt->bindParam(":type", $this->type);
         $stmt->bindParam(":chef_magasin", $chefMagasin); // Correctement aligné avec la requête SQL
         $stmt->bindParam(":contacts", $contactsString);
 
@@ -119,30 +121,57 @@ class Magasin{
     }
   }
 
-  public function addProduit($id_produit){
-    $query = "INSERT INTO Magasin_Produit (id_magasin, id_produit) VALUES (:id_magasin, :id_produit)"; 
-    $stmt = $this->conn->prepare($query);
+  public function addProduit($produitName,$id_produit){
+    try{
+        $query = "INSERT INTO Magasin_Produit (id_produit, id_magasin, produit) VALUES (:id_produit, :id_magasin, :produit)"; 
+        $stmt = $this->conn->prepare($query);
 
-    $stmt->bindParam(":id_magasin", $this->id_magasin);
-    $stmt->bindParam(":id_produit", $id_produit);
-    if($stmt->execute()){
-      return true;
-    }else{
-      return false;
+        $stmt->bindParam(":id_produit", $id_produit);
+        $stmt->bindParam(":id_magasin", $this->id_magasin);
+        $stmt->bindParam(":produit", htmlspecialchars($produitName));
+        $stmt->execute();
+        return true;
+    } catch (Exception $e) {
+        // Annuler la transaction en cas d'erreur
+        error_log($e->getMessage());
+        echo "Erreur capturée : " . $e->getMessage();
+        return false;
     }
+
   }
 
-  public function getProduit(){
-    $query = "SELECT p.id_produit, p.nom_commercial, mp.quantite, mp.date_ajout 
-              FROM Magasin_produit mp
-              INNER JOIN Produit p ON mp.ip_produit = p.id_produit
-              WHERE mp.id_magasin =: id_magasin";
-    $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(":id_magasin", $this->id_magasin);
-    $stmt->execute();
+  public function getProduit($id_magasin){
+      try{
+        $query = "SELECT * FROM Magasin_Produit WHERE id_magasin = :id_magasin ORDER BY date_ajout DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id_magasin", $id_magasin);
+        $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-  }
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      } catch (Exception $e) {
+        // Annuler la transaction en cas d'erreur
+        error_log($e->getMessage());
+        echo "Erreur capturée : " . $e->getMessage();
+        return false;
+    }      
+    }
+  
+    public function getIDMagasin($nom){
+      try{
+        $query = "SELECT id_magasin FROM Magasin WHERE nom = :nom";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":nom", $nom);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+      } catch (Exception $e) {
+        // Annuler la transaction en cas d'erreur
+        error_log($e->getMessage());
+        echo "Erreur capturée : " . $e->getMessage();
+        return false;
+    }      
+    }
+
 }
 
 ?>

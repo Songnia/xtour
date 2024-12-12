@@ -10,7 +10,7 @@
         <h2>Tools</h2>
         <a href="../pages/<?= $namePage ?>" class="tool-btn nav-link">Tournées</a>
         <a href="../pages/visite.php" class="tool-btn nav-link">Visite</a>
-        <a href="../pages/connexion.php" class="tool-btn nav-link">Sign Out</a>
-        
+        <a href="../pages/livraison.php" class="tool-btn nav-link">Livraison</a>
+        <a href="../pages/connexion.php" class="tool-btn nav-link">Sign Out</a>    
     </div>
 </aside>

@@ -97,7 +97,6 @@ $magas= $magasin->read();
                 </div>
             </div>
             <div class="sort-filter">
-                <span>Trier par:</span>
                 <button id="addButton" class="btn btn-green">Ajouter Magasin</button>
             </div>
     </div>
@@ -147,52 +146,72 @@ $magas= $magasin->read();
             </div>
         </div>
     </div>
+    <style>
+                .info_livraison{
+                    background-color: #adadadbf;
+                    color: #242323;
+                    padding: 3px 0px 3px 3px;
+                    margin-right: 5px;
+                    border-radius: 5px;
+                    font-style: italic;
+                }
+    </style>
 
     <div class="content-body">
-        <div class="store-info">
-            <h4>Nom du Magasin</h4>
-            <p>Dernière Livraison: <span>--date--</span></p>
-            <div class="product-list">
-                <button  class="addButton2 btn btn-green" onclick="openModalProduitMagasin()">Ajouter un produit</button>
+        <?php foreach ($magas as $maga): ?>
+            <div class="elementsBody">
+                    <div class="store-info">
+                        <h4><?php echo htmlspecialchars($maga['nom']); ?></h4>
+                        <p>Dernière Livraison: <span id="iii">--date--</span></p>
+                        <div class="product-list">
+                        <!--<button  class="addButton2 btn btn-purple" onclick="openEditModalMagasin('<?php echo $maga['id_magasin']; ?>',
+                                                                                                  <?php echo $maga['nom']; ?>', 
+                                                                                                  <?php echo $maga['type']; ?>', 
+                                                                                                  <?php echo $maga['contactName']; ?>', 
+                                                                                                  <?php echo $maga['contactTel']; ?>', 
+                                                                                                  <?php echo $maga['commercialKnow']; ?>', 
+                                                                                                  <?php echo $maga['produitKnow']; ?>', 
+                                                                                                  <?php echo $maga['relation']; ?>', 
+                                                                                                  <?php echo $maga['Honette']; ?>')">
+                        Modifier</button>-->
+                        <button  class="addButton2 btn btn-purple" onclick="openEditModalMagasin('<?php echo $maga['id_magasin']; ?>')">Modifier</button>
+                        <button  class="addButton2 btn btn-green" onclick="openModalProduitMagasin('<?php echo $maga['id_magasin']; ?>')">Ajouter un produit</button>
+
+                    </div>
+                    </div>
+                    <?php $prodsM = $magasin->getProduit( $maga['id_magasin'] );?>
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th>Noms Produit</th>
+                                <th>Qt en stock</th>
+                                <th>Qt en rayon</th>
+                                <th>Derniere Livraison</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($prodsM as $prodm){ ?>                           
+                                <tr>
+                                    <td><?php echo htmlspecialchars($prodm['produit']); ?></td>
+                                    <td><?php echo htmlspecialchars($prodm['quantite_stock']); ?></td>
+                                    <td><?php echo htmlspecialchars($prodm['quantite_rayon']); ?></td>
+                                    <td>
+                                        <div>
+                                            <span class="info_livraison">Date:</span> <span> 20/20/2020</span>
+                                            <span class="info_livraison">Quantite:</span> <span> 20</span>
+                                        </div>
+                                    </td>
+                                </tr>  
+                            <?php }?>
+                            <!-- Ajoutez d'autres lignes ici si nécessaire -->
+                        </tbody>
+                    </table>
+                
             </div>
-        </div>
-        <style>
-            .info_livraison{
-                background-color: #adadadbf;
-                color: #242323;
-                padding: 3px 0px 3px 3px;
-                margin-right: 5px;
-                border-radius: 5px;
-                font-style: italic;
-            }
-        </style>
-        <table class="product-table">
-            <thead>
-                <tr>
-                    <th>Noms Produit</th>
-                    <th>Qt en stock</th>
-                    <th>Qt en rayon</th>
-                    <th>Derniere Livraison</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($magas as $maga): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($maga['id_magasin']); ?></td>
-                        <td>10</td>
-                        <td>5</td>
-                        <td>
-                            <div>
-                                <span class="info_livraison">Date:</span> <span> 20/20/2020</span>
-                                <span class="info_livraison">Quantite:</span> <span> 20</span>
-                            </div>
-                        </td>
-                    </tr>  
-                <?php endforeach; ?>
-                <!-- Ajoutez d'autres lignes ici si nécessaire -->
-            </tbody>
-        </table>
-    </div>
+        <?php endforeach; ?>
+    </div>            
+
+
     <!-- Stores Table --> 
     <div class="container-scroll">
         <div class="table-section">
@@ -200,6 +219,7 @@ $magas= $magasin->read();
         <thead>
             <tr>
             <th>ID</th>
+            <th>Ville</th>
             <th>Nom magasin</th>
             <th>Localisation</th>
             <th>Chef du magasin</th>
@@ -212,6 +232,7 @@ $magas= $magasin->read();
             <?php foreach ($magas as $maga): ?>
             <tr>
                 <td><?php echo htmlspecialchars($maga['id_magasin']); ?></td>
+                <td><?php echo $ville = rand(0, 1) ? "Douala" : "Yaounde"; ?></td>
                 <td><?php echo htmlspecialchars($maga['nom']); ?></td>
                 <td><?php echo htmlspecialchars($maga['localisation']); ?></td>
                 <td><?php echo htmlspecialchars($maga['chef_magasin']); ?></td>
@@ -233,6 +254,8 @@ $magas= $magasin->read();
         <h2>Ajouter un Magasin</h2>
         <!-- Formulaire avec les champs du magasin, date, commercial et OK -->
         <form method="POST" action="../includes/classes/magasin_method/create_magasin.php" class="form-col">
+        <input type="hidden" id="id_magasin" name="id_magasin" >
+
             <div class="infoPMagasin">
                     <div>
                         <label for="store">Magasin</label>
@@ -281,46 +304,44 @@ $magas= $magasin->read();
                         </select>
                     </div>             
             </div>
-            <div class="infoPMagasin">
-                    <div>
-                        <label for="chefMagasinName">Nom du chef de magasin</label>
-                        <input required="" id="chefMagasinName" name="chefMagasinName" type="text" placeholder="chef magasint ...">
+            <hr> <br>
+            <label for="" style="font-style:italic;font-weight:bold;font-size:larger;">Nos Contact Dans le magasin</label>
+            <div>
+                    <div class="infoPMagasin">
+                        <div>
+                            <label for="chefMagasinName">Nom</label>
+                            <input required="" id="" name="contactName" type="text" placeholder="nom ...">
+                        </div>
+                        <div>
+                            <label for="contactChef">Telephone</label>
+                            <input required="" id="contactChef" name="contactTel" type="tel" placeholder="+237 6********">
+                        </div>
                     </div>
-                    <div>
-                        <label for="contactChef">Contact</label>
-                        <input required="" id="contactChef" name="contactChef" type="tel" placeholder="+237 6********">
-                    </div>
+                    <div class="my-form">
+                        <div class="choix">
+                            <input type="checkbox" name="commercialKnow" id="">
+                            <label for="commercialKnow">Il connais notre commercial</label>
+                        </div>
+                        <div class="choix">
+                            <input type="checkbox" name="produitKnow" id="">
+                            <label for="produitKnow">Il connais nos produits</label>
+                        </div>
+
+                        <div class="infoPMagasin">                        
+                            <label for="relation">Notre relation</label>
+                            <select name="relation" id="" style="width:400px">
+                                <option value="Supportaire">Supportaire</option>
+                                <option value="Neutre">Neutre</option>
+                                <option value="Contre nous">Contre nous</option>
+                            </select>
+                        </div>
+                        <div class="choix">
+                            <input type="checkbox" name="Honette" id="">
+                            <label for="Honette">Il est Honnette</label>
+                        </div>
+                    </div>     
             </div>
-            <div class="infoPMagasin">
-                    <div>
-                        <label for="contactName1">Nom du chef de magasin</label>
-                        <input required="" id="contactName1" name="contactName1" type="text" placeholder="chef magasint ...">
-                    </div>
-                    <div>
-                        <label for="contact1">Contact1</label>
-                        <input required="" id="contact1" name="contact1" type="tel" placeholder="+237 6********">
-                    </div>
-            </div> 
-            <div class="infoPMagasin">
-                    <div>
-                        <label for="contactName2">Nom du chef de magasin</label>
-                        <input  id="contactName2" name="contactName2" type="text" placeholder="chef magasint ...">
-                    </div>
-                    <div>
-                        <label for="contact2">Contact2</label>
-                        <input  id="contact2" name="contact2" type="tel" placeholder="+237 6********">
-                    </div>
-            </div>      
-            <div class="infoPMagasin">
-                    <div>
-                        <label for="contactName3">Nom du chef de magasin</label>
-                        <input id="contactName3" name="contactName3" type="text" placeholder="chef magasint ...">
-                    </div>
-                    <div>
-                        <label for="contact3">Contact3</label>
-                        <input  id="contact3" name="contact3" type="tel" placeholder="+237 6********">
-                    </div>
-            </div> 
+
             <button type="submit" class="add-button" >Ajouter</button>
         </form>
     </div>
@@ -334,20 +355,20 @@ $magas= $magasin->read();
             <div class="my-form-container">
                 <form class="my-form" method="POST" action="../includes/classes/magasin_method/addProduit_magasin.php">
                     <!-- Champ caché pour transmettre l'ID du magasin -->
-                    <input type="hidden" name="id_magasin" value="1">
-
+                    <input type="hidden" id="id_magasin" name="id_magasin" >
+                    
                     <h3>Sélectionnez les produits :</h3>
                     <div>
                         <input id="product1" type="checkbox" name="products[]" value="Kara">
-                        <label for="product1">Produit 1</label>
+                        <label  for="product1">Produit 1</label>
                     </div>
                     <div>
                         <input id="product2" type="checkbox" name="products[]" value="Cookies">
                         <label for="product2">Produit 2</label>
                     </div>
                     <div>
-                        <input id="product3" type="checkbox" name="products[]" value="Sable">
-                        <label for="product3">Produit 3</label>
+                        <input id="product3" type="checkbox" name="products[]" value="HUILE SANTE NGON">
+                        <label for="product3">HUILE SANTE NGON</label>
                     </div>
                     <!-- Bouton de soumission -->
                     <button type="submit" class="add-button">Ajouter</button>
@@ -359,6 +380,5 @@ $magas= $magasin->read();
         </div>
     </div>
 </div>  
-
 
 <?php include_once("../includes/footer.php"); ?>

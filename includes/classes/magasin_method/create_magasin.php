@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
   // Appel de la méthode create()
   if ($magasin->create($contacts)) {
-      header("Location: ../../../pages/magasin.php");
+      //header("Location: ../../../pages/magasin.php");
   } else {
       echo "Erreur lors de l'ajout du magasin.";
   }

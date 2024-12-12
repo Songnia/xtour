@@ -10,6 +10,8 @@
       <a href="../pages/dashboard.php" class="nav-link active">Overview</a>
       <a href="../pages/rapport.php" class="nav-link ">Tournées</a>
       <a href="../pages/magasin.php" class="nav-link ">Magasins</a>
+      <a href="../pages/visite.php" class="nav-link">Visite</a>
+      <a href="../pages/livraison.php" class="nav-link">Livraison</a>
       <a href="../pages/produit.php" class="nav-link">Produits</a>
       <a href="../pages/user.php" class="nav-link">Utilisateurs</a>
     </nav>

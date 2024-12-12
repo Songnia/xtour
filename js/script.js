@@ -18,6 +18,12 @@ const poidField = document.getElementById("poid");
 const validationModal = document.getElementById("validationModal");
 const modal3 = document.getElementById("modal3");
 
+const modal2 = document.getElementById("productModal2");
+const addButton2 = document.querySelectorAll(".addButton2");
+const closeButtons2 = document.querySelectorAll(".close-button2");
+const iiiElement = document.getElementById("label1");
+const ID = document.getElementById("id_magasin");
+const Promotice = document.getElementById("promotrice");
 
 addButton.addEventListener("click", () => {
   modal.style.display = "flex";
@@ -66,6 +72,7 @@ function openDeleteModal(id){
   document.getElementById("product_id").value = id;
   document.getElementById("delete_product_id").value = document.getElementById("product_id").value;
 }
+
 //GERER PRODUITS
 
 
@@ -106,15 +113,22 @@ window.addEventListener("click", (event) => {
 });
 
 // Sélection des éléments
-const modal2 = document.getElementById("productModal2");
-const addButton2 = document.querySelectorAll(".addButton2");
-const closeButtons2 = document.querySelectorAll(".close-button2");
 
 //Ouvrir le modal produit de chaque magasin
-function openModalProduitMagasin(){
+function openModalProduitMagasin(id){
   modal2.style.display = "flex";
+  ID.value=id;
+}
+function openEditModalMagasin(id) {
+  modal.style.display = "flex";
+  ID.value = id;
 }
 
+addButton2.forEach((button) => {
+  button.addEventListener("click", () => {
+    modal2.style.display = "flex";
+  });
+});
 // Masquer les modals lors du clic sur les boutons de fermeture
 closeButtons2.forEach((button) => {
   button.addEventListener("click", () => {
@@ -266,3 +280,10 @@ filterElements.forEach((radio) => {
     });
 });
 
+function openPromotrice(){
+  Promotice.style.display = "block";
+}
+
+function hiddenPromotrice(){
+  Promotice.style.display = "none";
+}

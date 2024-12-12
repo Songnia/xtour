@@ -378,11 +378,15 @@ th {
 .content-body {
   display: flex;
   flex-direction: column;
+}
+.elementsBody{
   margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+
   padding: 2%;
   background-color: white;
 }
-
 .page-controls {
   display: flex;
   justify-content: space-between;
@@ -445,10 +449,10 @@ th {
   padding: 20px;
   
 }
-.content-header-report{
+/*.content-header-report{
   display: flex;
   justify-content: space-between;
-}
+}*/
 .content-header-report h1 {
   font-size: 2em;
   margin: 0;
@@ -609,7 +613,7 @@ input[type="date"] {
 }
 
 .form-input-text,
-input[type="number"] {
+input[type="number"],.prix {
   width: 100%;
   padding: 5px;
   border: 1px solid #ccc;
@@ -838,6 +842,15 @@ input[type="number"] {
 
 .submit:hover {
   background-color: #0f4d12;
+}
+
+.detailqs{
+  font-size: small;
+  font-style: italic;
+  color: gray;
+}
+#promotrice{
+  display: none;
 }
 
 @keyframes pulse {
@@ -1162,23 +1175,28 @@ input[type="number"] {
 }
 
 label {
-  display: block;
+  /*display: block;*/
   margin: 5px 0;
   font-weight: bold;
 }
 .question {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 .reponse {
   display: flex;
   gap: 20%;
 }
-.reponse label {
+.reponse label{
   padding: 15px;
   border-radius: 8px;
-  background-color: #e0e0e07a;
+  background-color: #9cf1b27a;
 }
-
+.infoQuantite label{
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #9cf1b27a;
+  margin: 0;
+}
 
 input[type="date"],
 input[type="number"],
@@ -1253,6 +1271,7 @@ textarea {
 
 .infoProduit {
   width: 100%;
+  margin-top: 10px;
 }
 
 .add-btn {
@@ -1316,7 +1335,18 @@ textarea {
   font-size: larger;
   cursor: pointer;
 }
-
+#espace{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.FeedLabel{
+  display: flex;
+  gap: 30px;
+  margin: 5px 0;
+}
+.evaluation{
+  width: 150px;
+}
 @media (max-width: 576px) {
   body {
     flex-direction: column;
@@ -1382,15 +1412,20 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
   }
+  .infoPMagasin{
+    flex-direction: column;
+  }
+  .icon{
+    right: 2rem;
+    margin: 0 10px 5px 5px;
+  }
+  .group1{
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
 }
-.icon{
-  right: 2rem;
-  margin: 0 10px 5px 5px;
-}
-.group1{
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
+
+
 
 @media (min-width: 576px) {
   /* 768px est une largeur commune pour les tablettes */
