@@ -3,58 +3,38 @@
 class Magasin{
   private $conn;
   private $name_table = "Magasin";
-  private $contacts_table = "MagasinContacts";
-
 
   public $id_magasin;
   public $nom;
- // public $ville;
+  public $ville;
   public $latitude;
   public $longitude;
-  public $chefMagasinName;
-  public $contactChef;
   public $type;
-  public $contacts;
+
+
   public function __construct($db){
     $this->conn = $db;
   }
 
-  public function create($contacts = []) {
+  public function create() {
     try {
-        // Préparer les contacts concaténés
-        $contactsConcat = [];
-        foreach ($contacts as $contact) {
-            $contactsConcat[] = $contact['name'] . ": " . $contact['contact'];
-        }
-        $contactsString = implode("; ", $contactsConcat);
-
-        // Concaténer nom et contact du chef magasin
-        $chefMagasin = $this->chefMagasinName . " | " . $this->contactChef;
-
         // Démarrer une transaction
         $this->conn->beginTransaction();
 
         // Requête SQL
         $query = "INSERT INTO " . $this->name_table . " SET 
+                  ville = :ville,
                   nom = :nom,
-                  type = :type,
-                  chef_magasin = :chef_magasin,
-                  contacts = :contacts";
+                  type = :type";
 
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":ville", $this->ville);
         $stmt->bindParam(":nom", $this->nom);
         $stmt->bindParam(":type", $this->type);
-        $stmt->bindParam(":chef_magasin", $chefMagasin); // Correctement aligné avec la requête SQL
-        $stmt->bindParam(":contacts", $contactsString);
-
-        if (!$stmt->execute()) {
-            throw new Exception("Erreur lors de la création du magasin : " . implode(" | ", $stmt->errorInfo()));
-        }
-
+        $stmt->execute();
         // Valider la transaction
         $this->conn->commit();
         return true;
-
     } catch (Exception $e) {
         // Annuler la transaction en cas d'erreur
         $this->conn->rollBack();
@@ -72,45 +52,73 @@ class Magasin{
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function update($contacts = []){
-    $contactsConcat = [];
-    foreach ($contacts as $contact) {
-        $contactsConcat[] = $contact['name'] . ": " . $contact['contact'];
-    }
-    $contactsString = implode("; ", $contactsConcat);
-
+  public function update(){
     // Concaténer nom et contact du chef magasin
-    $chefMagasin = $this->chefMagasinName . " | " . $this->contactChef;
+    try{
+        $query = "UPDATE ".$this->name_table." SET 
+                  ville=:ville,
+                  nom=:nom,
+                  type=:type, 
+                  WHERE id_magasin=:id";
+        $stmt = $this->conn->prepare($query);
+        
+        $stmt->bindParam(":ville",$this->ville);
+        $stmt->bindParam(":nom", $this->nom);
+        $stmt->bindParam(":id_magasin", $this->id_magasin);
+        $stmt->bindParam(":type", $this->type);
 
-
-    $query = "UPDATE ".$this->name_table." SET 
-              nom=:nom,
-              latitude=:latitude, 
-              longitude=:longitude, 
-              chef_magasin=:chef_magasin, 
-              type=:type, 
-              contacts:=contacts 
-              WHERE id_magasin=:id";
-    $stmt = $this->conn->prepare($query);
-
-    $stmt->bindParam(":nom",$this->nom);
-    $stmt->bindParam(":latitude", $this->latitude);
-    $stmt->bindParam(":longitude", $this->longitude);
-    $stmt->bindParam(":id_magasin", $this->id_magasin);
-    $stmt->bindParam(":chef_magasin", $this->$chefMagasin);
-    $stmt->bindParam(":type", $this->type);
-    $stmt->bindParam(":contacts", $contactsString);
-    $stmt->bindParam(":id", $this->id_magasin);
-
-    if($stmt->execute()){
-      return true;
-    }else{
+        $stmt->execute();
+    } catch (Exception $e) {
+      // Annuler la transaction en cas d'erreur
+      $this->conn->rollBack();
+      error_log($e->getMessage());
+      echo "Erreur capturée : " . $e->getMessage();
       return false;
-    }
   }
 
+  }
+
+  public function addContact($id_magasin, $name, $phone, $relation){
+    // Concaténer nom et contact du chef magasin
+    try{   
+        $query = "INSERT INTO Contact SET
+                  id_magasin=:id_magasin,
+                  name=:name,
+                  phone=:phone,
+                  relation=:relation";
+      
+      $stmt = $this->conn->prepare($query);
+      
+      // Liaison des paramètres
+      $stmt->bindParam(':name', $name);
+      $stmt->bindParam(':phone', $phone);
+      $stmt->bindParam(':relation', $relation);
+      $stmt->bindParam(':id_magasin', $id_magasin);
+        
+      $stmt->execute();
+    } catch (Exception $e) {
+      // Annuler la transaction en cas d'erreur
+      error_log($e->getMessage());
+      echo "Erreur capturée : " . $e->getMessage();
+      return false;
+  }
+
+  }
+
+  public function readContact($id_magasin) {
+        $query = "SELECT * FROM Contact WHERE id_magasin = :id_magasin";
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':id_magasin', $id_magasin);
+        // Exécution de la requête
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
   public function delete(){
-    $query = "DELETE FROM ".$this->name_table." WHERE id_magasin = ?";
+    try{
+          $query = "DELETE FROM ".$this->name_table." WHERE id_magasin = ?";
     $stmt = $this->conn->prepare($query);
 
     $stmt->bindParam(1,$this->id_magasin);
@@ -119,6 +127,13 @@ class Magasin{
     }else{
       return false;
     }
+    } catch (Exception $e) {
+      // Annuler la transaction en cas d'erreur
+      error_log($e->getMessage());
+      echo "Erreur capturée : " . $e->getMessage();
+      return false;
+  }
+
   }
 
   public function addProduit($produitName,$id_produit){
@@ -155,7 +170,25 @@ class Magasin{
         return false;
     }      
     }
-  
+    public function deleteProduit($id_produit){
+      try{
+        $query = "DELETE FROM Magasin_Produit WHERE id_produit = :id_produit";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam("id_produit", $id_produit);
+        $stmt->execute();
+
+        if($stmt->execute()){
+          return true;
+        }
+        error_log($stmt->errorInfo()[2]); // Journaliser l'erreur
+        return false;
+      } catch (Exception $e) {
+        // Annuler la transaction en cas d'erreur
+        error_log($e->getMessage());
+        echo "Erreur capturée : " . $e->getMessage();
+        return false;
+    }
+  }
     public function getIDMagasin($nom){
       try{
         $query = "SELECT id_magasin FROM Magasin WHERE nom = :nom";
@@ -171,7 +204,25 @@ class Magasin{
         return false;
     }      
     }
+    public function getNameMagasin($id_magasin) {
+      try {
+          $query = "SELECT nom FROM Magasin WHERE id_magasin = :id_magasin";
+          $stmt = $this->conn->prepare($query);
+          $stmt->bindParam(":id_magasin", $id_magasin); // Spécifiez le type pour plus de sécurité
+          $stmt->execute();
+  
+          // Récupérer uniquement le nom du magasin
+          $result = $stmt->fetch(PDO::FETCH_ASSOC);
+          return $result ? $result['nom'] : null; // Retourne le nom ou null si aucun résultat
 
+      } catch (Exception $e) {
+          // Journaliser l'erreur pour le débogage
+          error_log($e->getMessage());
+          echo "Erreur capturée : " . $e->getMessage();
+          return false;
+      }
+  }
+  
 }
 
 ?>

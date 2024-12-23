@@ -127,6 +127,14 @@ include_once("../includes/sidebar.php");
     <form method="POST" action="../includes/classes/produit_method/create_product.php"  class="form-col">
       <!-- Champ caché pour identifier l'édition d'un produit -->
       <input type="hidden" name="product_id" id="product_id">
+      <div>
+          <label for="Ville">Ville</label>
+            <select name="type" id="type">
+              <option value="Douala">Douala</option>
+              <option value="Yaounde">Yaounde</option>
+              <!-- Autres options ici -->
+            </select>
+      </div> 
       <div class="infoPMagasin" >
                     <div>
                         <label for="store">Magasin</label>
@@ -175,14 +183,6 @@ include_once("../includes/sidebar.php");
                         </select>
                     </div>           
       </div>
-      <div>
-          <label for="Ville">Ville</label>
-            <select name="type" id="type">
-              <option value="Douala">Douala</option>
-              <option value="Yaounde">Yaounde</option>
-              <!-- Autres options ici -->
-            </select>
-      </div> 
       <div>
           <label for="store">Produit</label>
           <select name="prosuit" id="store" required>

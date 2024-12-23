@@ -9,7 +9,9 @@ $db = $database->getConnection();
 
 $magasin = new Magasin($db);
 $produit = new Produit($bd);
-
+echo"<pre>";
+var_dump(value: $_POST);
+echo"</pre>";
 // ID du magasin (par exemple, passé via un champ caché dans le formulaire ou l'URL)
 $magasin->id_magasin = isset($_POST['id_magasin']) ? intval($_POST['id_magasin']) : null;
 try{

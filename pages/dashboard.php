@@ -43,7 +43,7 @@
       <div class="stat-box">
         <span class="stat-icon">📄</span>
         <h3>12</h3>
-        <p>Alertes</p>
+        <p>Livraison</p>
         <div class="go-corner">
             <a href="#"><div class="go-arrow">→</div></a>
         </div>

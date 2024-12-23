@@ -7,30 +7,42 @@ $database = new Database();
 $db = $database->getConnection();
 $magasin = new Magasin($db);
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-  $magasin->nom = htmlspecialchars(trim($_POST["nom"]));
-  $magasin->type = htmlspecialchars(trim($_POST["type"]));
-  $magasin->chefMagasinName = htmlspecialchars(trim($_POST["chefMagasinName"]));
-  $magasin->contactChef = htmlspecialchars(trim($_POST["contactChef"]));
-  echo"<pre>";
-  var_dump($_POST);
-  echo"</pre>";
-  // Collecter les contacts supplémentaires
-  $contacts = [];
-  for ($i = 1; $i <= 3; $i++) {
-      $contactName = isset($_POST["contactName$i"]) ? htmlspecialchars(trim($_POST["contactName$i"])) : null;
-      $contact = isset($_POST["contact$i"]) ? htmlspecialchars(trim($_POST["contact$i"])) : null;
+  
+    $magasin->ville = htmlspecialchars(trim($_POST["ville"]));
+    $magasin->nom = htmlspecialchars(trim($_POST["nom"]));
+    $magasin->type = htmlspecialchars(trim($_POST["type"]));
+    
+    $name = htmlspecialchars(trim($_POST["name"]));
+    $phone = htmlspecialchars(trim($_POST["phone"]));
+    $relation = json_encode($_POST["relation"]);
 
-      if (!empty($contactName) && !empty($contact)) {
-          $contacts[] = [
-              "name" => $contactName,
-              "contact" => $contact,
-          ];
-      }
-  }
+  echo"<pre>";
+  var_dump(value: $name);
+  echo"</pre>";
+  echo"<pre>";
+  var_dump(value: $phone);
+  echo"</pre>";
+  echo"<pre>";
+  var_dump(value: $relation);
+  echo"</pre>";
+
+    echo "LE MAGASIN";
+  echo"<pre>";
+  var_dump(value: $magasin);
+  echo"</pre>";
+ 
+  
 
   // Appel de la méthode create()
-  if ($magasin->create($contacts)) {
-      //header("Location: ../../../pages/magasin.php");
+  if ($magasin->create()) {
+      // Collecter les contacts supplémentaires
+      $maga = $magasin->getIDMagasin($magasin->nom);
+      echo $maga['id_magasin'];
+      if($magasin->addContact($maga['id_magasin'],$name,$phone,$relation)){
+          echo" contact ajouter";
+      }   
+
+      header("Location: ../../../pages/magasin.php");
   } else {
       echo "Erreur lors de l'ajout du magasin.";
   }

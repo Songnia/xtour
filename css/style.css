@@ -852,7 +852,14 @@ input[type="number"],.prix {
 #promotrice{
   display: none;
 }
-
+.feedback_value{
+  display: flex;
+  gap: 10;
+  padding: 10px;
+  flex-direction: row;
+  border-radius: 8px;
+  background-color: #9cf1b27a;
+}
 @keyframes pulse {
   from {
     transform: scale(0.9);

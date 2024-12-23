@@ -1,5 +1,6 @@
 // Sélection des éléments
 const modal = document.getElementById("productModal");
+const contactModal = document.getElementById("contactModal");
 const addButton = document.getElementById("addButton");
 const closeButtons = document.querySelectorAll(".close-button");
 
@@ -59,20 +60,34 @@ function openModalProduit() {
 }
 
 function openEditModalProduit(id, nomCommercial, nomDescriptif, prix, poids) {
+  modal.style.display = "flex";
   document.getElementById("modalTitle").textContent = "Modifier le produit";
   document.getElementById("product_id").value = id;
   document.getElementById("commercialName").value = nomCommercial;
   document.getElementById("descripName").value = nomDescriptif;
   document.getElementById("prix").value = prix;
   document.getElementById("poids").value = poids;
-  document.getElementById("productModal").style.display = "flex";
 }
 
 function openDeleteModal(id){
   document.getElementById("product_id").value = id;
   document.getElementById("delete_product_id").value = document.getElementById("product_id").value;
 }
+function openDeleteModal(id){
+  //document.getElementById("product_id").value = id;
+  document.getElementById("delete_product_id").value = document.getElementById("product_id").value;
+}
 
+
+
+const tr = document.getElementById("trblock");
+function settrblock(){
+  if(tr.style.display === "none"){
+    tr.style.display = "table-row";
+  }else{
+    tr.style.display = "none";
+  }
+}
 //GERER PRODUITS
 
 
@@ -117,13 +132,18 @@ window.addEventListener("click", (event) => {
 //Ouvrir le modal produit de chaque magasin
 function openModalProduitMagasin(id){
   modal2.style.display = "flex";
-  ID.value=id;
+  document.getElementById("id_magasinproduit").value=id;
 }
+
 function openEditModalMagasin(id) {
   modal.style.display = "flex";
   ID.value = id;
 }
 
+function openAddModalContact(id){
+  contactModal.style.display = "flex";
+  document.getElementById("id_magasin_contact").value = id;
+}
 addButton2.forEach((button) => {
   button.addEventListener("click", () => {
     modal2.style.display = "flex";
@@ -199,12 +219,20 @@ alertClick.addEventListener("click", () => {
 closeButtons.forEach((button) => {
   button.addEventListener("click", () => {
     alertModal.style.display = "none";
+    contactModal.style.display = "none";
   });
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target === contactModal) {
+    contactModal.style.display = "none";
+  }
 });
 
 window.addEventListener("click", (event) => {
   if (event.target === alertModal) {
     alertModal.style.display = "none";
+    contactModal.style.display = "none";
   }
 });
 

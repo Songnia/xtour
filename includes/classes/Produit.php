@@ -72,16 +72,28 @@
     // Supprimer un produit
 
     public function delete(){
-      $query = "DELETE FROM ". $this->table_name . " WHERE id_produit = ?";
-      $stmt = $this->conn->prepare($query);
-      $stmt->bindParam(1, $this->id_produit);
+      try{
+        $query = "DELETE FROM Magasin_Produit WHERE id_produit = :id_produit";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam("id_produit", $this->id_produit);
+        $stmt->execute();
 
-      if($stmt->execute()){
-        return true;
-      }
-      error_log($stmt->errorInfo()[2]); // Journaliser l'erreur
-      return false;
+        $query = "DELETE FROM ". $this->table_name . " WHERE id_produit = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id_produit);
+
+        if($stmt->execute()){
+          return true;
+        }
+        error_log($stmt->errorInfo()[2]); // Journaliser l'erreur
+        return false;
+      } catch (Exception $e) {
+        // Annuler la transaction en cas d'erreur
+        error_log($e->getMessage());
+        echo "Erreur capturée : " . $e->getMessage();
+        return false;
     }
+  }
     
   }  
 

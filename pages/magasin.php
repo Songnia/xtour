@@ -9,12 +9,23 @@ include_once("../includes/header.php");
 include_once("../includes/sidebar.php");
 include_once("../includes/classes/Database.php");
 include_once("../includes/classes/Magasin.php");
+include_once("../includes/classes/Produit.php");
+
 
 $database = new Database();
 $db = $database->getConnection();
 $magasin = new Magasin($db);
+$produit = new Produit($db);
 
+$prods = $produit->read();
 $magas= $magasin->read();
+/*$contacts = $magasin->readContact($maga['id_magasin']);
+
+echo "<pre>";
+    var_dump($contacts);
+    
+echo "</pre>";*/
+
 ?>
 
 
@@ -71,6 +82,20 @@ $magas= $magasin->read();
     }
     .container-scroll{
         display: block;
+    }
+
+    .img-map{
+        width: 45px;
+        height: 45px;
+        border-radius: 100px;
+        border: 2px solid yellow;
+
+    }
+    #la-map{
+        padding-left:4% ;
+    }
+    #hiddetr tr{
+        display: none;
     }
 
     </style>
@@ -165,16 +190,15 @@ $magas= $magasin->read();
                         <p>Dernière Livraison: <span id="iii">--date--</span></p>
                         <div class="product-list">
                         <!--<button  class="addButton2 btn btn-purple" onclick="openEditModalMagasin('<?php echo $maga['id_magasin']; ?>',
-                                                                                                  <?php echo $maga['nom']; ?>', 
+                                                                                                  <?php echo $maga['ville']; ?>, 
+                                                                                                  <?php echo $maga['nom']; ?>',
                                                                                                   <?php echo $maga['type']; ?>', 
-                                                                                                  <?php echo $maga['contactName']; ?>', 
-                                                                                                  <?php echo $maga['contactTel']; ?>', 
-                                                                                                  <?php echo $maga['commercialKnow']; ?>', 
-                                                                                                  <?php echo $maga['produitKnow']; ?>', 
-                                                                                                  <?php echo $maga['relation']; ?>', 
-                                                                                                  <?php echo $maga['Honette']; ?>')">
-                        Modifier</button>-->
-                        <button  class="addButton2 btn btn-purple" onclick="openEditModalMagasin('<?php echo $maga['id_magasin']; ?>')">Modifier</button>
+                                                                                                  <?php echo $maga['name']; ?>', 
+                                                                                                  <?php echo $maga['phone']; ?>', 
+                                                                                                  <?php echo $maga['relation']; ?>')">
+                        Modifier</button>-->                        
+                        <button  class=" btn btn-purple" onclick="openAddModalContact('<?php echo $maga['id_magasin']; ?>')">Ajouter un contact</button>
+                        <button  class=" btn btn-purple" onclick="openEditModalMagasin('<?php echo $maga['id_magasin']; ?>')">Modifier</button>
                         <button  class="addButton2 btn btn-green" onclick="openModalProduitMagasin('<?php echo $maga['id_magasin']; ?>')">Ajouter un produit</button>
 
                     </div>
@@ -187,6 +211,7 @@ $magas= $magasin->read();
                                 <th>Qt en stock</th>
                                 <th>Qt en rayon</th>
                                 <th>Derniere Livraison</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -200,6 +225,9 @@ $magas= $magasin->read();
                                             <span class="info_livraison">Date:</span> <span> 20/20/2020</span>
                                             <span class="info_livraison">Quantite:</span> <span> 20</span>
                                         </div>
+                                    </td>
+                                    <td>
+                                    <button class="delete-btn" onclick="openMDeleteModal('<?php echo $prodm['id_produit']; ?>')">Supprimer</button>
                                     </td>
                                 </tr>  
                             <?php }?>
@@ -222,7 +250,6 @@ $magas= $magasin->read();
             <th>Ville</th>
             <th>Nom magasin</th>
             <th>Localisation</th>
-            <th>Chef du magasin</th>
             <th>Nos contacts</th>
             <th>Type</th>
             <th>Produit</th>
@@ -232,13 +259,42 @@ $magas= $magasin->read();
             <?php foreach ($magas as $maga): ?>
             <tr>
                 <td><?php echo htmlspecialchars($maga['id_magasin']); ?></td>
-                <td><?php echo $ville = rand(0, 1) ? "Douala" : "Yaounde"; ?></td>
+                <td><?php echo  htmlspecialchars($maga['ville']); ?></td>
                 <td><?php echo htmlspecialchars($maga['nom']); ?></td>
-                <td><?php echo htmlspecialchars($maga['localisation']); ?></td>
-                <td><?php echo htmlspecialchars($maga['chef_magasin']); ?></td>
-                <td><?php echo htmlspecialchars($maga['contacts']); ?></td>
+                <td id="la-map">
+                    <a href="<?php echo "https://www.google.com/maps?q=" . htmlspecialchars($maga['latitude']) . "," . htmlspecialchars($maga['longitude']); ?>" target="_blank">
+                        <img class="img-map" src="../assets/map.webp" alt="Voir l'emplacement sur Google Maps">
+                    </a>
+                </td>
+                <td>
+                            <table>
+                                <thead onclick="settrblock()">
+                                    <th>name</th>
+                                    <th>phone</th>
+                                    <th>relation</th>
+                                </thead>
+                                <tbody id="hiddetr">
+                                    <?php
+                                        $contacts = $magasin->readContact($maga['id_magasin']);
+                                        foreach ($contacts as $contact){ ?>
+                                        <tr id="trblock">
+                                            <td><?php echo htmlspecialchars($contact['name']); ?></td>
+                                            <td><?php echo htmlspecialchars($contact['phone']); ?></td>
+                                            <td><?php echo htmlspecialchars($contact['relation']); ?></td>
+                                        </tr>
+                                        <?php } ?>
+                                </tbody>
+                            </table>
+                 </td>
                 <td><?php echo htmlspecialchars($maga['type']); ?></td>
-                <td>Kara, Sable, Apero</td>
+                <td>
+                    <?php $prodsM = $magasin->getProduit( $maga['id_magasin'] );
+                        foreach($prodsM as $prodm){
+                            echo $prodm['produit'].", ";
+                        }
+                    ?>
+
+                </td>
             </tr>
             <?php endforeach; ?>
             <!-- Ajouter d'autres lignes pour chaque Produit -->
@@ -258,7 +314,15 @@ $magas= $magasin->read();
 
             <div class="infoPMagasin">
                     <div>
-                        <label for="store">Magasin</label>
+                        <label for="Ville"></label>
+                            <select name="ville" id="type">
+                                <option value="">Ville</option>
+                                <option value="Douala">Douala</option>
+                                <option value="Yaounde">Yaounde</option>
+                            <!-- Autres options ici -->
+                            </select>
+                    </div> 
+                    <div>
                         <select name="nom" id="store">
                         <option value="">Sélectionnez un magasin</option>
                             <optgroup label="Douala">
@@ -292,17 +356,19 @@ $magas= $magasin->read();
                                 <option value="la-sama">La Sama</right>
                             </optgroup>
                         </select>
-                    </div>
-                    <div>
-                        <label for="typeMagasin">Type de Magasin</label>
+                    </div>           
+            </div>
+            <div class="infoPMagasin">
+                <div>
                         <select name="type" id="type">
-                            <option value="Supermarché">Supermarché</option>
+                            <option value="">Type de Magasin</option>
+                            <option value="Super Marché">Supermarché</option>
                             <option value="Magasin Made in Cameroun">Magasin Made in Cameroun</option>
                             <option value="Supérette">Supérette</option>
                             <option value="Autre">Autre</option>
                         <!-- Autres options ici -->
                         </select>
-                    </div>             
+                </div>                  
             </div>
             <hr> <br>
             <label for="" style="font-style:italic;font-weight:bold;font-size:larger;">Nos Contact Dans le magasin</label>
@@ -310,33 +376,33 @@ $magas= $magasin->read();
                     <div class="infoPMagasin">
                         <div>
                             <label for="chefMagasinName">Nom</label>
-                            <input required="" id="" name="contactName" type="text" placeholder="nom ...">
+                            <input required="" id="" name="name" type="text" placeholder="nom ...">
                         </div>
                         <div>
                             <label for="contactChef">Telephone</label>
-                            <input required="" id="contactChef" name="contactTel" type="tel" placeholder="+237 6********">
+                            <input required="" id="contactChef" name="phone" type="tel" placeholder="+237 6********">
                         </div>
                     </div>
                     <div class="my-form">
                         <div class="choix">
-                            <input type="checkbox" name="commercialKnow" id="">
-                            <label for="commercialKnow">Il connais notre commercial</label>
+                            <input type="checkbox" name="relation[]" value="Il connais notre commercial" >
+                            <label for="commercialKnow">Connait-il notre commercial ?</label>
                         </div>
                         <div class="choix">
-                            <input type="checkbox" name="produitKnow" id="">
-                            <label for="produitKnow">Il connais nos produits</label>
+                            <input type="checkbox" name="relation[]" value="Il connais nos produits">
+                            <label for="produitKnow">Connait-il nos produits ?</label>
                         </div>
 
                         <div class="infoPMagasin">                        
                             <label for="relation">Notre relation</label>
-                            <select name="relation" id="" style="width:400px">
+                            <select name="relation[]" style="width:400px">
                                 <option value="Supportaire">Supportaire</option>
                                 <option value="Neutre">Neutre</option>
                                 <option value="Contre nous">Contre nous</option>
                             </select>
                         </div>
                         <div class="choix">
-                            <input type="checkbox" name="Honette" id="">
+                            <input type="checkbox" name ="relation[]" value="Honette" id="">
                             <label for="Honette">Il est Honnette</label>
                         </div>
                     </div>     
@@ -346,6 +412,57 @@ $magas= $magasin->read();
         </form>
     </div>
 </div>  
+
+<div id="contactModal" class="modal">
+<div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <h2>Ajouter un Contact</h2>
+        <!-- Formulaire avec les champs du magasin, date, commercial et OK -->
+        <form method="POST" action="../includes/classes/magasin_method/updateMagasin.php" class="form-col">
+        <input type="hidden" id="id_magasin_contact" name="id_magasin" >
+            <hr> <br>
+            <label for="" style="font-style:italic;font-weight:bold;font-size:larger;">Nos Contact Dans le magasin</label>
+            <div>
+                    <div class="infoPMagasin">
+                        <div>
+                            <label for="chefMagasinName">Nom</label>
+                            <input required="" id="" name="name" type="text" placeholder="nom ...">
+                        </div>
+                        <div>
+                            <label for="contactChef">Telephone</label>
+                            <input required="" id="contactChef" name="phone" type="tel" placeholder="+237 6********">
+                        </div>
+                    </div>
+                    <div class="my-form">
+                        <div class="choix">
+                            <input type="checkbox" name="relation[]" value="1" >
+                            <label for="commercialKnow">Connait-il notre commercial ?</label>
+                        </div>
+                        <div class="choix">
+                            <input type="checkbox" name="relation[]" value="2">
+                            <label for="produitKnow">Connait-il nos produits ?</label>
+                        </div>
+
+                        <div class="infoPMagasin">                        
+                            <label for="relation">Notre relation</label>
+                            <select name="relation[]" style="width:400px">
+                                <option value="3">Supportaire</option>
+                                <option value="4">Neutre</option>
+                                <option value="5">Contre nous</option>
+                            </select>
+                        </div>
+                        <div class="choix">
+                            <input type="checkbox" name ="relation[]" value="6" id="">
+                            <label for="Honette">Il est Honnette</label>
+                        </div>
+                    </div>     
+            </div>
+
+            <button type="submit" class="add-button" >Ajouter</button>
+        </form>
+    </div>
+</div>
+
 <div id="productModal2" class="modal">
     <div class="modal-content">
         <span class="close-button2" onclick="closeModal()">&times;</span>
@@ -355,21 +472,15 @@ $magas= $magasin->read();
             <div class="my-form-container">
                 <form class="my-form" method="POST" action="../includes/classes/magasin_method/addProduit_magasin.php">
                     <!-- Champ caché pour transmettre l'ID du magasin -->
-                    <input type="hidden" id="id_magasin" name="id_magasin" >
-                    
+                    <input type="hidden" id="id_magasinproduit" name="id_magasin" >
+                    <?php $i = 0; ?>
                     <h3>Sélectionnez les produits :</h3>
-                    <div>
-                        <input id="product1" type="checkbox" name="products[]" value="Kara">
-                        <label  for="product1">Produit 1</label>
-                    </div>
-                    <div>
-                        <input id="product2" type="checkbox" name="products[]" value="Cookies">
-                        <label for="product2">Produit 2</label>
-                    </div>
-                    <div>
-                        <input id="product3" type="checkbox" name="products[]" value="HUILE SANTE NGON">
-                        <label for="product3">HUILE SANTE NGON</label>
-                    </div>
+                    <?php foreach($prods as $prod): ?>
+                        <div>
+                            <input id="product<?php echo ++$i; ?>" type="checkbox" name="products[]" value="<?php echo htmlspecialchars($prod['nom_commercial']); ?>">
+                            <label for="product<?php echo $i; ?>"><?php echo htmlspecialchars($prod['nom_commercial']); ?></label>
+                        </div>
+                    <?php endforeach; ?>
                     <!-- Bouton de soumission -->
                     <button type="submit" class="add-button">Ajouter</button>
                 </form>
@@ -380,5 +491,23 @@ $magas= $magasin->read();
         </div>
     </div>
 </div>  
+<div id="modal3" class="modal">
+  <div class="modal-content validationModal">
+    <span class="close-button" onclick="closeModalValidation()">&times;</span>
+    <div class="image">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20 7L9.00004 18L3.99994 13" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+    </div>
+    Confirmer la supression!
+    <!-- Bouton Ajouter en bas -->
+
+    <form method="POST" action="../includes/classes/magasin_method/delete_produitM.php" class="btn-container-val">
+        <!-- Champ caché pour identifier l'édition d'un produit--> 
+        <input type="hidden" name="product_id" id="delete_productM_id" value="<?php echo  $prodm['id_produit']; ?>">
+        <button type="submit" id="delete"class="add-button">Supprimer</button> <?php //buton qui vas executer la fonction delete?>
+        <button class="add-button" onclick="closeModalValidation()">Non</button>
+    </form>
+
+  </div>
+</div>
 
 <?php include_once("../includes/footer.php"); ?>

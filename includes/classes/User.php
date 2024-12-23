@@ -63,15 +63,24 @@ class Utilisateur{
   }
 
   public function delete(){
-    $query = "DELETE FROM ". $this->name_table ." WHERE   id_utilisateur= ? ";
-    $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(1, $this->id_utilisateur);
+    try{
+      $query = "DELETE FROM ". $this->name_table ." WHERE   id_utilisateur= ? ";
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(1, $this->id_utilisateur);
 
-    if($stmt->execute()){
-      return true;
-    }else{
+      if($stmt->execute()){
+        return true;
+      }else{
+        return false;
+      }
+    } catch (Exception $e) {
+      // Annuler la transaction en cas d'erreur
+      error_log($e->getMessage());
+      echo "Erreur capturée : " . $e->getMessage();
       return false;
-    }
+  }
+
+
   }
 
 
