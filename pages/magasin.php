@@ -31,7 +31,7 @@ echo "</pre>";*/
 
 <div class="page-container">
     <div class="content-header">
-        <h1>Magasins</h1>
+        <h1 id="alpha">Magasins</h1>
     </div>
     <style>
     .radio-inputs {
@@ -267,11 +267,10 @@ echo "</pre>";*/
                     </a>
                 </td>
                 <td>
-                            <table>
+                            <table class="tableContact" >
                                 <thead onclick="settrblock()">
                                     <th>name</th>
                                     <th>phone</th>
-                                    <th>relation</th>
                                 </thead>
                                 <tbody id="hiddetr">
                                     <?php
@@ -280,7 +279,6 @@ echo "</pre>";*/
                                         <tr id="trblock">
                                             <td><?php echo htmlspecialchars($contact['name']); ?></td>
                                             <td><?php echo htmlspecialchars($contact['phone']); ?></td>
-                                            <td><?php echo htmlspecialchars($contact['relation']); ?></td>
                                         </tr>
                                         <?php } ?>
                                 </tbody>
@@ -381,6 +379,10 @@ echo "</pre>";*/
                         <div>
                             <label for="contactChef">Telephone</label>
                             <input required="" id="contactChef" name="phone" type="tel" placeholder="+237 6********">
+                        </div>
+                        <div class="infoPMagasinName">
+                                <input id="Latitude" name="latitude" type="hidden" placeholder="6.521..">
+                                <input id="Longitude" name="longitude" type="hidden" placeholder="4.658...">
                         </div>
                     </div>
                     <div class="my-form">

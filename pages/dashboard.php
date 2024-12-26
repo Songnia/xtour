@@ -16,6 +16,15 @@
     <div class="stats">
 
       <div class="stat-box">
+        <span class="stat-icon">🏬</span>
+        <h3>20</h3>
+        <p>magasins</p>
+        <div class="go-corner">
+        <a href="../pages/magasin.php"><div class="go-arrow">→</div></a>
+        </div>
+      </div>
+
+      <div class="stat-box">
         <span class="stat-icon">📦</span>
           <h3>12</h3>
           <p>produits</p>
@@ -25,27 +34,20 @@
       </div>
 
       <div class="stat-box">
-        <span class="stat-icon">🏬</span>
-        <h3>20</h3>
-        <p>magasins</p>
+        <span class="stat-icon">📄</span>
+        <h3>12</h3>
+        <p>Livraison</p>
         <div class="go-corner">
-        <a href="../pages/magasin.php"><div class="go-arrow">→</div></a>
+            <a href="#"><div class="go-arrow">→</div></a>
         </div>
       </div>
+
       <div class="stat-box">
         <span class="stat-icon">📊</span>
         <h3>125</h3>
         <p>Tournées</p>
         <div class="go-corner">
         <a href="../pages/rapport.php"><div class="go-arrow">→</div></a>
-        </div>
-      </div>
-      <div class="stat-box">
-        <span class="stat-icon">📄</span>
-        <h3>12</h3>
-        <p>Livraison</p>
-        <div class="go-corner">
-            <a href="#"><div class="go-arrow">→</div></a>
         </div>
       </div>
     </div>

@@ -16,15 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $phone = htmlspecialchars(trim($_POST["phone"]));
     $relation = json_encode($_POST["relation"]);
 
-  echo"<pre>";
-  var_dump(value: $name);
+  /*echo"<pre>";
+  var_dump(value: $_POST);
   echo"</pre>";
   echo"<pre>";
   var_dump(value: $phone);
   echo"</pre>";
   echo"<pre>";
   var_dump(value: $relation);
-  echo"</pre>";
+  echo"</pre>";*/
 
     echo "LE MAGASIN";
   echo"<pre>";

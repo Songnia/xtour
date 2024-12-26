@@ -13,7 +13,7 @@ include("../includes/sidebar-com.php");
 <div class="main-content">
     <header>
         <div class="page-controls">
-            <h2>Tournées</h2>
+            <h2>Planifier une Tournée</h2>
             <button id="addButton" class="btn-purple">Ajouter Tournée</button>
         </div>
     </header>
@@ -24,7 +24,7 @@ include("../includes/sidebar-com.php");
         <h3>Tournée 1 - Nom Commercial</h3>
         <div class="toolbar">
         <div>
-            <button class="addButton2 btn btn-green">Modifier</button>
+            <button class="addButton2 btn btn-green">Ajouter un magasin</button>
             <button class="buttonValider btn btn-green ">Valider</button>
         </div>
     </div>
@@ -61,7 +61,7 @@ include("../includes/sidebar-com.php");
         <h3>Tournée 1 - Nom Commercial</h3>
         <div class="toolbar">
         <div>
-            <button class="addButton2 btn btn-green">Modifier</button>
+            <button class="addButton2 btn btn-green">Ajouter un magasin</button>
             <button class="buttonValider btn btn-green">Valider</button>
         </div>
     </div>

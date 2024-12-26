@@ -8,10 +8,12 @@ include_once("../includes/header.php");
 include_once("../includes/sidebar.php");
 include_once("../includes/classes/Database.php");
 include_once("../includes/classes/Magasin.php");
+include_once("../includes/classes/Produit.php");
 
 $database = new Database();
 $db = $database->getConnection();
 $magasin = new Magasin($db);
+$produit = new Produit($db);
 
 try {
     $query = "
@@ -126,6 +128,118 @@ echo"</pre>";
     }
     #hiddetr tr{
         display: none;
+    }
+
+    /**Style Image */
+    .mySlides {display: none}
+    img {vertical-align: middle;}
+
+    /* Slideshow container */
+    .slideshow-container {
+    display: none;
+    margin: auto;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    }
+    .modal-slide-content {
+
+    background-color: #fff;
+    width: 500px;
+    height: 500px;
+    margin:5% auto;
+    text-align: left;
+    position: relative;
+    }
+
+    .mySlides img{
+    width: 500px;
+    height: 500px;
+    }
+
+    /* Next & previous buttons */
+    .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    }
+
+    /* Position the "next button" to the right */
+    .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+    }
+
+    /* On hover, add a black background color with a little bit see-through */
+    .prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+    }
+
+    /* Caption text */
+    .text {
+    color: #f2f2f2;
+    font-size: 15px;
+    padding: 8px 12px;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+    }
+
+    /* Number text (1/3 etc) */
+    .numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+    }
+
+    /* The dots/bullets/indicators */
+    .dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+    }
+
+    .active, .dot:hover {
+    background-color: #717171;
+    }
+
+    /* Fading animation */
+    .fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+    }
+
+    @keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+    }
+
+    /* On smaller screens, decrease text size */
+    @media only screen and (max-width: 300px) {
+    .prev, .next,.text {font-size: 11px}
     }
 
     </style>
@@ -292,17 +406,90 @@ echo"</pre>";
                         echo htmlspecialchars($magasinName); 
                     ?>
                 </td>
-                <td><?php echo htmlspecialchars($result['produit_id']); ?></td>
+                <td>
+                    <?php 
+                        echo $produit->getNameProduit(htmlspecialchars($result['produit_id'])); 
+                    ?>
+                </td>
                 <td><?php echo htmlspecialchars($result['visibilite_produit']); ?></td>
                 <td><?php echo  htmlspecialchars($result['ville']); ?></td>
                 <td><?php echo htmlspecialchars($result['prix_etiquette']); ?></td>
                 <td><?php echo htmlspecialchars($result['stock_etat']); ?></td>
                 <td><?php echo htmlspecialchars($result['date_fabrication']); ?></td>
                 <td><?php echo  htmlspecialchars($result['date_expiration']); ?></td>
-                <td><?php echo htmlspecialchars($result['qts_rayon']); ?></td>
+                <td>
+                    <?php
+                        try{
+                            $query = "SELECT quantite_rayon
+                            FROM stocks_produits
+                            WHERE quantite_rayon > 0
+                            AND nom = :nom
+                            ORDER BY id_stock DESC
+                            LIMIT 1";
+                        $stmt = $db->prepare($query);
+                        
+                        // Lier la variable idMagasin à la requête
+                        $stmt->bindParam(':nom',$magasinName);
+
+                        $qt_rayon = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $qt_rayon = $qt_rayon['quantite_rayon'];
+                        } catch (Exception $e) {
+                            // Journaliser l'erreur pour le débogage
+                            error_log($e->getMessage());
+                            echo "Erreur capturée : " . $e->getMessage();
+                        }
+                            echo $qt_rayon; 
+                    ?>
+                </td>
                 <td><?php echo htmlspecialchars($result['emplacement']); ?></td>
                 <td><?php echo htmlspecialchars($result['feedback_value']); ?></td>
-                <td><?php echo htmlspecialchars($result['image_path']); ?></td>
+                <td>
+                    <?php 
+                        $image = $result['image_path'];
+                        echo "<img onclick='openModalSlide()' src='$image' alt='Image téléchargée' style='max-width:30px; max-height:30px;'>"
+                        
+                    ?>
+                    <div class="slideshow-container" id="slide">
+                        <div class="modal-slide-content">
+                                <div class="mySlides fade">
+                            <div class="numbertext">1 / 3</div>
+                            <img src="../includes/classes/images/0ad4ad518640d4db1870a7b5142b390e.jpg" style='max-width:500px; max-height:500px;'>
+                            <div class="text">Caption Text</div>
+                            </div>
+
+                            <div class="mySlides fade">
+                            <div class="numbertext">2 / 3</div>
+                            <img src="../includes/classes/images/fcc0f40d3422e3263075864f72d74314.png" style='max-width:500px; max-height:500px;'">
+                            <div class="text">Caption Two</div>
+                            </div>
+
+                            <div class="mySlides fade">
+                            <div class="numbertext">3 / 3</div>
+                            <img src="../includes/classes/images/0ad4ad518640d4db1870a7b5142b390e.jpg" style='max-width:500px; max-height:500px;'>
+                            <div class="text">Caption Three</div>
+                            </div>
+
+                            <div class="mySlides fade">
+                            <div class="numbertext">3 / 3</div>
+                            <img src="../includes/classes/images/0ad4ad518640d4db1870a7b5142b390e.jpg" style='max-width:500px; max-height:500px;'>
+                            <div class="text">Caption Three</div>
+                            </div>
+
+                            <a class="prev" onclick="plusSlides(-1)">❮</a>
+                            <a class="next" onclick="plusSlides(1)">❯</a>
+
+                            
+                            <br>
+
+                            <div style="text-align:center">
+                            <span class="dot" onclick="currentSlide(1)"></span> 
+                            <span class="dot" onclick="currentSlide(2)"></span> 
+                            <span class="dot" onclick="currentSlide(3)"></span> 
+                            <span class="dot" onclick="currentSlide(4)"></span>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
             <?php endforeach; ?>
             <!-- Ajouter d'autres lignes pour chaque Produit -->

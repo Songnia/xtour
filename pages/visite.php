@@ -6,6 +6,13 @@ include("../includes/sidebar-com.php");
 
 // Insérer le header
 include("../includes/header.php");
+include_once("../includes/classes/Produit.php");
+include_once("../includes/classes/Database.php");
+$database = new Database();
+$db = $database->getConnection();
+
+$produit = new Produit($db);
+$prods = $produit->read();
 
 ?>
     <!-- Page Content -->
@@ -65,8 +72,9 @@ include("../includes/header.php");
                     <div class="question">
                         <label for="product">Produit</label>
                         <select id="product" name="product" required>
-                            <option value="kara">Kara</option>
-                            <!-- Ajoutez d'autres options de produit si nécessaire -->
+                            <?php foreach($prods as $prod): ?>
+                                <option value="<?php echo htmlspecialchars($prod['nom_commercial']); ?>"><?php echo htmlspecialchars($prod['nom_commercial']); ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>         
 

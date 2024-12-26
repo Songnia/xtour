@@ -266,6 +266,9 @@ body {
   margin-bottom: 10px;
 }
 
+.table-section .tableContact {
+  min-width: 220px; /* Définit une largeur minimale pour que le tableau reste lisible */
+}
 .table-section table {
   width: 100%; /* Fait en sorte que le tableau occupe toute la largeur du conteneur */
   min-width: 600px; /* Définit une largeur minimale pour que le tableau reste lisible */

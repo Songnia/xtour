@@ -43,10 +43,18 @@
 
     // Lire les produits
     public function read(){
-      $query = "SELECT * FROM " . $this->table_name. " ORDER BY id_produit DESC";
-      $stmt = $this->conn->prepare($query);
-      $stmt->execute();
-      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      try{
+        $query = "SELECT * FROM " . $this->table_name. " ORDER BY id_produit DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      } catch (Exception $e) {
+        // Annuler la transaction en cas d'erreur
+        error_log($e->getMessage());
+        echo "Erreur capturée : " . $e->getMessage();
+        return false;
+    }
+
     }
 
     // Mettre a jour un produit
@@ -94,6 +102,43 @@
         return false;
     }
   }
+
+  public function getIDProduit($nom){
+    try{
+      $query = "SELECT id_produit FROM Produit WHERE nom_commercial = :nom";
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(":nom", $nom);
+      $stmt->execute();
+
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      return $result ? $result['id_produit'] : null; // Retourne le nom ou null si aucun résultat
+
+    } catch (Exception $e) {
+      // Annuler la transaction en cas d'erreur
+      error_log($e->getMessage());
+      echo "Erreur capturée : " . $e->getMessage();
+      return false;
+  }      
+  }
+
+  public function getNameProduit($id_produit) {
+    try {
+        $query = "SELECT nom_commercial FROM Produit WHERE id_produit = :id_produit";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id_produit", $id_produit); // Spécifiez le type pour plus de sécurité
+        $stmt->execute();
+
+        // Récupérer uniquement le nom du produit
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['nom_commercial'] : null; // Retourne le nom ou null si aucun résultat
+
+    } catch (Exception $e) {
+        // Journaliser l'erreur pour le débogage
+        error_log($e->getMessage());
+        echo "Erreur capturée : " . $e->getMessage();
+        return false;
+    }
+}
     
   }  
 

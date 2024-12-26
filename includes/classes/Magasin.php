@@ -170,6 +170,22 @@ class Magasin{
         return false;
     }      
     }
+
+    public function getProduits($name){
+      try{
+        $query = "SELECT * FROM Magasin_Produit WHERE nom = :name ORDER BY date_ajout DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":name", $name);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      } catch (Exception $e) {
+        // Annuler la transaction en cas d'erreur
+        error_log($e->getMessage());
+        echo "Erreur capturée : " . $e->getMessage();
+        return false;
+    }      
+    }
     public function deleteProduit($id_produit){
       try{
         $query = "DELETE FROM Magasin_Produit WHERE id_produit = :id_produit";

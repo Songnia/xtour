@@ -315,3 +315,57 @@ function openPromotrice(){
 function hiddenPromotrice(){
   Promotice.style.display = "none";
 }
+
+//Caroucelle
+let slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  let dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+}
+const slide = document.getElementById("slide");
+function openModalSlide(){
+  slide.style.display = "block";
+}
+window.addEventListener("click", (event) => {
+  if (event.target === slide) {
+    slide.style.display = "none";
+  }
+});
+//const test =document.getElementById("alpha");
+//test.textContent = "3";
+const Lat =document.getElementById("Latitude");
+const Lon =document.getElementById("Longitude");
+
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            Lat.value= position.coords.latitude;
+            Lon.value = position.coords.longitude;
+            //test.textContent = test.textContent+" : Latitude: " + lat + ", Longitude: " + lon;
+        }, function(error) {
+            console.log("Erreur de géolocalisation : " + error.message);
+        });
+    } else {
+        console.log("La géolocalisation n'est pas supportée par ce navigateur.");
+    }
