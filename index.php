@@ -3,31 +3,26 @@
     include_once("includes/header.php");
 ?>
 <main class="main-connexion">
-    <form class="form-connexion">
+    <form class="form-connexion" action="includes/classes/user_method/login.php" method="POST">
         <p class="title-form-connexion">Connexion </p>
-        <p class="message">Login now and get full access to our app. </p>
+        <p class="message">connectez-vous. </p>
             <div class="flex">
             <label>
-                <input required="" placeholder="" type="text" class="input">
-                <span>Firstname</span>
+                <input required="" placeholder="" name="user_name" type="text" class="input">
+                <span>Nom d'utilisateur</span>
             </label>
 
-            <label>
-                <input required="" placeholder="" type="text" class="input">
-                <span>Lastname</span>
-            </label>
+            <!--<label>
+                <input required="" placeholder="" name="prenom" type="text" class="input">
+                <span>Prenom</span>
+            </label> -->
         </div>  
-                
-        <label>
-            <input required="" placeholder="" type="email" class="input">
-            <span>Email</span>
-        </label> 
             
         <label>
-            <input required="" placeholder="" type="password" class="input">
+            <input required="" name="pass" placeholder="" type="password" class="input">
             <span>Password</span>
         </label>
-        <button class="submit"><a href="pages/dashboard.php">Submit</a></button>
+        <button class="submit">Submit</button>
     </form>
 </main>
 

@@ -194,10 +194,6 @@ include_once("../includes/sidebar.php");
           <label for="Quantite">Quantite</label>
           <input required="" id="quantite" name="quantite" type="number">
       </div>
-      <div>
-          <label for="prix">Prix Unitaire(Fcfa)</label>
-          <input required="" id="prix" name="prix" type="number">
-      </div> 
       <!-- Bouton Ajouter en bas -->
       <button type="submit" class="add-button" >Ajouter</button>
     </form>

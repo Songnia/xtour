@@ -19,6 +19,8 @@ $produit = new Produit($db);
 
 $prods = $produit->read();
 $magas= $magasin->read();
+
+
 /*$contacts = $magasin->readContact($maga['id_magasin']);
 
 echo "<pre>";
@@ -319,42 +321,10 @@ echo "</pre>";*/
                                 <option value="Yaounde">Yaounde</option>
                             <!-- Autres options ici -->
                             </select>
-                    </div> 
+                    </div>
                     <div>
-                        <select name="nom" id="store">
-                        <option value="">Sélectionnez un magasin</option>
-                            <optgroup label="Douala">
-                                <option value="santa-lucia-akwa">Santa Lucia Akwa</option>
-                                <option value="santa-lucia-a-nord">Santa Lucia A Nord</option>
-                                <option value="santa-lucia-bberi">Santa Lucia Bberi</option>
-                                <option value="santa-lucia-bssadi">Santa Lucia Bssadi</option>
-                                <option value="santa-lucia-c-cicam">Santa Lucia C Cicam</option>
-                                <option value="santa-lucia-nkolbong">Santa Lucia Nkolbong</option>
-                                <option value="santa-lucia-palmier">Santa Lucia Palmier</option>
-                                <option value="santa-lucia-dla-bercy">Santa Lucia Dla-Bercy</option>
-                                <option value="ma-sarl-douala">Ma Sarl Douala</option>
-                                <option value="paul-gaby-sarl">Paul Gaby Sarl</option>
-                                <option value="vinny-akwa-1">Vinny Akwa 1</option>
-                                <option value="vinny-akwa-2">Vinny Akwa 2</option>
-                                <option value="mahima-bssadi">Mahima Bssadi</option>
-                                <option value="mahima-akwa">Mahima Akwa</option>
-                                <option value="fortune-cosmetics">Fortune cosmetics</option>
-                                <option value="parfumerie-jp">Parfumerie JP</option>
-                                <option value="precision-pressing">Precision Pressing</option>
-                            </optgroup>
-                            <optgroup label="Yaoundé">
-                                <option value="mieux-vivre">Mieux Vivre</option>
-                                <option value="sesame-market">Sesame Market</option>
-                                <option value="vitrine-du-cameroun-yde">Vitrine du Cameroun Yde</option>
-                                <option value="vitalia">Vitalia</option>
-                                <option value="ma-sarl-tsinga">Ma Sarl Tsinga</option>
-                                <option value="ma-sarl-mvolye">Ma Sarl Mvolye</option>
-                                <option value="ma-min-commerce">Ma Min Commerce</option>
-                                <option value="ma-bastos">Ma Bastos</option>
-                                <option value="la-sama">La Sama</right>
-                            </optgroup>
-                        </select>
-                    </div>           
+                        <input type="text" name="nom" id="store" placeholder="Nom du magasin" >
+                    </div>                              
             </div>
             <div class="infoPMagasin">
                 <div>

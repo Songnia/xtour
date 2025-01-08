@@ -16,6 +16,7 @@ $magasinDB = new Magasin($db);
 $produit = new Produit($db);
 
 // Récupération des données du formulaire
+$code_tournee = $_POST['codeTournee'];
 $ville = $_POST['ville']; //ville
 $magasin = $_POST['nom']; // Nom du magasin
 $produit_name = $_POST['product']; // Nom du produit
@@ -35,9 +36,9 @@ $feedback_value = $_POST['feedback_value'];
 $emplacement = $_POST['emplacement']; // Emplacement du produit
 $feedback_description = $_POST['description']; // Feedback général sur la visite
 
-/*echo"<pre>";
+echo"<pre>";
     var_dump($_POST);
-echo"</pre>";*/
+echo"</pre>";
 
 //Recuperet l'ID du magasin
 $magasin_id = $magasinDB->getIDMagasin($magasin);
@@ -91,11 +92,10 @@ try {
     $db->beginTransaction();
     try{
         // Insertion des informations dans la table "visite"
-        $query = "INSERT INTO Visite (ville, tournee_id, magasin_id, feedback_value, feedback_description  ) VALUES (:ville, :tournee_id, :magasin_id, :feedback_value, :feedback_description)";
-        $tournee_id = rand(1, 3); //on fait un random en attendans de gerer les Tourneer
+        $query = "INSERT INTO Visite (ville, codeTournee, magasin_id, feedback_value, feedback_description  ) VALUES (:ville, :codeTournee, :magasin_id, :feedback_value, :feedback_description)";
         $stmt = $db->prepare($query);
         $stmt->bindParam("ville",$ville);
-        $stmt->bindParam("tournee_id",$tournee_id);
+        $stmt->bindParam("codeTournee",$code_tournee);
         $stmt->bindParam("magasin_id",$magasin_id);
         $stmt->bindParam("feedback_value",$feedback_value);
         $stmt->bindParam("feedback_description",$feedback_description);

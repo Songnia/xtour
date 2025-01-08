@@ -1,4 +1,6 @@
-<?php $titre = "Dashboard"; 
+<?php $titre = "Dashboard";
+  session_start();
+  echo "Hello".$_SESSION['nom_utilisateur'];
   include("../includes/sidebar-mobile.php");
   include("../includes/header.php");
 ?>
@@ -15,7 +17,7 @@
     <!-- Stat Boxes -->
     <div class="stats">
 
-      <div class="stat-box">
+      <div class="stat-box" onclick="goTomagasin()">
         <span class="stat-icon">🏬</span>
         <h3>20</h3>
         <p>magasins</p>
@@ -24,7 +26,7 @@
         </div>
       </div>
 
-      <div class="stat-box">
+      <div class="stat-box" onclick="goToproduit()">
         <span class="stat-icon">📦</span>
           <h3>12</h3>
           <p>produits</p>
@@ -33,7 +35,7 @@
           </div>
       </div>
 
-      <div class="stat-box">
+      <div class="stat-box" onclick="goTolivraison()">
         <span class="stat-icon">📄</span>
         <h3>12</h3>
         <p>Livraison</p>
@@ -42,7 +44,7 @@
         </div>
       </div>
 
-      <div class="stat-box">
+      <div class="stat-box" onclick="goTotournee()">
         <span class="stat-icon">📊</span>
         <h3>125</h3>
         <p>Tournées</p>

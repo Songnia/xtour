@@ -25,6 +25,7 @@ const closeButtons2 = document.querySelectorAll(".close-button2");
 const iiiElement = document.getElementById("label1");
 const ID = document.getElementById("id_magasin");
 const Promotice = document.getElementById("promotrice");
+const btnr = document.getElementById("remarqueModal");
 
 addButton.addEventListener("click", () => {
   modal.style.display = "flex";
@@ -69,6 +70,7 @@ function openEditModalProduit(id, nomCommercial, nomDescriptif, prix, poids) {
   document.getElementById("poids").value = poids;
 }
 
+
 function openDeleteModal(id){
   document.getElementById("product_id").value = id;
   document.getElementById("delete_product_id").value = document.getElementById("product_id").value;
@@ -79,6 +81,11 @@ function openDeleteModal(id){
 }
 
 
+function openModalAddTour(code) {
+  modal2.style.display = "flex";
+  document.getElementById("code_tournee").value = code;
+}
+
 
 const tr = document.getElementById("trblock");
 function settrblock(){
@@ -87,6 +94,12 @@ function settrblock(){
   }else{
     tr.style.display = "none";
   }
+}
+const modal_status = document.getElementById("ModalStatut");
+const code_tournee2 = document.getElementById("code_tournee2");
+function openModalSetStatutTournee(code){
+  code_tournee2.value = code;
+  modal_status.style.display = "flex";
 }
 //GERER PRODUITS
 
@@ -99,6 +112,12 @@ editButton.forEach((button) => {
   });
 });
 */
+const remarque_input = document.getElementById("remarque");
+function openModalRemarque(id, objectif_content){
+  remarque_input.value = objectif_content;
+  document.getElementById("id_tour").value = id;
+  btnr.style.display="flex";
+}
 
 // Afficher le modal lors du clic sur "Supprimer"
 buttonSupprimer.forEach((button) => {
@@ -110,6 +129,7 @@ buttonSupprimer.forEach((button) => {
 
 function closeModal() {
   modal.style.display = "none";
+  btnr.style.display = "none";
 }
 function closeModalValidation() {
   modal3.style.display = "none";
@@ -123,8 +143,12 @@ window.addEventListener("click", (event) => {
 });
 window.addEventListener("click", (event) => {
   if (event.target === modal3) {
-    modal3.style.display = "none";
+      modal3.style.display = "none";  
   }
+  /*window.addEventListener("click", (event) => {
+    if (event.target === btnr) {
+      btnr.style.display = "none";
+    }*/
 });
 
 // Sélection des éléments
@@ -162,6 +186,9 @@ window.addEventListener("click", (event) => {
     modal2.style.display = "none";
   }
 });
+
+
+
 
 const buttonValider = document.querySelectorAll(".buttonValider");
 const acceptButton = document.querySelectorAll(".acceptButton");
@@ -252,6 +279,29 @@ function showDetail() {
   contentBody.style.display = "flex";  // Affiche la vue "Détail"
   contentScroll.style.display = "none"; // Masque la vue "Liste"
   console.log("Mode Détail activé");
+}
+
+
+const tournee_actuel = document.getElementById("tournee-actuel");
+const historique = document.querySelectorAll (".histo");
+
+// Fonction pour afficher la liste
+function showtournee_actuel() {
+  tournee_actuel.style.display = "block"; // Affiche la vue "Liste"
+  historique.forEach(element => {
+    element.style.display = 'none';
+  });  
+  console.log("Mode planification activé");
+}
+
+// Fonction pour afficher le détail
+function showHistorique() {
+  historique.forEach(element => {
+    element.style.display = 'block';
+    //element.style.transition = 'all 0.5s ease-in';
+  });  
+  tournee_actuel.style.display = "none"; // Masque la vue "Liste"
+  console.log("Mode historique activé");
 }
 
 const searchInput = document.getElementById("searchInput");
@@ -369,3 +419,62 @@ const Lon =document.getElementById("Longitude");
     } else {
         console.log("La géolocalisation n'est pas supportée par ce navigateur.");
     }
+
+
+
+    //Fonction AJAX pour le suivit des visites
+
+    /*function chargerVisite(idMagasin) {
+      fetch(`../includes/classes/Magasin.php?id_magasin=${idMagasin}`)
+          .then(response => response.json())
+          .then(magasin => {
+              document.querySelector('#nom_magasin').value = magasin.nom_magasin;
+              document.querySelector('#produit').value = magasin.produit;
+          })
+          .catch(error => console.error('Erreur:', error));
+  }
+
+    function passerVisiteSuivante(idTournee, idMagasinActuel) {
+      fetch(`get_magasin_suivant.php?id_tournee=${idTournee}&id_magasin=${idMagasinActuel}`)
+          .then(response => response.json())
+          .then(magasinSuivant => {
+              if (magasinSuivant) {
+                  chargerVisite(magasinSuivant.id_magasin);
+              } else {
+                  alert('Toutes les visites sont terminées !');
+                  location.reload(); // Recharge la page pour afficher l'état final
+              }
+          })
+          .catch(error => console.error('Erreur:', error));
+  }*/
+
+  function sedTourneeInformation(nom, ville, code){
+      const villeEncode = encodeURIComponent(ville);
+      const nameEncode = encodeURIComponent(nom);
+      const codeEncode = encodeURIComponent(code);
+
+      window.location.href = `visite.php?nomMagasin=${nameEncode}&villeMagasin=${villeEncode}&codeTournee=${codeEncode}`;
+  }
+  
+
+  function submitForm() {
+    console.error('Debut..........');
+    var formData = new FormData(document.getElementById('productForm'));
+
+    fetch('../includes/classes/enregistrerVisite.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert('Données enregistrées avec succès !');
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+    });
+}
+
+function goTomagasin(){
+  fetch("../pages/magasin.php");
+}

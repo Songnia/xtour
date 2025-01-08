@@ -13,8 +13,13 @@ include_once("../includes/classes/User.php");
 
 $database = new Database();
 $db = $database->getConnection();
+
 $utilisateur = new Utilisateur($db);
 $users = $utilisateur->read();
+
+echo "<pre>";
+//var_dump($users);
+echo "</pre>";
 ?>
 
 <!-- Main Content -->
@@ -97,6 +102,7 @@ $users = $utilisateur->read();
         <tr>
           <th>ID</th>
           <th>Nom du Utilisateur</th>
+          <th>mot de passe</th>
           <th>Roles</th>
           <th>Magasins</th>
           <th>Actions</th>
@@ -107,6 +113,7 @@ $users = $utilisateur->read();
         <tr>
           <td><?php echo htmlspecialchars($user['id_utilisateur']) ?></td>
           <td><?php echo htmlspecialchars($user['nom']." ".$user['prenom']) ?></td>
+          <td><?php echo htmlspecialchars($user['mot_de_passe']) ?></td>
           <td><?php echo htmlspecialchars($user['role']) ?></td>
           <td>Ampiat, Santa Loucia</td>
           <td>
@@ -147,7 +154,6 @@ $users = $utilisateur->read();
           <option vrequired=""alue="Admin">Admin</option>
           <option value="Commercial">Commercial</option>
           <option value="responsable_commercial">Responsable Commercial</option>
-          <!-- Autres options ici -->
       </select>
       </div>
       <div>

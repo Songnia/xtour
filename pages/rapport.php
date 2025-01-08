@@ -19,7 +19,7 @@ try {
     $query = "
     SELECT 
         v.id_visite,
-        v.tournee_id,
+        v.codeTournee,
         v.magasin_id,
         v.ville,
         v.date_visite,

@@ -411,6 +411,22 @@ th {
   border-radius: 4px;
   cursor: pointer;
 }
+.btn-yellow {
+  background-color: #f5c637;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.heartool{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-right: 2%;
+}
 
 .btn-green:hover .add-store-bt:hover {
   background-color: #45a049;
@@ -863,6 +879,11 @@ input[type="number"],.prix {
   border-radius: 8px;
   background-color: #9cf1b27a;
 }
+#historique{
+  display: none;
+}
+
+
 @keyframes pulse {
   from {
     transform: scale(0.9);
@@ -945,6 +966,9 @@ input[type="number"],.prix {
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+}
+.histo{
+  display: none;
 }
 
 .table {

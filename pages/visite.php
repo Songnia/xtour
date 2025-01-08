@@ -8,74 +8,161 @@ include("../includes/sidebar-com.php");
 include("../includes/header.php");
 include_once("../includes/classes/Produit.php");
 include_once("../includes/classes/Database.php");
+include_once("../includes/classes/Magasin.php");
 $database = new Database();
 $db = $database->getConnection();
 
+$magasin = new Magasin($db);
 $produit = new Produit($db);
 $prods = $produit->read();
 
+try {
+    $query = "
+    SELECT 
+        v.id_visite,
+        v.codeTournee,
+        v.magasin_id,
+        v.ville,
+        sp.produit_id
+    FROM 
+        Visite v
+
+    LEFT JOIN 
+        stocks_produits sp ON v.id_visite = sp.visite_id
+    ORDER BY 
+    v.id_visite DESC;
+
+    ";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute();
+
+    $resultas = $stmt->fetch(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo "Erreur capturée : " . $e->getMessage();
+    return false;
+}
+
+echo"<pre>";
+//var_dump($resultas);
+echo"</pre>";
+
+$nom = isset($_GET['nomMagasin']) ? $_GET['nomMagasin'] : '';
+$ville = isset($_GET['villeMagasin']) ? $_GET['villeMagasin'] : '';
+$code = isset($_GET['codeTournee']) ? $_GET['codeTournee'] : '';
+echo"<pre>";
+//var_dump($nom);
+echo"</pre>";
+if(empty($nom) and empty($ville) and empty($code)){
+    $nom = $magasin->getNameMagasin($resultas["magasin_id"]);
+    $code = $resultas['codeTournee'];
+    $ville = $resultas['ville'];
+}
+echo"<pre>";
+//var_dump($nom);
+echo"</pre>";
+
+echo "code= ".$code;
 ?>
     <!-- Page Content -->
     <main class="container">
         <h1>Tournées</h1>
         <form id="productForm" method="POST" enctype="multipart/form-data" action="../includes/classes/enregistrerVisite.php" enctype="multipart/form-data">
             <!-- Vérification générale -->
+             <input type="hidden" name="codeTournee" value="<?php echo $code; ?>">
             <section class="section">
                 <h2>Vérification générale</h2>
 
                     <div>
                         <hr>
                     </div>                    
-                    <div class="question"><label for="Ville">Ville</label>
+                    <div class="question" ><label for="Ville">Ville</label>
 
-                        <select name="ville" id="">
-                            <option value="Douala">Douala</option>
-                            <option value="Yaounde">Yaounde</option>
+                        <select name="ville" id="ville_visite">
+                            <option value="Douala"<?php if ($ville == 'Douala') echo 'selected'; ?>>Douala</option>
+                            <option value="Yaounde"<?php if ($ville == 'Yaounde') echo 'selected'; ?>>Yaounde</option>
                         </select>
                     </div>
                     <div class="question">
                         <label for="store">Magasin</label>
-                        <select name="nom" id="store">
+                        <?php
+                            if(isset($ville) and !empty($ville)){
+                                try{
+                                    $query = "SELECT nom FROM Magasin WHERE ville =:ville ORDER BY date_enregistrement DESC";
+                                    $stmt = $db->prepare($query);
+                                    $stmt->bindParam(":ville", $ville);
+                                    $stmt->execute();
+                                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    //var_dump($result);
+                                } catch (Exception $e) {
+                                        // Annuler la transaction en cas d'erreur
+                                        $db->rollBack();
+                                        error_log($e->getMessage());
+                                        echo "Erreur capturée : " . $e->getMessage();
+                                        return false;
+                                }
+                            }else{
+                                try{
+                                    $query = "SELECT nom FROM Magasin ORDER BY date_enregistrement DESC";
+                                    $stmt = $db->prepare($query);
+                                    $stmt->execute();
+                                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    //var_dump($result);
+                                } catch (Exception $e) {
+                                        // Annuler la transaction en cas d'erreur
+                                        $db->rollBack();
+                                        error_log($e->getMessage());
+                                        echo "Erreur capturée : " . $e->getMessage();
+                                        return false;
+                                }                                    
+                            }
+                        ?> 
+                        <select name="nom" id="magasin_visite">
                         <option value="">Sélectionnez un magasin</option>
-                            <optgroup label="Douala">
-                                <option value="santa-lucia-akwa">Santa Lucia Akwa</option>
-                                <option value="santa-lucia-a-nord">Santa Lucia A Nord</option>
-                                <option value="santa-lucia-bberi">Santa Lucia Bberi</option>
-                                <option value="santa-lucia-bssadi">Santa Lucia Bssadi</option>
-                                <option value="santa-lucia-c-cicam">Santa Lucia C Cicam</option>
-                                <option value="santa-lucia-nkolbong">Santa Lucia Nkolbong</option>
-                                <option value="santa-lucia-palmier">Santa Lucia Palmier</option>
-                                <option value="santa-lucia-dla-bercy">Santa Lucia Dla-Bercy</option>
-                                <option value="ma-sarl-douala">Ma Sarl Douala</option>
-                                <option value="paul-gaby-sarl">Paul Gaby Sarl</option>
-                                <option value="vinny-akwa-1">Vinny Akwa 1</option>
-                                <option value="vinny-akwa-2">Vinny Akwa 2</option>
-                                <option value="mahima-bssadi">Mahima Bssadi</option>
-                                <option value="mahima-akwa">Mahima Akwa</option>
-                                <option value="fortune-cosmetics">Fortune cosmetics</option>
-                                <option value="parfumerie-jp">Parfumerie JP</option>
-                                <option value="precision-pressing">Precision Pressing</option>
-                            </optgroup>
-                            <optgroup label="Yaoundé">
-                                <option value="mieux-vivre">Mieux Vivre</option>
-                                <option value="sesame-market">Sesame Market</option>
-                                <option value="vitrine-du-cameroun-yde">Vitrine du Cameroun Yde</option>
-                                <option value="vitalia">Vitalia</option>
-                                <option value="ma-sarl-tsinga">Ma Sarl Tsinga</option>
-                                <option value="ma-sarl-mvolye">Ma Sarl Mvolye</option>
-                                <option value="ma-min-commerce">Ma Min Commerce</option>
-                                <option value="ma-bastos">Ma Bastos</option>
-                                <option value="la-sama">La Sama</right>
-                            </optgroup>
+                            <?php foreach($result as $res): ?>
+                                <option value="<?php echo htmlspecialchars($res['nom']); ?>" <?php if ($nom == $res['nom']) echo 'selected'; ?>>
+                                    <?php echo htmlspecialchars($res['nom']); ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select> 
                     </div>  
                     <div class="question">
                         <label for="product">Produit</label>
+                        <?php
+                            if(isset($nom) || !empty($nom)){
+                                $id_magasin = $magasin->getIDMagasin($nom);
+                                $id_magasin = $id_magasin['id_magasin'];
+
+                                //var_dump($id_magasin);
+                                $produit_magasin = $magasin->getProduit($id_magasin);
+                                echo "<pre>";
+                                //var_dump($produit_magasin);
+                                echo "</pre>";
+                        ?>
                         <select id="product" name="product" required>
-                            <?php foreach($prods as $prod): ?>
-                                <option value="<?php echo htmlspecialchars($prod['nom_commercial']); ?>"><?php echo htmlspecialchars($prod['nom_commercial']); ?></option>
-                            <?php endforeach; ?>
+                            <?php
+                            if (!empty($produit_magasin)) {
+                                foreach ($produit_magasin as $prod) { ?>
+                                    <option value="<?php echo $prod['produit']; ?>">
+                                        <?php echo $prod['produit']; ?>
+                                    </option>
+                                <?php }
+                            } else {
+                                if (isset($prods)) {
+                                    var_dump($prods);
+                                    foreach ($prods as $prod) { ?>
+                                        <option value="<?php echo $prod['nom_commercial']; ?>">
+                                            <?php echo $prod['nom_commercial']; ?>
+                                        </option>
+                                    <?php } 
+                                }else{?>
+                                    <option value="">-- Aucun produit disponible --</option>
+                                <?php } }
+                            }
+                            ?>
                         </select>
+
                     </div>         
 
                     <div class="question">
