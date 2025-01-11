@@ -25,10 +25,10 @@ class Tour {
 
     // Fonctionnalités liées aux tournées
     // Créer une tournée
-    public function createTournee() {
+    public function createTournee($id_user) {
         try {
             $this->conn->beginTransaction(); // Démarre une transaction
-            $id_user = 3;
+
             $query = "INSERT INTO Tournee SET 
                     ville =:ville,
                     utilisateur_id = :utilisateur_id,

@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <style>
   /* From Uiverse.io by andrew-demchenk0 */ 
 .warning {
@@ -193,7 +197,7 @@ label{
 
 </style>
 <div class="header">
-      <h1>Welcome Back</h1>
+      <h1>Welcome Back <?php echo $_SESSION['nom'] ;?> </h1>
       <div class="header-right">
         <div class="notification-container" id="alertClick">
           <span  class="notification-icon">🔔</span>

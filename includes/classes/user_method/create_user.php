@@ -12,6 +12,7 @@
     $utilisateur->date_arrive_dans_entreprise = htmlspecialchars(trim($_POST["date_arrive_dans_entreprise"]));
     $utilisateur->role = htmlspecialchars(trim($_POST["role"]));
     $utilisateur->mot_de_passe = bin2hex(random_bytes(length: 12 / 2));
+    $commerciaux = $_POST["id_commerciaux"];
 
     $nom = $utilisateur->nom;
     $prenom = $utilisateur->prenom;
@@ -19,7 +20,8 @@
     
     // Verifier si l utilisateur existe
     echo "<pre>";
-      var_dump($utilisateur);
+      //var_dump($_POST);
+      var_dump($commerciaux);
     echo "</pre>";
     if(!empty($_POST["utilisateur_id"])){
       $utilisateur->id_utilisateur = $_POST["utilisateur_id"];
@@ -30,17 +32,24 @@
       }
     }else{
       if($utilisateur->create()){
-        /*$pass = $utilisateur->mot_de_passe;
+        $pass = $utilisateur->mot_de_passe;
         $id_user = $utilisateur->getIDUser($pass);
         echo "<pre>";
-         var_dump($id_user);
+         //var_dump($id_user);
         echo "</pre>";
-        $newcode = $id_user."".$pass;
+
+        foreach ($commerciaux as $com):          // Vérifier si un produit a été trouvé
+          // Appel de la méthode addProduit
+          $name = $utilisateur->getNameCom($com);
+          $name = $name[0]['nom_utilisateur'];
+          $utilisateur->attributCommerciaux($name, $id_user, $com);
+        endforeach;
+        /*$newcode = $id_user."".$pass;
         echo "<pre>";
         var_dump($newcode);
        echo "</pre>";*/
         //$utilisateur->updatePassword($newcode);
-        header("Location: ../../../pages/user.php");
+       header("Location: ../../../pages/user.php");
       }else{
         echo "Erreur lors de la creation de l utilisateur";
       }

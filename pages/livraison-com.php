@@ -1,23 +1,12 @@
 <?php 
 $titre = "Magasins"; 
-
-session_start();
-
-
-
-switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
-  case 'Admin': 
-    include_once("../includes/sidebar-mobile.php");
-    include_once("../includes/sidebar.php");
-    break;
-
-  default:
-  include_once("../includes/sidebar-com.php");
-}
+include_once("../includes/sidebar-mobile.php");
 
 // Insérer le header
 include_once("../includes/header.php");
 
+// Insérer la Sidebar
+include_once("../includes/sidebar.php");
 ?>
 
 <!-- Main Content -->

@@ -1,4 +1,6 @@
 <?php
+session_start();
+$id_utilisateur = $_SESSION['id_utilisateur'];
 echo "hello";
 include_once("../Database.php"); 
 include_once("../Tournee.php");
@@ -46,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     var_dump($tour);  // Affiche l'objet Tour avec ses propriétés
     echo "</pre>";
 
-    if( $tour->createTournee()){
+    if( $tour->createTournee($id_utilisateur)){
         $id_tournee = $tour->getIDTournee($code_tournee);
 
         $annee = date('Y');

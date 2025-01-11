@@ -281,6 +281,36 @@ function showDetail() {
   console.log("Mode Détail activé");
 }
 
+const containcheck = document.getElementById("containcheck");
+const user_role = document.getElementById("utilisateur_role");
+
+function showCommerciaux(){
+  if(user_role.value === "responsable_commercial"){
+    containcheck.style.display = "block";
+  } 
+}
+
+const visiteButtons = document.querySelectorAll(".visite_id"); // Utilisation de la classe pour les boutons
+const btnU = document.querySelectorAll(".btn-unique");
+const goVisite = document.getElementById("goVisite");
+
+
+// Fonction pour afficher les boutons de visite et masquer les autres
+function showVisite(){
+    if (visiteButtons.length > 0) {
+        visiteButtons.forEach(button => {
+            button.style.display = "block";  // Affiche tous les boutons de la classe "visite_id"
+        });
+
+        btnU.forEach(element => {
+            element.style.display = 'none';  // Masque tous les boutons de la classe "btn-unique"
+        });
+    } else {
+        console.error("Aucun bouton .visite_id trouvé.");
+    }
+}
+
+
 
 const tournee_actuel = document.getElementById("tournee-actuel");
 const historique = document.querySelectorAll (".histo");
@@ -476,5 +506,16 @@ const Lon =document.getElementById("Longitude");
 }
 
 function goTomagasin(){
-  fetch("../pages/magasin.php");
+  window.location.href = "../pages/magasin.php";
 }
+function goToproduit(){
+  window.location.href = "../pages/produit.php";
+}
+function goTolivraison(){
+  window.location.href = "../pages/livraison.php";
+}
+function goTotournee(){
+  window.location.href = "../pages/rapport.php";
+}
+
+

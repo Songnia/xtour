@@ -57,6 +57,56 @@ class Utilisateur{
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function readComerciaux(){
+    try{
+      $query = "SELECT * FROM ".  $this->name_table ." WHERE role = :role ORDER BY id_utilisateur DESC";
+      $stmt = $this->conn->prepare($query);
+      $this->role = "Commercial";
+      $stmt->bindParam(":role",$this->role);
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }catch (Exception $e) {
+      // Annuler la transaction en cas d'erreur
+      error_log($e->getMessage());
+      echo "Erreur capturée : " . $e->getMessage();
+      return false;
+    }    
+
+  }
+
+  public function getNameCom($id_com){
+    try{
+      $query = "SELECT nom_utilisateur FROM ".  $this->name_table ." WHERE id_utilisateur = :id_utilisateur ORDER BY id_utilisateur DESC";
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(":id_utilisateur",$id_com);
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }catch (Exception $e) {
+      // Annuler la transaction en cas d'erreur
+      error_log($e->getMessage());
+      echo "Erreur capturée : " . $e->getMessage();
+      return false;
+    }       
+  }
+
+  public function attributCommerciaux($comName,$id_responsable,$id_com){
+    try{
+        $query = "INSERT INTO Relation_Hierarchique (id_commercial, id_responsable, nom_commercial) VALUES (:id_commercial, :id_responsable, :nom_commercial)"; 
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(":id_commercial", $id_com);
+        $stmt->bindParam(":id_responsable", $id_responsable);
+        $stmt->bindParam(":nom_commercial", htmlspecialchars($comName));
+        $stmt->execute();
+        return true;
+    } catch (Exception $e) {
+        // Annuler la transaction en cas d'erreur
+        error_log($e->getMessage());
+        echo "Erreur capturée : " . $e->getMessage();
+        return false;
+    }
+  }
+
   // Mise a jour les utilisateurs
   public function update(){
     $query = "UPDATE ".$this->name_table." SET nom=:nom, prenom=:prenom, date_arrive_dans_entreprise=:date_arrive_dans_entreprise, role=:role WHERE id_utilisateur=:id";

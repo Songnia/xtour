@@ -1,3 +1,6 @@
+<?php 
+session_start();
+?>
 <header class="header-mobile">
     <div class="logo">LOGO</div>
     <h1>HOME</h1>
@@ -7,15 +10,26 @@
 <aside class="sidebarMobile" id="sidebarMobile">
     <button class="close-btn" id="closesidebarMobile">&times;</button>
     <div class="tools">
-        <h2>Tools</h2>
+        <h2>
+            
+            <?php
+                switch($_SESSION['role']) {
+                case 'Admin': echo $_SESSION['role'] ;
+                    break;
+                case 'Commercial':echo $_SESSION['role'];
+                    break;
+                case 'responsable_commercial': echo "R commercial";
+                    break;
+            }?>
+            Tools</h2>
         <a href="../pages/dashboard.php" class="tool-btn nav-link active">Overview</a>
         <a href="../pages/rapport.php" class="tool-btn nav-link">Tournées</a>
         <a href="../pages/magasin.php" class="tool-btn nav-link">Magasins</a>
-        <a href="../pages/visite.php" class="tool-btn nav-link">Visite</a>
+        <a href="../pages/tournee-com.php" class="tool-btn nav-link">Planifier</a>
         <a href="../pages/livraison.php" class="tool-btn nav-link">Livraison</a>
         <a href="../pages/produit.php" class="tool-btn nav-link">Produits</a>
         <a href="../pages/user.php" class="tool-btn nav-link">Utilisateurs</a>
-        <a href="../pages/connexion.php" class="tool-btn nav-link">Sign Out</a>
+        <a href="../pages/" class="tool-btn nav-link">Sign Out</a>
 
     </div>
 </aside>

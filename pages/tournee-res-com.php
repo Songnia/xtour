@@ -1,12 +1,22 @@
 <?php $titre = "Tournées"; 
     $namePage = "tournee-res-com.php";
-include("../includes/sidebar-mobile-com.php");
 
+session_start();
+switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
+        case 'Admin': 
+        include_once("../includes/sidebar-mobile.php");
+        include_once("../includes/sidebar.php");
+        break;
+        
+        default:
+        include_once("../includes/sidebar-com.php");
+        include("../includes/sidebar-mobile-com.php");
+}
+$id_utilisateur = $_SESSION['id_utilisateur'];
 // Insérer le header
 include("../includes/header.php");
 
 // Insérer la Sidebar commercial
-include("../includes/sidebar-com.php");
 include_once("../includes/classes/Tournee.php");
 include_once("../includes/classes/Magasin.php");
 include_once("../includes/classes/Database.php");
@@ -15,15 +25,15 @@ $database = new Database();
 $db = $database->getConnection();
 
 $tournee = new Tour($db);
-$query = "SELECT * FROM Tournee ORDER BY date_enregistrement DESC";
+$query = "SELECT * FROM Tournee  WHERE utilisateur_id = ".$id_utilisateur." ORDER BY date_enregistrement DESC";
 $stmt = $db->prepare($query);
 $stmt->execute();
 $tournees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 echo "<pre>";
-    //var_dump($tournees[0]);  // Affiche l'objet Tournee avec ses propriétés
-    //echo"-----------------------------<br>";
-    //var_dump($tournees);
+    /*var_dump($tournees[0]);  // Affiche l'objet Tournee avec ses propriétés
+    echo"-----------------------------<br>";
+    var_dump($tournees);*/
 echo "</pre>";
 
 $tours = new Tour($db);
@@ -56,7 +66,7 @@ echo "</pre>";*/
     </header>
 
     
-    <!-- Table Container valider-->
+    <!--    Table Container valider-->
 
         <div class="table-container" id="tournee-actuel">
                     <h3 style="display:inline" >Tournée <?php echo $tournees[0]['code']; ?></h3>
@@ -81,12 +91,13 @@ echo "</pre>";*/
                                                     break;
                                     default: 
                                             echo"En attente";
-                                }                  
+                                }                            
                             ?>
                     </span>
                         
                     </div>
                     </div>
+                                <?php  //if($tournees===null){echo "Aucune tournee n a encore ete planifier";}?>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -98,13 +109,12 @@ echo "</pre>";*/
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php
+                                    $tours_list = $tours->read($tournees[0]['code']);                         
+                                    foreach ($tours_list as $tour){  
+                                    ?>
                                 <tr>
                                 
-                                <?php
-                                    $tours_list = $tours->read($tournees[0]['code']);
-                                    
-                                    foreach ($tours_list as $tour){ 
-                                ?>
                                     <td><?php echo $tour['nom_magasin']; ?></td>
                                     <td><?php echo $tour['date']; ?></td>
                                     <td><?php echo $tour['jour']; ?></td>

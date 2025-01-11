@@ -1,11 +1,18 @@
 <?php $titre = "Tournées"; 
     $namePage = "tournee-com.php";
+
+session_start();
+$id_utilisateur = $_SESSION['id_utilisateur'];
+
 include("../includes/sidebar-mobile-com.php");
 // Insérer le header
 include("../includes/header.php");
 
 // Insérer la Sidebar commercial
 include("../includes/sidebar-com.php");
+
+
+
 include_once("../includes/classes/Tournee.php");
 include_once("../includes/classes/Magasin.php");
 include_once("../includes/classes/Database.php");
@@ -14,7 +21,7 @@ $database = new Database();
 $db = $database->getConnection();
 
 $tournee = new Tour($db);
-$query = "SELECT * FROM Tournee ORDER BY date_enregistrement DESC";
+$query = "SELECT * FROM Tournee WHERE utilisateur_id = ".$id_utilisateur." ORDER BY date_enregistrement DESC";
 $stmt = $db->prepare($query);
 $stmt->execute();
 $tournees = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -55,8 +62,7 @@ echo "</pre>";*/
 
     
     <!-- Table Container valider-->
-
-            <div class="table-container" id="tournee-actuel">
+        <div class="table-container" id="tournee-actuel">
                     <h3 style="display:inline" >Tournée <?php echo $tournees[0]['code']; ?></h3>
                         <?php
                             $statut = $tournees[0]['statut'];
@@ -81,9 +87,10 @@ echo "</pre>";*/
                     <div class="toolbar">
                     <div class="heartool">
                         <button class="btn btn-green" onclick="openModalAddTour('<?php echo $tournees[0]['code']; ?>')">Ajouter un magasin</button>
-                        <button class="  btn-yellow">Commencer la tournee</button>
+                        <button id="goVisite" class="btn-yellow" onclick="showVisite()" >Commencer la tournee</button>
                     </div>
                     </div>
+                    <div class="container-scroll">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -95,29 +102,30 @@ echo "</pre>";*/
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                
                                 <?php
                                     $tours_list = $tours->read($tournees[0]['code']);
-                                    
                                     foreach ($tours_list as $tour){ 
                                 ?>
+                                <tr>
                                     <td><?php echo $tour['nom_magasin']; ?></td>
                                     <td><?php echo $tour['date']; ?></td>
                                     <td><?php echo $tour['jour']; ?></td>
                                     <td><?php echo $tour['Objectif']; ?></td>
                                     <td>
-                                        <button class="btn btn-purple" onclick="sedTourneeInformation('<?php echo $tour['nom_magasin']; ?>' , '<?php echo $tournees[0]['ville']; ?>', '<?php echo $tournees[0]['code']; ?>')" >visiter</button>
-                                        <button class="addButton2 btn btn-green">Modifier</button>
-                                        <button class="buttonValider btn delete-btn">Supprimer</button>
+                                        <button class="visite_id btn btn-purple" onclick="sedTourneeInformation('<?php echo $tour['nom_magasin']; ?>' , '<?php echo $tournees[0]['ville']; ?>', '<?php echo $tournees[0]['code']; ?>')" >visiter</button>
+                                        <button class="btn-unique addButton2 btn btn-green">Modifier</button>
+                                        <button class="btn-unique buttonValider btn delete-btn">Supprimer</button>
                                     </td>
                                 </tr>
                                 <?php }?>
                                 <!-- Repeat rows as needed -->
                             </tbody>
                         </table>
-            </div>
+                    </div>
+        </div>
     
+       
+
         <?php foreach ($tournees as $tournee): ?>
                 <div class="table-container histo">
                         <h3 style="display:inline" >Tournée <?php echo $tournee['code']; ?></h3>
@@ -140,9 +148,10 @@ echo "</pre>";*/
                         <div class="toolbar">
                             <div class="heartool">
                                 <button class="btn btn-green" onclick="openModalAddTour('<?php echo $tournee['code']; ?>')">Ajouter un magasin</button>
-                                <button class="  btn-yellow">Commencer la tournee</button>
+                                <button class="  btn-yellow" onclick="showVisite()" >Commencer la tournee</button>
                             </div>
                         </div>
+                        <div class="container-scroll">
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -168,8 +177,8 @@ echo "</pre>";*/
                                         <td><?php echo $tour['Objectif']; ?></td>
                                         <td>
                                             <button class="btn btn-purple" onclick="sedTourneeInformation('<?php echo $tour['nom_magasin']; ?>' , '<?php echo $tournee['ville']; ?>' , '<?php echo $tournee['code']; ?>')" >visiter</button>
-                                            <button class="addButton2 btn btn-green">Modifier</button>
-                                            <button class="buttonValider btn delete-btn">Supprimer</button>
+                                           <!-- <button class="addButton2 btn btn-green">Modifier</button>
+                                            <button class="buttonValider btn delete-btn">Supprimer</button> -->
                                         </td>
                                     </tr>
                                     <?php }?>
@@ -180,7 +189,7 @@ echo "</pre>";*/
                 </div>
         <?php endforeach ?>
 
-</div>
+<div/>
 
 
 

@@ -1,6 +1,5 @@
 <?php $titre = "Dashboard";
   session_start();
-  echo "Hello".$_SESSION['nom_utilisateur'];
   include("../includes/sidebar-mobile.php");
   include("../includes/header.php");
 ?>

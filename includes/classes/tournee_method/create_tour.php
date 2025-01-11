@@ -1,6 +1,7 @@
 <?php
 include_once("../Database.php"); 
 include_once("../Tournee.php");
+session_start();
 
 $database = new Database();
 $db = $database->getConnection();
@@ -39,7 +40,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if( $tour->create($tour->code)){
         echo "Le Magasin a été ajouter avec succès";
-        header("Location: ../../../pages/tournee-com.php");
+        switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
+            case 'Admin': $location ="../../../pages/tournee-res-com.php"; ;
+                break;
+            case 'Commercial':$location ="../../../pages/tournee-com.php";;
+                break;
+            case 'responsable_commercial': $location ="../../../pages/tournee-res-com.php";;
+                break;
+        }
     } else {
         echo "Une erreur s'est produite lors de l'ajout du magasin.";
     }

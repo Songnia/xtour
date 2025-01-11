@@ -1,18 +1,42 @@
 
   <!-- Sidebar -->
+  <?php 
+session_start();
+$location ="";
+
+switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
+    case 'Admin': $location ="../pages/tournee-com.php"; ;
+        break;
+    case 'Commercial':$location ="../pages/tournee-com.php";;
+        break;
+    case 'responsable_commercial': $location ="../pages/tournee-res-com.php";;
+        break;
+}
+?>
   
   <aside class="sidebar">
     <div class="logo">
       <img src="path/to/logo.png" alt="Logo"> <!-- Remplacez par le chemin de votre logo -->
     </div>
-    <h2>Admin Tools</h2>
+    <h2>
+
+    <?php
+      switch($_SESSION['role']) {
+        case 'Admin': echo $_SESSION['role'] ;
+            break;
+        case 'Commercial':echo $_SESSION['role'];
+            break;
+        case 'responsable_commercial': echo "R commercial";
+            break;
+      }?> Tools</h2>
+      
     <nav class="nav">
-      <a href="../pages/tournee-com.php" class="nav-link active">Overview</a>
-      <a href="../pages/visite.php" class="nav-link">Visite</a>
+      <a href="<?php echo $location; ?>" class="nav-link active">Planifier</a>
+      <!--<a href="../pages/visite.php" class="nav-link">Visite</a> -->
       <a href="../pages/livraison.php" class="nav-link">Livraison</a>
     </nav>
     <div class="sign-out">
-      <a href="../pages/connexion.php">Sign Out</a>
+      <a href="../pages/">Sign Out</a>
     </div>
   </aside>
   <!-- Main Content -->

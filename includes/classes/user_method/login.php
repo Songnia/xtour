@@ -37,8 +37,9 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
         // Enregistrement des données dans la session
         $_SESSION['nom_utilisateur'] = $user['nom_utilisateur'];
         $_SESSION['role'] = $user['role'];
-        /*$_SESSION['nom'] = $user['nom'];
         $_SESSION['nom'] = $user['nom'];
+        $_SESSION['id_utilisateur'] = $user['id_utilisateur'];
+        /*$_SESSION['nom'] = $user['nom'];
         $_SESSION['nom'] = $user['nom'];*/
 
         //$_SESSION['prenom'] = $user['prenom'];
@@ -46,7 +47,15 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
         
         
         // Redirection vers le dashboard
-       header("location:../../../pages/dashboard.php");
+        switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
+            case 'Admin': header("location:../../../pages/dashboard.php");
+                break;
+            case 'Commercial':header("location:../../../pages/tournee-com.php");
+                break;
+            case 'responsable_commercial': header("location:../../../pages/tournee-res-com.php");
+                break;
+        }
+        
         exit;
     } else {
         // Gérer l'erreur, par exemple : utilisateur ou mot de passe incorrect

@@ -426,6 +426,7 @@ th {
   display: flex;
   justify-content: space-between;
   margin-right: 2%;
+  gap: 5px;
 }
 
 .btn-green:hover .add-store-bt:hover {
@@ -745,7 +746,7 @@ input[type="number"],.prix {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 500px;
+  min-width: 500px;
   background-color: #fff;
   padding: 20px;
   border-radius: 20px;
@@ -885,6 +886,7 @@ input[type="number"],.prix {
 
 
 @keyframes pulse {
+  
   from {
     transform: scale(0.9);
     opacity: 1;
@@ -1381,6 +1383,9 @@ textarea {
 .evaluation{
   width: 150px;
 }
+.visite_id{
+  display: none;
+}
 @media (max-width: 576px) {
   body {
     flex-direction: column;
@@ -1457,6 +1462,28 @@ textarea {
     margin-top: 15px;
     margin-bottom: 15px;
   }
+
+  .form-connexion {
+    min-width: 300px;
+  }
+  .toolbar .btn{
+    padding:  3px 5px;
+  }
+  .heartool{
+    width: auto;
+    /*flex-direction: column;*/
+    justify-content: space-between;
+    gap: 5px;
+  }
+  .btn-yellow{
+    padding:  5px;
+  }
+  .btn-purple{
+    margin-bottom:5px ;
+  }
+  /*.btn-unique{
+
+  }*/
 }
 
 

@@ -63,7 +63,7 @@ echo"<pre>";
 //var_dump($nom);
 echo"</pre>";
 
-echo "code= ".$code;
+//echo "code= ".$code;
 ?>
     <!-- Page Content -->
     <main class="container">
