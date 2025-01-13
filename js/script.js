@@ -36,6 +36,9 @@ function openModalUser() {
   modal.style.display = "flex";
 }
 
+
+
+
 // Fonction pour afficher le modal en mode édition
 function openEditModalUser(id, nom, prenom, role, date_arrive_dans_entreprise) {
   modal.style.display = "flex";
@@ -241,6 +244,9 @@ const alertModal = document.getElementById("alertModal");
 alertClick.addEventListener("click", () => {
   alertModal.style.display = "flex";
 });
+
+
+
 
 // Masquer les modals lors du clic sur les boutons de fermeture
 closeButtons.forEach((button) => {

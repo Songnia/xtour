@@ -59,7 +59,9 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
         exit;
     } else {
         // Gérer l'erreur, par exemple : utilisateur ou mot de passe incorrect
-        echo "Utilisateur ou mot de passe incorrect";
+        $error = 1;
+        header("location:../../../index.php?parametre=".urlencode($error));
+        exit();
     }
 }
 ?>

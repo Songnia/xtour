@@ -77,10 +77,10 @@ $magasin_id = $magasin_id['id_magasin'];
         $hhh = "/xtour/includes/classes/images/" . $newName . '.' . $extension;
 
         
-        if (!move_uploaded_file($_FILES["image"]["tmp_name"], $newFileName)) {
+        /*if (!move_uploaded_file($_FILES["image"]["tmp_name"], $newFileName)) {
             die("L upload a echoué. Erreur probable : " . print_r(error_get_last(), true));
-            
-        }
+        }*/
+        
     } catch (Exception $e) {
             // Annuler la transaction en cas d'erreur
             error_log($e->getMessage());

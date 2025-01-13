@@ -13,7 +13,7 @@ switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
 ?>
 
 <header class="header-mobile">
-    <div class="logo">LOGO</div>
+    <div class="logo"><img src="../assets/logo1.png" alt=""></div>
     <h1>
     <?php
       switch($_SESSION['role']) {

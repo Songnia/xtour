@@ -21,7 +21,7 @@
         <h3>20</h3>
         <p>magasins</p>
         <div class="go-corner">
-        <a href="../pages/magasin.php"><div class="go-arrow">→</div></a>
+        <div class="go-arrow">→</div>
         </div>
       </div>
 
@@ -30,7 +30,7 @@
           <h3>12</h3>
           <p>produits</p>
           <div class="go-corner">
-          <a href="../pages/produit.php"><div class="go-arrow">→</div></a>
+          <div class="go-arrow">→</div>
           </div>
       </div>
 
@@ -39,7 +39,7 @@
         <h3>12</h3>
         <p>Livraison</p>
         <div class="go-corner">
-            <a href="#"><div class="go-arrow">→</div></a>
+          <div class="go-arrow">→</div>
         </div>
       </div>
 
@@ -48,7 +48,7 @@
         <h3>125</h3>
         <p>Tournées</p>
         <div class="go-corner">
-        <a href="../pages/rapport.php"><div class="go-arrow">→</div></a>
+        <div class="go-arrow">→</div>
         </div>
       </div>
     </div>

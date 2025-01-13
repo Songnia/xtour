@@ -327,8 +327,38 @@ echo "</pre>";
           <td><?php echo htmlspecialchars($user['nom']." ".$user['prenom']) ?></td>
           <td><?php echo htmlspecialchars($user['nom_utilisateur']) ?></td>
           <td><?php echo htmlspecialchars($user['mot_de_passe']) ?></td>
-          <td><?php echo htmlspecialchars($user['role']) ?></td>
-          <td>Ampiat, Santa Loucia</td>
+          <td><?php echo htmlspecialchars(string: $user['role']) ?></td>
+          <td>
+            <?php 
+
+
+
+              // Exemple avec un nom_utilisateur
+              $result = $utilisateur->getCommerciauxByResponsable($user['id_utilisateur']);
+              if (!empty($result) && !isset($result['error'])) {
+                  foreach ($result as $commercial) {
+                      echo htmlspecialchars($commercial['nom']) . 
+                          " " . htmlspecialchars($commercial['prenom']) . ", ";
+                  }
+              } else {
+                  //echo isset($result['error']) ? $result['error'] : "Aucun commercial trouvé.";
+              }
+
+
+              /*$result = $utilisateur->getIdCom();
+
+              if ($result) {
+                  var_dump($result);
+              }else {
+                  echo "Aucun commercial trouvé.";
+              }*/
+              /*if($user['role'] === "responsable_commercial"){
+                  $utilisateur->getNameCom($user['id_utilisateur'], $user['role']);
+              }else{
+                echo "hello";
+              }*/
+            ?>
+          </td>
           <td>
             <!--<button class="view-btn">Voir</button> -->
             <button class="edit-btn" onclick="showCommerciaux() openEditModalUser('<?php echo $user['id_utilisateur']; ?>','<?php echo $user['nom']; ?>', '<?php echo $user['prenom']; ?>', '<?php echo $user['role']; ?>','<?php echo $user['date_arrive_dans_entreprise']; ?>')" >Éditer</button>                                                             

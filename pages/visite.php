@@ -190,14 +190,24 @@ echo"</pre>";
                         <hr>
                      </div>
 
-                    <div class="infoProduit" class="question">
+                    <!--<div class="infoProduit" class="question">
                         <label for="etat">État du Produit</label>
                         <select id="etat" name="etat" required>
                             <option value="bon">Bon</option>
                             <option value="moyen">Moyen</option>
                             <option value="mauvais">Mauvais</option>
                         </select>
+                    </div> -->
+
+                    <div class="question">
+                    <p>Quel est L'État du Produit ?</p>
+                        <div class="reponse">
+                            <label><input type="radio" name="etat" value="bon" > bon</label>
+                            <label><input type="radio" name="etat" value="moyen" > moyen</label>
+                            <label><input type="radio" name="etat" value="mauvais" > mauvais</label>
+                        </div>
                     </div>
+
                     <div class="stock-info" class="question">
                         <div class="infoProduit">
                             <label for="dateFab">Date de fabrication</label>
@@ -260,7 +270,9 @@ echo"</pre>";
                             <label><input type="radio" name="presence_promotrice" value="no" > Non</label>
                         </div>
                     </div>
-                    <div class="question">
+
+
+                    <!--<div class="question">
                         <div class="FeedLabel">
                             <label for="feedback">Feedbacks</label>
                             <div >
@@ -274,7 +286,22 @@ echo"</pre>";
                             </div>
                         </div>
                         <textarea id="feedback" name="decription" placeholder="Feedback..."></textarea>                        
+                    </div> -->
+
+                    <div class="question">
+                        <p>Feedbacks</p>
+                        <div class="reponse">
+                            <label><input type="radio" name="feedback_value" value="Très bon" > Très bon</label>
+                            <label style="min-width:114.13"><input type="radio" name="feedback_value" value="bon" > bon</label>
+                        </div>
                     </div>
+                    <div class="question" >
+                        <div class="reponse">
+                            <label style="min-width:114.13"><input type="radio" name="feedback_value" value="Moyen" > Moyen</label>
+                            <label><input type="radio" name="feedback_value" value="Mauvais" > Mauvais</label>
+                        </div>
+                    </div>
+                    <textarea id="feedback" name="decription" placeholder="Feedback..."></textarea>                        
 
                 </section>
 

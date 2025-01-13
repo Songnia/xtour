@@ -1,6 +1,9 @@
 <?php
 session_start();
 $id_utilisateur = $_SESSION['id_utilisateur'];
+$role_utilisateur = $_SESSION['role'];
+
+//echo $id_utilisateur ." ".$rode_utilisateur ;
 echo "hello";
 include_once("../Database.php"); 
 include_once("../Tournee.php");
@@ -17,10 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $jour = htmlspecialchars(trim($_POST['jour']));
     $ville = htmlspecialchars(trim($_POST['ville']));
     $objectif = htmlspecialchars(trim(string: $_POST['remarque']));
+    $id_commercial = htmlspecialchars(trim(string: $_POST['id_commercial']));
 
+    if($role_utilisateur === "responsable_commercial"){
+        $id_utilisateur = $id_commercial;
+    }
 
     echo "<pre>";
-    var_dump($_POST);  // Affiche les données envoyées par le formulaire
+    //var_dump($_POST);  // Affiche les données envoyées par le formulaire
     echo "</pre>";
 
     // Vérifier si les champs sont remplis correctement
@@ -41,11 +48,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Debugging - affichage des données reçues
     echo "<pre>";
-    var_dump($_POST);  // Affiche les données envoyées par le formulaire
+    //var_dump($_POST);  // Affiche les données envoyées par le formulaire
     echo "</pre>";
 
     echo "<pre>";
-    var_dump($tour);  // Affiche l'objet Tour avec ses propriétés
+    //var_dump($tour);  // Affiche l'objet Tour avec ses propriétés
     echo "</pre>";
 
     if( $tour->createTournee($id_utilisateur)){
@@ -62,7 +69,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $tour->code = $new_code;
         $tour->create($tour->code);
         echo "La tournée a été créée avec succès. dernier ID enregistrer : ".$last_id;
-        header("Location: ../../../pages/tournee-com.php");
+
+        switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
+            case 'Admin': $location ="../../../pages/tournee-res-com.php"; 
+                break;
+            case 'Commercial':$location ="../../../pages/tournee-com.php";
+                break;
+            case 'responsable_commercial': $location ="../../../pages/tournee-res-com.php";
+                break;
+        }
+        header("Location:".$location);
     } else {
         echo "Une erreur s'est produite lors de la création de la tournée.";
     }

@@ -57,6 +57,7 @@ class Utilisateur{
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+
   public function readComerciaux(){
     try{
       $query = "SELECT * FROM ".  $this->name_table ." WHERE role = :role ORDER BY id_utilisateur DESC";
@@ -74,11 +75,11 @@ class Utilisateur{
 
   }
 
-  public function getNameCom($id_com){
+  public function readComerciaux_code($nomUtilisateur){
     try{
-      $query = "SELECT nom_utilisateur FROM ".  $this->name_table ." WHERE id_utilisateur = :id_utilisateur ORDER BY id_utilisateur DESC";
+      $query = "SELECT * FROM ".  $this->name_table ." WHERE nom_utilisateur = :nom_utilisateur";
       $stmt = $this->conn->prepare($query);
-      $stmt->bindParam(":id_utilisateur",$id_com);
+      $stmt->bindParam(":nom_utilisateur",$nomUtilisateur);
       $stmt->execute();
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }catch (Exception $e) {
@@ -86,7 +87,7 @@ class Utilisateur{
       error_log($e->getMessage());
       echo "Erreur capturée : " . $e->getMessage();
       return false;
-    }       
+    }  
   }
 
   public function attributCommerciaux($comName,$id_responsable,$id_com){
@@ -105,6 +106,108 @@ class Utilisateur{
         echo "Erreur capturée : " . $e->getMessage();
         return false;
     }
+  }
+
+
+  public function getCommerciauxByResponsable($identifiantResponsable) {
+    try {
+        // Déterminer si l'identifiant est numérique ou alphanumérique (nom_utilisateur ou id_utilisateur)
+        $field = is_numeric($identifiantResponsable) ? 'UR.id_utilisateur' : 'UR.nom_utilisateur';
+
+        // Requête SQL avec jointure pour récupérer les commerciaux attribués au responsable
+        $query = "
+            SELECT U.nom, U.prenom, U.id_utilisateur, U.nom_utilisateur 
+            FROM Utilisateur U
+            JOIN Relation_Hierarchique R 
+                ON U.id_utilisateur = R.id_commercial
+            JOIN Utilisateur UR 
+                ON UR.id_utilisateur = R.id_responsable
+            WHERE $field = :identifiant;
+        ";
+
+        // Préparation de la requête
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':identifiant', $identifiantResponsable, is_numeric($identifiantResponsable) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Récupération des résultats sous forme de tableau associatif
+        $commerciaux = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Retour du tableau (même vide si aucun commercial trouvé)
+        return $commerciaux;
+
+    } catch (Exception $e) {
+        // Gestion de l'erreur
+        error_log($e->getMessage());
+        return ["error" => "Une erreur s'est produite : " . $e->getMessage()];
+    }
+}
+
+
+
+
+
+  //Recuperer l ID du reponsable commercial dans la table Relation_Hierarchique
+  /*public function getIdCom(){
+    try {
+        $query = "SELECT id_commercial, nom_commercial FROM Relation_Hierarchique";
+
+        // Préparation de la requête
+        $stmt = $this->conn->prepare($query);
+                
+        // Exécution de la requête
+        $stmt->execute();
+        
+        // Récupération du résultat
+        $result = $stmt->fetch(PDO::FETCH_ASSOC); 
+         
+         if ($result) {
+            //var_dump($result);
+            return $result;  // Retourne l'ID commercial si trouvé
+        }
+    } catch (Exception $e) {
+        // Gestion de l'erreur
+        error_log($e->getMessage());  
+        echo "Erreur capturée : " . $e->getMessage();
+        return false;
+    }
+}*/
+
+
+  //recuper le nom du commercial a partir de son identifiant recuperer grace a getIdCom
+  public function getNameCom($id_com){
+    try{
+      $query = "SELECT nom, prenom FROM ".  $this->name_table ." WHERE id_utilisateur = :id_utilisateur  ORDER BY id_utilisateur DESC";
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(":id_utilisateur",$id_com, PDO::PARAM_INT);
+      //$stmt->bindParam(":role",$role, PDO::PARAM_INT);
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      //$results =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+      /*var_dump($results);
+      //echo "___________ <br>";
+
+      $table_name = [];
+
+
+      foreach($results as $result){
+        $table_name[] = $this->readComerciaux_code($result["nom"]);
+        echo "<pre>";
+          var_dump($table_name);
+        echo "</pre>";
+        echo $table_name[0][0]["nom"]." ".$table_name[0][0]["prenom"];
+        //echo "___________ <br>";
+      }
+      echo "<pre>";
+      //print_r($table_name);
+      echo "</pre>";
+      return $table_name;*/
+    }catch (Exception $e) {
+      // Annuler la transaction en cas d'erreur
+      error_log($e->getMessage());
+      echo "Erreur capturée : " . $e->getMessage();
+      return false;
+    }       
   }
 
   // Mise a jour les utilisateurs

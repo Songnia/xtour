@@ -16,7 +16,7 @@ switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
   
   <aside class="sidebar">
     <div class="logo">
-      <img src="path/to/logo.png" alt="Logo"> <!-- Remplacez par le chemin de votre logo -->
+      <img src="../assets/logo.png" alt="Logo"> <!-- Remplacez par le chemin de votre logo -->
     </div>
     <h2>
 
@@ -36,7 +36,7 @@ switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
       <a href="../pages/livraison.php" class="nav-link">Livraison</a>
     </nav>
     <div class="sign-out">
-      <a href="../pages/">Sign Out</a>
+      <a href="../index.php">Sign Out</a>
     </div>
   </aside>
   <!-- Main Content -->

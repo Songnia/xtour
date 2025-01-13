@@ -16,7 +16,7 @@ switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
   
   <aside class="sidebar">
     <div class="logo">
-      <img src="/logo.png" alt="Logo"> <!-- Remplacez par le chemin de votre logo -->
+      <img src="../assets/logo.png" alt="Logo"> <!-- Remplacez par le chemin de votre logo -->
     </div>
     <h2>
     <?php

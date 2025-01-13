@@ -48,6 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             case 'responsable_commercial': $location ="../../../pages/tournee-res-com.php";;
                 break;
         }
+        header("Location:".$location);
     } else {
         echo "Une erreur s'est produite lors de l'ajout du magasin.";
     }

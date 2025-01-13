@@ -2,7 +2,7 @@
 session_start();
 ?>
 <header class="header-mobile">
-    <div class="logo">LOGO</div>
+    <div class="logo"><img src="../assets/logo1.png" alt=""></div>
     <h1>HOME</h1>
     <button class="menu-btn" id="menuToggle">&#9776;</button>
 </header>
@@ -29,7 +29,7 @@ session_start();
         <a href="../pages/livraison.php" class="tool-btn nav-link">Livraison</a>
         <a href="../pages/produit.php" class="tool-btn nav-link">Produits</a>
         <a href="../pages/user.php" class="tool-btn nav-link">Utilisateurs</a>
-        <a href="../pages/" class="tool-btn nav-link">Sign Out</a>
+        <a href="../index.php" class="tool-btn nav-link">Sign Out</a>
 
     </div>
 </aside>

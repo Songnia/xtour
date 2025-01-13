@@ -40,7 +40,7 @@
 
         foreach ($commerciaux as $com):          // Vérifier si un produit a été trouvé
           // Appel de la méthode addProduit
-          $name = $utilisateur->getNameCom($com);
+          $name = $utilisateur->readComerciaux_code($com);
           $name = $name[0]['nom_utilisateur'];
           $utilisateur->attributCommerciaux($name, $id_user, $com);
         endforeach;

@@ -19,10 +19,13 @@ include("../includes/header.php");
 // Insérer la Sidebar commercial
 include_once("../includes/classes/Tournee.php");
 include_once("../includes/classes/Magasin.php");
+include_once("../includes/classes/User.php");
 include_once("../includes/classes/Database.php");
 
 $database = new Database();
 $db = $database->getConnection();
+
+$utilisateur = new Utilisateur($db);
 
 $tournee = new Tour($db);
 $query = "SELECT * FROM Tournee  WHERE utilisateur_id = ".$id_utilisateur." ORDER BY date_enregistrement DESC";
@@ -268,8 +271,20 @@ echo "</pre>";*/
                 </div>
             </div>
             <div class="infoPMagasin" style="justify-content: center">
-                    <select name="name_commercial" id="name_commercial" style="width:100%">
+                    <?php 
+                        $result = $utilisateur->getCommerciauxByResponsable($id_utilisateur);
+                        if (!empty($result) && !isset($result['error'])) {
+                            
+                    ?>
+                    <select name="id_commercial" id="name_commercial" style="width:100%">
                         <option value="">Choisir le commercial</option>
+                        <?php
+                            foreach ($result as $commercial) {?>
+                                <option value="<?php echo htmlspecialchars($commercial['id_utilisateur']); ?>"> <?php echo htmlspecialchars($commercial['nom']) . " " . htmlspecialchars($commercial['prenom']); ?> </option>
+                        <?php 
+                                }
+                            }
+                        ?>
                     </select>
             </div>
             <div class="infoPMagasin" style="justify-content: center">
