@@ -1,5 +1,5 @@
 <?php 
-$titre = "Magasins"; 
+$titre = "Livraison"; 
 
 session_start();
 
@@ -16,7 +16,26 @@ switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
 }
 
 // Insérer le header
-include_once("../includes/header.php");
+include("../includes/header.php");
+
+//include("../includes/config.php");
+
+include_once("../includes/classes/Database.php");
+include_once("../includes/classes/Livraison.php");
+include_once("../includes/classes/Magasin.php");
+include_once("../includes/classes/Produit.php");
+
+
+
+
+$database = new Database();
+$db = $database->getConnection();
+$livraison = new Livraison($db);
+
+// Lecture des produits
+$livs = $livraison->read();
+$produit = new Produit($db);
+$magasin = new Magasin($db);
 
 ?>
 
@@ -56,21 +75,21 @@ include_once("../includes/header.php");
         </div>
     </div>
 
-    <!-- Filtre Par Produit -->
+    <!-- Filtre Par Livraison -->
     <div class="divFilter">
-        <label for="filter_produit">Par Produit :</label>
+        <label for="filter_livraison">Par Livraison :</label>
         <div class="radio-inputs">
-            <label class="radio" for="produit1">
-                <input id="produit1" type="radio" name="radio_produit" value="produit1" checked="">
-                <span class="name">Produit1</span>
+            <label class="radio" for="livraison1">
+                <input id="livraison1" type="radio" name="radio_livraison" value="livraison1" checked="">
+                <span class="name">Livraison1</span>
             </label>
-            <label class="radio" for="produit2">
-                <input id="produit2" type="radio" name="radio_produit" value="produit2">
-                <span class="name">Produit2</span>
+            <label class="radio" for="livraison2">
+                <input id="livraison2" type="radio" name="radio_livraison" value="livraison2">
+                <span class="name">Livraison2</span>
             </label>
-            <label class="radio" for="produit3">
-                <input id="produit3" type="radio" name="radio_produit" value="produit3">
-                <span class="name">Produit3</span>
+            <label class="radio" for="livraison3">
+                <input id="livraison3" type="radio" name="radio_livraison" value="livraison3">
+                <span class="name">Livraison3</span>
             </label>
         </div>
     </div>
@@ -100,28 +119,61 @@ include_once("../includes/header.php");
       <thead>
         <tr>
           <th>ID</th>
+          <th>code</th>
           <th>Ville</th>
           <th>Magasin</th>
           <th>Produit</th>
-          <th>Quantite</th>
-          <th>Prix</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach($prods as $prod): ?>
+        <?php foreach($livs as $liv): ?>
           <tr>
-            <td><?php echo htmlspecialchars($prod['id_produit']); ?></td>
-            <td><?php echo htmlspecialchars($prod['nom_commercial']); ?></td>
-            <td><?php echo htmlspecialchars($prod['nom_descriptif']); ?></td>
-            <td><?php echo htmlspecialchars($prod['prix']); ?></td>
-            <td><?php echo htmlspecialchars($prod['poids']); ?></td>
+          <td><?php echo htmlspecialchars( $liv['id_livraison']); ?></td>
+            <td><?php echo htmlspecialchars($liv['code']); ?></td>
+            <td><?php echo htmlspecialchars($liv['ville']); ?></td>
             <td>
-              <button class="edit-btn" onclick="openEditModalProduit('<?php echo $prod['id_produit']; ?>','<?php echo $prod['nom_commercial']; ?>', '<?php echo $prod['nom_descriptif']; ?>', '<?php echo $prod['prix']; ?>', '<?php echo $prod['poids']; ?>')">Éditer</button>
-              <button class="delete-btn" onclick="openDeleteModal('<?php echo $prod['id_produit']; ?>')">Supprimer</button>
+              <?php 
+                  $name_magasin = $magasin->getNameMagasin($liv['magasin_id']);
+                  echo htmlspecialchars($name_magasin);
+              ?>
+            </td>
+            <td>
+              <table>
+                  <thead>
+                      <tr>
+                        <th>Nom</th>
+                        <th>Quantite</th>
+                        <th>Date</th>
+                      </tr>
+                  </thead>
+                  <?php $prodsM = $livraison->getProduit( $liv['id_livraison'] );?>
+                  
+                  <tbody>
+                    <?php foreach($prodsM as $prodm){ ?>
+                        <tr onclick="openModalProduitMagasin('<?php echo $liv['id_livraison']; ?>')">
+                            <td>
+                              <?php 
+                                  $name_produit = $produit->getNameProduit($prodm['produit_id']);
+                                  echo $name_produit;
+                              ?>
+                            </td>
+                            <td><?php echo htmlspecialchars($prodm['quantite']); ?></td>
+                            <td><?php echo "Fab: ". htmlspecialchars($prodm['date_fabrication'])."    Exp: ". htmlspecialchars($prodm['date_expiration']); ?></td>
+                        </tr>
+                     <?php } ?> 
+                  </tbody>
+              </table>
+            </td>
+
+            <td>
+              <!--<button class="edit-btn" onclick="openEditModalLivraison('<?php echo $liv['id_livraison']; ?>','<?php echo $liv['nom_commercial']; ?>', '<?php echo $liv['nom_descriptif']; ?>', '<?php echo $liv['prix']; ?>', '<?php echo $liv['poids']; ?>')">Éditer</button>
+              <button class="delete-btn" onclick="openDeleteModal('<?php echo $liv['id_livraison']; ?>')">Supprimer</button>-->
+              <button class="edit-btn" onclick="openModalProduitMagasin('<?php echo $liv['id_livraison']; ?>')">Ajouter un produit</button>
             </td>
           </tr>
         <?php endforeach; ?>
-        <!-- Ajouter d'autres lignes pour chaque Produit -->
+        <!-- Ajouter d'autres lignes pour chaque Livraison -->
       </tbody>
     </table>
   </div>
@@ -135,82 +187,171 @@ include_once("../includes/header.php");
     <h2 id="modalTitle">Ajouter une Livraison</h2>
     
     <!-- Formulaire avec les champs du magasin, date, commercial et OK -->
-    <form method="POST" action="../includes/classes/produit_method/create_product.php"  class="form-col">
-      <!-- Champ caché pour identifier l'édition d'un produit -->
-      <input type="hidden" name="product_id" id="product_id">
+    <form method="POST" action="../includes/classes/livraison_method/create_livraison.php"  class="form-col">
+      <!-- Champ caché pour identifier l'édition d'un livraison -->
+      <input type="hidden" name="livraison_id" id="livraison_id">
       <div>
           <label for="Ville">Ville</label>
-            <select name="type" id="type">
+            <select name="ville" id="type">
               <option value="Douala">Douala</option>
               <option value="Yaounde">Yaounde</option>
               <!-- Autres options ici -->
             </select>
       </div> 
-      <div class="infoPMagasin" >
-                    <div>
-                        <label for="store">Magasin</label>
-                        <select name="nom" id="store">
-                        <option value="">Sélectionnez un magasin</option>
-                            <optgroup label="Douala">
-                                <option value="santa-lucia-akwa">Santa Lucia Akwa</option>
-                                <option value="santa-lucia-a-nord">Santa Lucia A Nord</option>
-                                <option value="santa-lucia-bberi">Santa Lucia Bberi</option>
-                                <option value="santa-lucia-bssadi">Santa Lucia Bssadi</option>
-                                <option value="santa-lucia-c-cicam">Santa Lucia C Cicam</option>
-                                <option value="santa-lucia-nkolbong">Santa Lucia Nkolbong</option>
-                                <option value="santa-lucia-palmier">Santa Lucia Palmier</option>
-                                <option value="santa-lucia-dla-bercy">Santa Lucia Dla-Bercy</option>
-                                <option value="ma-sarl-douala">Ma Sarl Douala</option>
-                                <option value="paul-gaby-sarl">Paul Gaby Sarl</option>
-                                <option value="vinny-akwa-1">Vinny Akwa 1</option>
-                                <option value="vinny-akwa-2">Vinny Akwa 2</option>
-                                <option value="mahima-bssadi">Mahima Bssadi</option>
-                                <option value="mahima-akwa">Mahima Akwa</option>
-                                <option value="fortune-cosmetics">Fortune cosmetics</option>
-                                <option value="parfumerie-jp">Parfumerie JP</option>
-                                <option value="precision-pressing">Precision Pressing</option>
-                            </optgroup>
-                            <optgroup label="Yaoundé">
-                                <option value="mieux-vivre">Mieux Vivre</option>
-                                <option value="sesame-market">Sesame Market</option>
-                                <option value="vitrine-du-cameroun-yde">Vitrine du Cameroun Yde</option>
-                                <option value="vitalia">Vitalia</option>
-                                <option value="ma-sarl-tsinga">Ma Sarl Tsinga</option>
-                                <option value="ma-sarl-mvolye">Ma Sarl Mvolye</option>
-                                <option value="ma-min-commerce">Ma Min Commerce</option>
-                                <option value="ma-bastos">Ma Bastos</option>
-                                <option value="la-sama">La Sama</right>
-                            </optgroup>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="typeMagasin">Type de Magasin</label>
-                        <select name="type" id="type">
-                            <option value="Supermarché">Supermarché</option>
-                            <option value="Magasin Made in Cameroun">Magasin Made in Cameroun</option>
-                            <option value="Supérette">Supérette</option>
-                            <option value="Autre">Autre</option>
-                        <!-- Autres options ici -->
-                        </select>
-                    </div>           
+      <?php 
+          try{
+              $query = "SELECT * FROM Magasin ORDER BY date_enregistrement DESC";
+              $stmt = $db->prepare($query);
+              $stmt->execute();
+              $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+          } catch (Exception $e) {
+                                // Annuler la transaction en cas d'erreur
+                                $db->rollBack();
+                                error_log($e->getMessage());
+                                echo "Erreur capturée : " . $e->getMessage();
+                                return false;
+          }                                    
+      ?>
+      
+      <div>
+          <select name="nom_magasin" id="nom_magasin">
+                            <option value="">Nom du magasin</option>
+                            <?php foreach($result as $res): ?>
+                                <option value="<?php echo htmlspecialchars($res['id_magasin']); ?>" <?php if ($nom == $res['nom']) echo 'selected'; ?>>
+                                    <?php echo htmlspecialchars($res['nom']); ?>
+                                </option>
+                            <?php endforeach; ?>
+          </select>
       </div>
+        <?php
+          $prods = $produit->read();
+        ?>
       <div>
           <label for="store">Produit</label>
-          <select name="prosuit" id="store" required>
-            <option value="Kara">Kara</option>
-            <option value="Cookies">Cookies</option>
-          </select> 
+          <select name="produit" id="">
+          <?php 
+            foreach ($prods as $prod) { ?>
+              <option value="<?php echo $prod['id_produit']; ?>">
+                  <?php echo $prod['nom_commercial']; ?>
+              </option>
+            <?php }  
+          ?>
+          </select>         
       </div>   
       <div>
           <label for="Quantite">Quantite</label>
           <input required="" id="quantite" name="quantite" type="number">
       </div>
+      <div class="stock-info" class="question">
+          <div class="infoProduit">
+                                <label for="dateFab">Date de fabrication</label>
+                                <input type="date" id="dateFab" name="dateFab" >
+          </div>
+          <div class="infoProduit">
+                                <label for="dateExp">Date d'expiration</label>
+                                <input type="date" id="dateExp" name="dateExp" >
+          </div>
+      </div>      
       <!-- Bouton Ajouter en bas -->
-      <button type="submit" class="add-button" >Ajouter</button>
+       <div class="infoPMagasin">
+            <button type="submit" class="add-button" >Ajouter</button>
+       </div>
+      
     </form>
 
 
   </div>
 </div>
+
+<div id="productModal2" class="modal">
+  <div class="scroll-y" style="overflow-y: auto;max-height: 550px;">
+      <!--<div class="modal-content">
+          <span class="close-button2" onclick="closeModal()">&times;</span>
+          <h2>Ajouter un Produit</h2>
+          <div class="form-col">
+              <div class="my-form-container">
+                  <form class="my-form" method="POST" action="../includes/classes/livraison_method/addProduit_livraison.php">
+                      <input type="hidden" id="id_magasinproduit" name="id_magasin" >
+                      <input type="hidden" id="id_livraison" name="id_livraison" >
+
+                      <?php $i = 0; ?>
+                      <h3>Sélectionnez les produits :</h3>
+                      <?php foreach($prods as $prod): ?>
+                        <div class="infoPMagasin" style="margin:0">
+                            <div class="infoPMagasin" style="">
+                                <input id="product<?php echo ++$i; ?>" type="checkbox" name="products[]" value="<?php echo htmlspecialchars($prod['nom_commercial']); ?>">
+                                <label for="product<?php echo $i; ?>"><?php echo htmlspecialchars($prod['nom_commercial']); ?></label>
+                            </div>
+                            <input type="number" name="quantity_product[]" id="" style="width:100px">
+                        </div>
+                        <div class="stock-info" class="question">
+                            <div class="infoProduit">
+                                <label for="dateFab">Date de fabrication</label>
+                                <input type="date" id="dateFab" name="dateFab" >
+                            </div>
+                            <div class="infoProduit">
+                                <label for="dateExp">Date d'expiration</label>
+                                <input type="date" id="dateExp" name="dateExp" >
+                            </div>
+                        </div>
+
+                      <?php endforeach; ?>
+                      <button type="submit" class="add-button">Ajouter</button>
+                  </form>
+              </div>
+      
+
+          </div>
+      </div>-->
+    
+  <div class="modal-content">
+    <span class="close-button" onclick="closeModal()">&times;</span>
+    <h2 id="modalTitleLiv">Ajouter une Livraison</h2>
+    
+    <!-- Formulaire avec les champs du magasin, date, commercial et OK -->
+    <form method="POST" action="../includes/classes/livraison_method/addProduit_livraison.php"  class="form-col">
+      <!-- Champ caché pour identifier l'édition d'un livraison -->
+      <input type="hidden" name="livraison_id" id="id_livraison_form">   
+        <?php
+          $prods = $produit->read();
+        ?>
+      <div>
+          <label for="store">Produit</label>
+          <select name="produit" id="">
+          <?php 
+            foreach ($prods as $prod) { ?>
+              <option value="<?php echo $prod['id_produit']; ?>">
+                  <?php echo $prod['nom_commercial']; ?>
+              </option>
+            <?php }  
+          ?>
+          </select>         
+      </div>   
+      <div>
+          <label for="Quantite">Quantite</label>
+          <input required="" id="quantite" name="quantite" type="number">
+      </div>
+      <div class="stock-info" class="question">
+          <div class="infoProduit">
+                                <label for="dateFab">Date de fabrication</label>
+                                <input type="date" id="dateFab" name="dateFab" >
+          </div>
+          <div class="infoProduit">
+                                <label for="dateExp">Date d'expiration</label>
+                                <input type="date" id="dateExp" name="dateExp" >
+          </div>
+      </div>      
+      <!-- Bouton Ajouter en bas -->
+       <div class="infoPMagasin">
+            <button type="submit" class="add-button" >Ajouter</button>
+       </div>
+      
+    </form>
+
+
+  </div>
+    </div>
+
+</div> 
 
 <?php include("../includes/footer.php"); ?>

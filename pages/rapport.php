@@ -9,52 +9,69 @@ include_once("../includes/sidebar.php");
 include_once("../includes/classes/Database.php");
 include_once("../includes/classes/Magasin.php");
 include_once("../includes/classes/Produit.php");
+include_once("../includes/classes/User.php");
 
 $database = new Database();
 $db = $database->getConnection();
 $magasin = new Magasin($db);
 $produit = new Produit($db);
-
+$utilisateur = new Utilisateur($db);
 try {
     $query = "
-    SELECT 
-        v.id_visite,
-        v.codeTournee,
-        v.magasin_id,
-        v.ville,
-        v.date_visite,
-        v.feedback,
-        v.feedback_value,
-        v.feedback_description,
-        sp.id_stock,
-        sp.produit_id,
-        sp.date_fabrication,
-        sp.date_expiration,
-        sp.etat AS stock_etat,
-        sp.quantite_rayon,
-        sp.quantite_stock,
-        sp.qts_rayon,
-        sp.qts_stock,
-        sp.image_path,
-        rv.id_reponse,
-        rv.etiquette,
-        rv.presence_promotrice,
-        rv.existance_promotrice,
-        rv.emplacement,
-        rv.visibilite_produit,
-        rv.prix_etiquette
-    FROM 
-        Visite v
-    LEFT JOIN 
-        stocks_produits sp ON v.id_visite = sp.visite_id
-    LEFT JOIN 
-        reponses_verification rv ON v.id_visite = rv.visite_id;
+    SELECT DISTINCT 
+    v.id_visite,
+    v.codeTournee,
+    v.magasin_id,
+    v.ville,
+    v.date_visite,
+    v.feedback_value,
+    rv.etiquette,
+    rv.presence_promotrice,
+    rv.emplacement,
+    rv.visibilite_produit,
+    rv.prix_etiquette
+    FROM Visite v
+    LEFT JOIN reponses_verification rv ON v.id_visite = rv.visite_id
+    LEFT JOIN stocks_produits sp ON v.id_visite = sp.visite_id;
+
     ";
 
     $stmt = $db->prepare($query);
     $stmt->execute();
 
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo "Erreur capturée : " . $e->getMessage();
+    return false;
+}
+
+
+try {
+    $query = "
+    SELECT DISTINCT 
+    v.id_visite,
+    v.codeTournee,
+    v.magasin_id,
+    v.ville,
+    v.date_visite,
+    v.feedback_value,
+    sp.produit_id,
+    sp.date_fabrication,
+    sp.date_expiration,
+    sp.quantite_rayon,
+    sp.quantite_stock,
+    sp.etat,
+    sp.image_path
+    FROM Visite v
+    LEFT JOIN reponses_verification rv ON v.id_visite = rv.visite_id
+    LEFT JOIN stocks_produits sp ON v.id_visite = sp.visite_id;
+    ";
+
+    $stmt = $db->prepare($query);
+    $stmt->execute();
+
+    $results1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     error_log($e->getMessage());
     echo "Erreur capturée : " . $e->getMessage();
@@ -266,9 +283,6 @@ echo"</pre>";
                         </div>
                     </div>
                 </div>
-                <div class="sort-filter">
-                    <button id="addButton" class="btn btn-green">Ajouter Magasin</button>
-                </div>
     </div>
     <div id="containterFilter">
         <div id="elementsFilter">
@@ -379,6 +393,11 @@ echo"</pre>";
         <table>
         <thead>
             <tr>
+            <!--<th>ID</th>
+            <th>code de la tournee</th>
+            <th>ville</th>
+            <th>nom Magasin</th>
+            <th>Nom du commercial</th>-->
             <th>ID</th>
             <th>ville</th>
             <th>nom Magasin</th>
@@ -396,7 +415,10 @@ echo"</pre>";
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($results as $result): ?>
+            <?php //foreach ($results as $result):
+                for($i = 0; $i < count($results); $i++){
+                                    $result = $results[$i];
+                                    $result1 = $results1[$i]; ?>
             <tr>
                 <td><?php echo htmlspecialchars($result['id_visite']); ?></td>
                 <td><?php echo  htmlspecialchars($result['ville']); ?></td>
@@ -408,18 +430,23 @@ echo"</pre>";
                 </td>
                 <td>
                     <?php 
-                        echo $produit->getNameProduit(htmlspecialchars($result['produit_id'])); 
+                        echo $produit->getNameProduit(htmlspecialchars($result1['produit_id'])); 
                     ?>
                 </td>
                 <td><?php echo htmlspecialchars($result['visibilite_produit']); ?></td>
-                <td><?php echo  htmlspecialchars($result['ville']); ?></td>
+                <td><?php echo  htmlspecialchars($result['etiquette']); ?></td>
                 <td><?php echo htmlspecialchars($result['prix_etiquette']); ?></td>
-                <td><?php echo htmlspecialchars($result['stock_etat']); ?></td>
-                <td><?php echo htmlspecialchars($result['date_fabrication']); ?></td>
-                <td><?php echo  htmlspecialchars($result['date_expiration']); ?></td>
+                <td><?php echo htmlspecialchars($result1['stock_etat']); ?></td>
+                <td><?php echo htmlspecialchars($result1['date_fabrication']); ?></td>
+                <td><?php echo  htmlspecialchars($result1['date_expiration']); ?></td>
                 <td>
                     <?php
-                        try{
+                        if($result1['quantite_rayon']){
+                            echo htmlspecialchars($result1['quantite_rayon']);
+                        }else{
+                            echo htmlspecialchars($result1['qts_rayon']);
+                        }
+                        /*try{
                             $query = "SELECT quantite_rayon
                             FROM stocks_produits
                             WHERE quantite_rayon > 0
@@ -438,68 +465,97 @@ echo"</pre>";
                             error_log($e->getMessage());
                             echo "Erreur capturée : " . $e->getMessage();
                         }
-                            echo $qt_rayon; 
+                            echo $qt_rayon; */
                     ?>
                 </td>
                 <td><?php echo htmlspecialchars($result['emplacement']); ?></td>
                 <td><?php echo htmlspecialchars($result['feedback_value']); ?></td>
                 <td>
-                    <?php 
-                        $image = $result['image_path'];
-                        echo "<img onclick='openModalSlide()' src='$image' alt='Image téléchargée' style='max-width:30px; max-height:30px;'>"
-                        
-                    ?>
+                    <img src="<?php echo $result1['image_path']; ?>" style='max-width:50px; max-height:50px;'>
+
+                    <?php foreach ($result1['image_path'] as $index => $res_img) { ?>
                     <div class="slideshow-container" id="slide">
                         <div class="modal-slide-content">
-                                <div class="mySlides fade">
-                            <div class="numbertext">1 / 3</div>
-                            <img src="../includes/classes/images/0ad4ad518640d4db1870a7b5142b390e.jpg" style='max-width:500px; max-height:500px;'>
-                            <div class="text">Caption Text</div>
-                            </div>
-
                             <div class="mySlides fade">
-                            <div class="numbertext">2 / 3</div>
-                            <img src="../includes/classes/images/fcc0f40d3422e3263075864f72d74314.png" style='max-width:500px; max-height:500px;'">
-                            <div class="text">Caption Two</div>
+                                <div class="numbertext"><?php echo ($index + 1) . ' / ' . count($result1['image_path']); ?></div>
+                                <img src="<?php echo htmlspecialchars($res_img); ?>" style="max-width: 100%; height: auto;">
+                                <div class="text">Caption Text</div>
                             </div>
-
-                            <div class="mySlides fade">
-                            <div class="numbertext">3 / 3</div>
-                            <img src="../includes/classes/images/0ad4ad518640d4db1870a7b5142b390e.jpg" style='max-width:500px; max-height:500px;'>
-                            <div class="text">Caption Three</div>
-                            </div>
-
-                            <div class="mySlides fade">
-                            <div class="numbertext">3 / 3</div>
-                            <img src="../includes/classes/images/0ad4ad518640d4db1870a7b5142b390e.jpg" style='max-width:500px; max-height:500px;'>
-                            <div class="text">Caption Three</div>
-                            </div>
-
                             <a class="prev" onclick="plusSlides(-1)">❮</a>
                             <a class="next" onclick="plusSlides(1)">❯</a>
 
-                            
                             <br>
 
                             <div style="text-align:center">
-                            <span class="dot" onclick="currentSlide(1)"></span> 
-                            <span class="dot" onclick="currentSlide(2)"></span> 
-                            <span class="dot" onclick="currentSlide(3)"></span> 
-                            <span class="dot" onclick="currentSlide(4)"></span>
+                                <?php for ($i = 1; $i <= count($result1['image_path']); $i++) { ?>
+                                    <span class="dot" onclick="currentSlide(<?php echo $i; ?>)"></span>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
+                    <?php } ?>
+
                 </td>
             </tr>
-            <?php endforeach; ?>
-            <!-- Ajouter d'autres lignes pour chaque Produit -->
+            <?php //endforeach; 
+            } ?>
         </tbody>
-        </table>
+                        
+        <!--<tbody>
+            <?php //foreach ($results as $result): 
+                for($i = 0; $i < count($results); $i++){
+                    $result = $results[$i];
+                    $result1 = $results1[$i];
+                $query = "SELECT utilisateur_id FROM Tournee WHERE code = :code";
+                $stmt = $db->prepare($query);
+                $stmt->bindParam(":code",$result['codeTournee']); 
+                $stmt->execute();
+                $users_id = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo"<pre>";
+                 //var_dump($users_id);
+                echo"</pre>";
+            ?>
+            <tr onclick="openModalSpecificMagasin('<?php echo htmlspecialchars($result['codeTournee']); ?>')">
+                <td><?php echo htmlspecialchars($result['id_visite']); ?></td>
+                <td><?php echo  htmlspecialchars($result['codeTournee']); ?></td>
+                <td><?php echo  htmlspecialchars($result['ville']); ?></td>
+                <td>
+                    <?php
+                        $magasinName = $magasin->getNameMagasin($result["magasin_id"]);
+                        echo htmlspecialchars($magasinName); 
+                    ?>
+                </td>
+                <td><?php
+                        $name = $utilisateur->getNameCom($users_id[0]['utilisateur_id']);
+                        if($name){
+                            echo $name[0]['nom']." ".$name[0]['prenom'];
+                        }
+                    ?>
+                 </td>
+            </tr>
+            
+                <div id="productModal" class="modal" style="width:100%; min-height:100vh; border-radius:0">
+                     <div id="scrolly">
+                        <div class="modal-content"style="width:98%; min-height:100vh">
+                                <span class="close-button" onclick="closeModal()">&times;</span>
+                                <?php 
+                                //echo"<pre>";
+                                    var_dump(value: $result);
+                                //echo"</pre>";
+                                ?>
+                        </div>  
+                    </div>
+                </div>
+
+            <?php //endforeach;
+            } ?>
+        </tbody> -->
+    </table>
     </div>
     </div>
 </div>
 
+    
 
-<button id="addButton"></button>
-
+</div>
 <?php include_once("../includes/footer.php");?>

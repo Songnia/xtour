@@ -19,19 +19,12 @@ include("../includes/header.php");
 // Insérer la Sidebar commercial
 include_once("../includes/classes/Tournee.php");
 include_once("../includes/classes/Magasin.php");
-include_once("../includes/classes/User.php");
 include_once("../includes/classes/Database.php");
 
 $database = new Database();
 $db = $database->getConnection();
-
-$utilisateur = new Utilisateur($db);
-
 $tournee = new Tour($db);
-$query = "SELECT * FROM Tournee  WHERE utilisateur_id = ".$id_utilisateur." ORDER BY date_enregistrement DESC";
-$stmt = $db->prepare($query);
-$stmt->execute();
-$tournees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 echo "<pre>";
     /*var_dump($tournees[0]);  // Affiche l'objet Tournee avec ses propriétés
@@ -43,6 +36,7 @@ $tours = new Tour($db);
 /*echo "<pre>";
 var_dump($tours);  // Affiche l'objet Tour avec ses propriétés
 echo "</pre>";*/
+$res = $utilisateur->getCommerciauxByResponsable($id_utilisateur);
 
 ?>
 
@@ -70,9 +64,15 @@ echo "</pre>";*/
 
     
     <!--    Table Container valider-->
+<?php foreach ($res as $commercial){ 
+    $query = "SELECT * FROM Tournee  WHERE utilisateur_id = ".$commercial['id_utilisateur']." ORDER BY date_enregistrement DESC";
+    $stmt = $db->prepare($query);
+    $stmt->execute();
+    $tournees = $stmt->fetchAll(PDO::FETCH_ASSOC);    
+?>
 
         <div class="table-container" id="tournee-actuel">
-                    <h3 style="display:inline" >Tournée <?php echo $tournees[0]['code']; ?></h3>
+                    <h3 style="display:inline" >Tournée <?php echo $tournees[0]['code'] ." ".$commercial['nom']." ".$commercial['prenom']; ?></h3>
                     <div class="toolbar">
                     <div class="heartool">
                     <div>
@@ -100,7 +100,6 @@ echo "</pre>";*/
                         
                     </div>
                     </div>
-                                <?php  //if($tournees===null){echo "Aucune tournee n a encore ete planifier";}?>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -136,7 +135,7 @@ echo "</pre>";*/
     
         <?php foreach ($tournees as $tournee): ?>
                 <div class="table-container histo">
-                        <h3 style="display:inline" >Tournée <?php echo $tournee['code']; ?></h3>
+                        <h3 style="display:inline" >Tournée <?php echo $tournee['code']." ".$commercial['nom']." ".$commercial['prenom']; ?></h3>
                         <div class="toolbar">
                             <div class="heartool">
                                 <div>
@@ -201,7 +200,7 @@ echo "</pre>";*/
                 </div>
         <?php endforeach ?>
 </div>
-
+<?php } ?>
 
 
 
@@ -272,14 +271,14 @@ echo "</pre>";*/
             </div>
             <div class="infoPMagasin" style="justify-content: center">
                     <?php 
-                        $result = $utilisateur->getCommerciauxByResponsable($id_utilisateur);
-                        if (!empty($result) && !isset($result['error'])) {
+                        $result0 = $utilisateur->getCommerciauxByResponsable($id_utilisateur);
+                        if (!empty($result0) && !isset($result0['error'])) {
                             
                     ?>
                     <select name="id_commercial" id="name_commercial" style="width:100%">
                         <option value="">Choisir le commercial</option>
                         <?php
-                            foreach ($result as $commercial) {?>
+                            foreach ($result0 as $commercial) {?>
                                 <option value="<?php echo htmlspecialchars($commercial['id_utilisateur']); ?>"> <?php echo htmlspecialchars($commercial['nom']) . " " . htmlspecialchars($commercial['prenom']); ?> </option>
                         <?php 
                                 }

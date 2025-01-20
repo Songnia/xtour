@@ -73,6 +73,11 @@ function openEditModalProduit(id, nomCommercial, nomDescriptif, prix, poids) {
   document.getElementById("poids").value = poids;
 }
 
+function openModalSpecificMagasin(code){
+  modal.style.display = "flex";
+  //document.getElementById('code_transfer').value = code;
+}
+
 
 function openDeleteModal(id){
   document.getElementById("product_id").value = id;
@@ -83,6 +88,11 @@ function openDeleteModal(id){
   document.getElementById("delete_product_id").value = document.getElementById("product_id").value;
 }
 
+//GERER LES LIVRAISONS
+function openModalLivraison() {
+  modalTitle.textContent = "Ajouter une Livraison";
+  modal.style.display = "flex";
+}
 
 function openModalAddTour(code) {
   modal2.style.display = "flex";
@@ -158,8 +168,9 @@ window.addEventListener("click", (event) => {
 
 //Ouvrir le modal produit de chaque magasin
 function openModalProduitMagasin(id){
+  console.log(id);
+  document.getElementById("id_livraison_form").value=id;
   modal2.style.display = "flex";
-  document.getElementById("id_magasinproduit").value=id;
 }
 
 function openEditModalMagasin(id) {

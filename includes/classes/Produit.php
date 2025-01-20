@@ -10,6 +10,7 @@
     public $nom_descriptif;
     public $prix;
     public $poids;
+
     public function __construct($db){
       $this->conn = $db;
     }

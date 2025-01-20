@@ -249,6 +249,12 @@ body {
   max-width: 1012.81px;
   background-color: white; /* Assure que le conteneur ne dépasse pas la largeur de l'écran */
 }
+
+/*scrool-y {
+  overflow-y: auto; 
+  min-height: 500px;
+}*/
+
 .table-section {
   background-color: #fff;
   padding: 20px;

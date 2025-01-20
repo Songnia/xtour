@@ -9,6 +9,7 @@ include("../includes/header.php");
 include_once("../includes/classes/Produit.php");
 include_once("../includes/classes/Database.php");
 include_once("../includes/classes/Magasin.php");
+include_once("../includes/classes/User.php");
 $database = new Database();
 $db = $database->getConnection();
 

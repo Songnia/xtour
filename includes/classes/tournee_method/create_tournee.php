@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Vérifier si les champs sont remplis correctement
     if (empty($nom_magasin) || empty($date) || empty($jour) || empty($ville)) {
         echo "Tous les champs sont obligatoires.";
+        
         return;
     }
 
