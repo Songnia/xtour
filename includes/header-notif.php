@@ -1,5 +1,10 @@
 <?php
 session_start();
+if (!isset($_SESSION['id_utilisateur'])) { 
+  // L'utilisateur n'est pas connecté
+  header("Location: ../includes/erreur.php"); // Rediriger vers une page d'erreur
+  exit();
+}
 ?>
 
 <style>
@@ -199,7 +204,7 @@ label{
 <div class="header">
       <h1>Welcome Back <?php echo $_SESSION['nom'] ;?> </h1>
       <div class="header-right">
-        <div class="notification-container" id="alertClick">
+        <div class="notification-container" id="alertClick" style="cursor:pointer;">
           <span  class="notification-icon">🔔</span>
           <span class="notification-count">1</span> <!-- Remplacez '1' par le nombre dynamique de notifications -->
         </div>
@@ -226,5 +231,30 @@ label{
           </div>
         </div>
         </div>
-</div>  
+</div> 
 
+<script>
+// document.addEventListener('DOMContentLoaded', function() {
+//   var alertClick = document.getElementById('alertClick');
+//   var alertModal = document.getElementById('alertModal');
+//   if(alertClick && alertModal) {
+//     alertClick.addEventListener('click', function() {
+//       alertModal.style.display = 'block';
+//     });
+//   }
+//   var closeButton = document.querySelector('.close-button');
+//   if(closeButton && alertModal) {
+//     closeButton.addEventListener('click', function() {
+//       alertModal.style.display = 'none';
+//     });
+//   }
+// });
+document.addEventListener('DOMContentLoaded', function() {
+  var alertClick = document.getElementById('alertClick');
+  if(alertClick) {
+    alertClick.addEventListener('click', function() {
+      window.location.href = '/xtour/pages/alerte.php';
+    });
+  }
+});
+</script>

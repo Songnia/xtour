@@ -45,11 +45,22 @@ class Magasin{
 }
 
 
-  public function read(){
-    $query = "SELECT * FROM ".$this->name_table." ORDER BY date_enregistrement DESC";
-    $stmt = $this->conn->prepare($query);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  public function read($filter, $params=[], $ordre){
+    try{
+      $query = "SELECT * FROM ".$this->name_table." ".$filter." ORDER BY date_enregistrement ".$ordre;
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute($params);
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+      // Annuler la transaction en cas d'erreur
+      if ($this->conn->inTransaction()) {
+        $this->conn->rollBack();
+      }    
+      error_log($e->getMessage());
+      echo "Erreur capturée : " . $e->getMessage();
+      return false;
+  }
+
   }
 
   public function update(){
@@ -78,12 +89,13 @@ class Magasin{
 
   }
 
-  public function addContact($id_magasin, $name, $phone, $relation){
+  public function addContact($id_magasin,$role, $name, $phone, $relation){
     // Concaténer nom et contact du chef magasin
     try{   
         $query = "INSERT INTO Contact SET
                   id_magasin=:id_magasin,
                   name=:name,
+                  role=:role,
                   phone=:phone,
                   relation=:relation";
       
@@ -91,6 +103,7 @@ class Magasin{
       
       // Liaison des paramètres
       $stmt->bindParam(':name', $name);
+      $stmt->bindParam(':role', $role);
       $stmt->bindParam(':phone', $phone);
       $stmt->bindParam(':relation', $relation);
       $stmt->bindParam(':id_magasin', $id_magasin);

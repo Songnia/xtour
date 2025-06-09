@@ -1,0 +1,39 @@
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  display: flex;
+  background-color: #f0f0f0;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 20%;
+  min-width: 200px; /* Garantit une largeur minimale */
+  background-color: #ffffff;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto; /* Pour permettre le défilement si le contenu est trop grand */
+  align-self: flex-start; /* Crucial pour sticky dans flex */
+  z-index: 100; /* Assure que la sidebar reste au-dessus des autres éléments */
+}
+
+/* Main Content - Créer un contexte de défilement approprié */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto; /* Permet le défilement du contenu principal */
+  height: 100vh; /* Hauteur fixe pour créer un conteneur de défilement */
+}

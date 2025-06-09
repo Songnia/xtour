@@ -16,6 +16,7 @@ echo"</pre>";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $livraison_id = htmlspecialchars(trim($_POST['livraison_id']));    
       $id_produit = htmlspecialchars(trim($_POST['produit']));
+      $quantiteR = htmlspecialchars(trim($_POST['quantiteR']));
       $quantite = htmlspecialchars(trim($_POST['quantite']));
       $date_fabrication = htmlspecialchars(trim($_POST['dateFab']));
       $date_expiration = htmlspecialchars(trim($_POST['dateExp']));
@@ -25,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Affecter les valeurs aux propriétés de l'objet Livraison
     $livraison->produit_id = $id_produit;
     $livraison->nom_produit = $name_produit;
+    $livraison->quantite_restante = $quantiteR;
     $livraison->quantite = $quantite;
     $livraison->date_fabrication = $date_fabrication;
     $livraison->date_expiration = $date_expiration;

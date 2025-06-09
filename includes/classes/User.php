@@ -129,11 +129,14 @@ class Utilisateur{
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':identifiant', $identifiantResponsable, is_numeric($identifiantResponsable) ? PDO::PARAM_INT : PDO::PARAM_STR);
         $stmt->execute();
-
+        
         // Récupération des résultats sous forme de tableau associatif
         $commerciaux = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Retour du tableau (même vide si aucun commercial trouvé)
+        if(empty($commerciaux)){
+          echo"vide";
+        }
         return $commerciaux;
 
     } catch (Exception $e) {

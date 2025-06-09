@@ -2,9 +2,12 @@
   <!-- Sidebar -->
   <?php 
 session_start();
+// Récupérer le nom de la page actuelle
+$currentPage = basename($_SERVER['PHP_SELF']);
+
 $location ="";
 
-switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
+switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...*/
     case 'Admin': $location ="../pages/tournee-com.php"; ;
         break;
     case 'Commercial':$location ="../pages/tournee-com.php";;
@@ -16,7 +19,7 @@ switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
   
   <aside class="sidebar">
     <div class="logo">
-      <img src="../assets/logo.png" alt="Logo"> <!-- Remplacez par le chemin de votre logo -->
+      <img src="../assets/logoNgon.png" alt="Logo"> <!-- Remplacez par le chemin de votre logo -->
     </div>
     <h2>
 
@@ -31,9 +34,14 @@ switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
       }?> Tools</h2>
       
     <nav class="nav">
-      <a href="<?php echo $location; ?>" class="nav-link active">Planifier</a>
+      <a href="<?php echo $location; ?>" class="nav-link <?php echo (strpos($currentPage, 'tournee') !== false) ? 'active' : ''; ?>">Planifier</a>
       <!--<a href="../pages/visite.php" class="nav-link">Visite</a> -->
-      <a href="../pages/livraison.php" class="nav-link">Livraison</a>
+      <a href="../pages/livraison.php" class="nav-link <?php echo ($currentPage == 'livraison.php') ? 'active' : ''; ?>">Livraison</a>
+      <?php if ($_SESSION['role'] == 'Commercial') { ?>
+        <a href="../pages/alerte.php" class="nav-link <?php echo ($currentPage == 'alerte.php') ? 'active' : ''; ?>">Alerte</a>
+      <?php } ?>
+      <a href="../pages/magasin.php" class="nav-link <?php echo ($currentPage == 'magasin.php') ? 'active' : ''; ?>">Magasin</a>
+      <a href="../pages/rapport.php" class="nav-link <?php echo ($currentPage == 'rapport.php') ? 'active' : ''; ?>">Tournees</a>
     </nav>
     <div class="sign-out">
       <a href="../index.php">Sign Out</a>

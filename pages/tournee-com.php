@@ -1,9 +1,9 @@
+<link rel="icon" type="image/png" sizes="32x32" href="Visimags-carre1.png">
 <?php $titre = "Tournées"; 
     $namePage = "tournee-com.php";
 
 session_start();
 $id_utilisateur = $_SESSION['id_utilisateur'];
-
 include("../includes/sidebar-mobile-com.php");
 // Insérer le header
 include("../includes/header.php");
@@ -56,7 +56,7 @@ echo "</pre>";*/
                     </div>
                 </div>
             </form>
-            <button id="addButton" class="btn-purple">Ajouter Tournée</button>
+            <button id="addButton" class="btn-purple" onclick="" >Ajouter Tournée</button>
         </div>
     </header>
 
@@ -66,17 +66,18 @@ echo "</pre>";*/
                     <h3 style="display:inline" >Tournée <?php echo $tournees[0]['code']; ?></h3>
                         <?php
                             $statut = $tournees[0]['statut'];
+                            //echo  "Statut: ".$statut;
                             switch($statut){
-                                case 0: $html = "<span style='margin:5px; color:red;font-style:italic' >";
+                                case 0: $html = "<span style='margin:5px; color:red;font-style:italic; padding:2px;border: 1px solid red;' >";
                                                 echo $html."En attente </span>";
                                                 break;
-                                case 1: $html = "<span style='margin:5px; color:green;' >";
-                                                echo $html."Valider </span>";
+                                case 1: $html = "<span style='margin:5px; color:green;padding:2px; border:1px solid green;' >";
+                                                echo $html."Validée </span>";
                                                 break;
-                                case 2: $html = "<span style='margin:7px; color:green; font-weight:bold' >";
-                                                echo $html."blue </span>";
+                                case 2: $html = "<span style='margin:7px; color:green; font-weight:bold; padding:2px;border: 1px solid green;' >";
+                                                echo $html."En cour </span>";
                                                 break;
-                                case 3: $html = "<span style='margin:7px; color:#26c4ec; font-weight:bold' >";
+                                case 3: $html = "<span style='margin:7px; color:#26c4ec; font-weight:bold; padding:2px;border: 1px solid #26c4ec;' >";
                                                 echo $html."Effectuer </span>";
                                                 break;
                                 
@@ -86,8 +87,9 @@ echo "</pre>";*/
                         ?>
                     <div class="toolbar">
                     <div class="heartool">
-                        <button class="btn btn-green" onclick="openModalAddTour('<?php echo $tournees[0]['code']; ?>')">Ajouter un magasin</button>
-                        <button id="goVisite" class="btn-yellow" onclick="showVisite()" >Commencer la tournee</button>
+
+                        <button class="btn btn-green" style=" display: <?php echo ($statut != 0) ? 'none' : 'block'; ?>;" onclick="openModalAddTour('<?php echo $tournees[0]['code']; ?>')">Ajouter un magasin</button>
+                        <button id="goVisite" style="display: <?php echo ($statut == 3) ? 'none' : 'block'; ?>" class="btn-yellow" onclick="handleTourneeStatus(this, '<?php echo $tournees[0]['code']; ?>'); " data-statut="<?php echo $statut; ?>">Commencer la tournee</button>
                     </div>
                     </div>
                     <div class="container-scroll">
@@ -98,7 +100,7 @@ echo "</pre>";*/
                                     <th>Date</th>
                                     <th>Jour</th>
                                     <th>Remarque</th>
-                                    <th>Action</th>
+                                    <th style="display: <?php echo ($statut == 3) ? 'none' : 'block'; ?>">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -111,10 +113,10 @@ echo "</pre>";*/
                                     <td><?php echo $tour['date']; ?></td>
                                     <td><?php echo $tour['jour']; ?></td>
                                     <td><?php echo $tour['Objectif']; ?></td>
-                                    <td>
-                                        <button class="visite_id btn btn-purple" onclick="sedTourneeInformation('<?php echo $tour['nom_magasin']; ?>' , '<?php echo $tournees[0]['ville']; ?>', '<?php echo $tournees[0]['code']; ?>')" >visiter</button>
-                                        <button class="btn-unique addButton2 btn btn-green">Modifier</button>
-                                        <button class="btn-unique buttonValider btn delete-btn">Supprimer</button>
+                                    <td style="display: <?php echo ($statut == 3) ? 'none' : 'block'; ?>">
+                                        <button style="display: <?php echo ($statut != 0) ? 'none' : 'block'; ?>" class="visite_id btn btn-purple" onclick="sendTourneeInformation('<?php echo $tour['nom_magasin']; ?>' , '<?php echo $tournees[0]['ville']; ?>', '<?php echo $tournees[0]['code']; ?>', '<?php echo $tournees[0]['type']; ?>')" >visiter</button>
+                                        <button style="display: <?php echo ($statut == 0) ? 'none' : 'block'; ?>" class="btn-unique addButton2 btn btn-green">Modifier</button>
+                                        <button style="display: <?php echo ($statut == 0) ? 'none' : 'block'; ?>" class="btn-unique buttonValider btn delete-btn">Supprimer</button>
                                     </td>
                                 </tr>
                                 <?php }?>
@@ -132,23 +134,27 @@ echo "</pre>";*/
                             <?php
                                 $statut = $tournee['statut'];
                                 switch($statut){
-                                    case 0: $html = "<span style='margin:5px; color:red;font-style:italic' >";
+                                    case 0: $html = "<span style='margin:5px; color:red;font-style:italic; padding:2px;border: 1px solid red;' >";
                                                     echo $html."En attente </span>";
                                                     break;
-                                    case 1: $html = "<span style='margin:5px; color:green;' >";
-                                                    echo $html."Valider </span>";
+                                    case 1: $html = "<span style='margin:5px; color:green;padding:2px; border:1px solid green;' >";
+                                                    echo $html."Validée </span>";
                                                     break;
-                                    case 2: $html = "<span style='margin:7px; color:green; font-weight:bold' >";
+                                    case 2: $html = "<span style='margin:7px; color:green; font-weight:bold; padding:2px;border: 1px solid green;' >";
+                                                    echo $html."En cour </span>";
+                                                    break;
+                                    case 3: $html = "<span style='margin:7px; color:#26c4ec; font-weight:bold; padding:2px;border: 1px solid #26c4ec;' >";
                                                     echo $html."Effectuer </span>";
                                                     break;
+                                    
                                     default: 
                                             echo"En attente";
-                                }                  
+                                }                    
                             ?>
                         <div class="toolbar">
                             <div class="heartool">
-                                <button class="btn btn-green" onclick="openModalAddTour('<?php echo $tournee['code']; ?>')">Ajouter un magasin</button>
-                                <button class="  btn-yellow" onclick="showVisite()" >Commencer la tournee</button>
+                                <button class="btn btn-green"  style=" display: <?php echo ($statut != 0) ? 'none' : 'block'; ?>;" onclick="openModalAddTour('<?php echo $tournee['code']; ?>')">Ajouter un magasin</button>
+                                <button class="btn-yellow" style=" display: <?php echo ($statut == 3) ? 'none' : 'block'; ?>;" onclick="handleTourneeStatus(this, '<?php echo $tournee['code']; ?>');" data-statut="<?php echo $statut; ?>">Commencer la tournee</button>
                             </div>
                         </div>
                         <div class="container-scroll">
@@ -159,7 +165,7 @@ echo "</pre>";*/
                                         <th>Date</th>
                                         <th>Jour</th>
                                         <th>Remarque</th>
-                                        <th>Action</th>
+                                        <th style="display: <?php echo ($statut == 3) ? 'none' : 'block'; ?>">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -175,7 +181,7 @@ echo "</pre>";*/
                                         <td><?php echo $tour['date']; ?></td>
                                         <td><?php echo $tour['jour']; ?></td>
                                         <td><?php echo $tour['Objectif']; ?></td>
-                                        <td>
+                                        <td style="display: <?php echo ($statut == 3) ? 'none' : 'block'; ?>">
                                             <button class="btn btn-purple" onclick="sedTourneeInformation('<?php echo $tour['nom_magasin']; ?>' , '<?php echo $tournee['ville']; ?>' , '<?php echo $tournee['code']; ?>')" >visiter</button>
                                            <!-- <button class="addButton2 btn btn-green">Modifier</button>
                                             <button class="buttonValider btn delete-btn">Supprimer</button> -->
@@ -207,7 +213,6 @@ echo "</pre>";*/
         <form method="POST" action="../includes/classes/tournee_method/create_tournee.php" class="form-col">
             <div class="infoPMagasin">
                     <div>
-                        <label for="Ville"></label>
                             <select name="ville" id="type">
                                 <option value="">Ville</option>
                                 <option value="Douala">Douala</option>
@@ -244,7 +249,7 @@ echo "</pre>";*/
 
             </div>
             <div class="infoPMagasin">
-                <div>
+                <!--<div>
                     <select id="jours" name="jour">
                         <option value="Lundi">Lundi</option>
                         <option value="Mardi">Mardi</option>
@@ -253,14 +258,16 @@ echo "</pre>";*/
                         <option value="Vendredi">Vendredi</option>
                         <option value="Samedi">Samedi</option>
                         <option value="Dimache">Dimache</option>
-                    <!-- Autres options ici -->
                     </select>
-                </div>
+                </div>-->
                 <div>
                     <input name="date" type="date">
                 </div>
             </div>
-
+            <div class="" style="margin-left: 20px;">
+                <input type="checkbox" name="is_quick_tour" id="quick" value="0"> 
+                <label for="quick" style="color:green">Tournee rapide</label>
+            </div>
             <!-- Bouton Ajouter en bas -->
             <div class="infoPMagasin">
                 <button type="submit" class="add-button">Ajouter</button>
@@ -296,18 +303,17 @@ echo "</pre>";*/
                 <input name="date" type="date" required>
             </div>
 
-            <div>
-                <label for="jour">Jour</label>
-                <select id="jours" name="jour" required>
-                    <option value="Lundi">Lundi</option>
-                    <option value="Mardi">Mardi</option>
-                    <option value="Mercredi">Mercredi</option>
-                    <option value="Jeudi">Jeudi</option>
-                    <option value="Vendredi">Vendredi</option>
-                    <option value="Samedi">Samedi</option>
-                    <option value="Dimache">Dimache</option>
-                </select>
-            </div>
+            <!--<div>
+                    <select id="jours" name="jour">
+                        <option value="Lundi">Lundi</option>
+                        <option value="Mardi">Mardi</option>
+                        <option value="Mercredi">Mercredi</option>
+                        <option value="Jeudi">Jeudi</option>
+                        <option value="Vendredi">Vendredi</option>
+                        <option value="Samedi">Samedi</option>
+                        <option value="Dimache">Dimache</option>
+                    </select>
+                </div>-->
             <button type="submit" class="add-button">Ajouter</button>
         </form>    
 

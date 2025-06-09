@@ -1,3 +1,4 @@
+<link rel="icon" type="image/png" sizes="32x32" href="Visimags-carre1.png">
 <?php 
 $titre = "Livraison"; 
 
@@ -19,7 +20,6 @@ switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
 include("../includes/header.php");
 
 //include("../includes/config.php");
-
 include_once("../includes/classes/Database.php");
 include_once("../includes/classes/Livraison.php");
 include_once("../includes/classes/Magasin.php");
@@ -27,17 +27,158 @@ include_once("../includes/classes/Produit.php");
 
 
 
-
 $database = new Database();
 $db = $database->getConnection();
 $livraison = new Livraison($db);
 
+// Récupération des filtres depuis l'URL
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+  $ville = isset($_GET['ville']) ? $_GET['ville'] : '';
+  $magasin_id = isset($_GET['magasin']) ? $_GET['magasin'] : '';
+  $groupe = isset($_GET['groupe']) ? $_GET['groupe'] : '';
+  //$produit_id = isset($_GET['produit']) ? $_GET['produit'] : '';
+  $date = isset($_GET['date']) ? $_GET['date'] : '';
+}
+// Construire la clause WHERE dynamiquement
+$conditions = [];
+$params = [];
+
+if (!empty($ville)) {
+  $conditions[] = "ville = ?";
+  $params[] = $ville;
+}
+if (!empty($magasin_id)) {
+  $conditions[] = "magasin_id= ?";
+  $params[] = $magasin_id;
+}
+if (empty($groupe)) {
+  /*$conditions[] = "groupe = ?";
+  $params[] = $groupe;*/
+    $groupe = "*";
+}
+//$groupe =  (empty($groupe))? "$groupe":"Carrefour" ;
+/*if (!empty($produit_id)) {
+  $conditions[] = "id_produit = ?";
+  $params[] = $produit_id;
+}*/
+$order =  (empty($date))? "ASC":$date ;
+//$order = (!empty($date) && in_array(strtoupper($date), ['ASC', 'DESC'])) ? strtoupper($date) : "ASC";
+
+//echo "Oerder: ".$order."<br>";
+$whereClause = count($conditions) > 0 ? ' WHERE ' . implode(' AND ', $conditions) : '';
 // Lecture des produits
-$livs = $livraison->read();
+$livs = $livraison->read($whereClause,$params,$groupe,$order);
+
+echo "<pre>";
+    //var_dump($livs);
+echo "</pre>";
+
 $produit = new Produit($db);
 $magasin = new Magasin($db);
 
 ?>
+
+<style>
+.container {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    overflow-x: auto;
+}
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    align-items: baseline;
+
+}
+
+.filter-button {
+    background: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px;
+    border-radius: 30px;
+    cursor: pointer;
+    min-width: 70px;
+}
+
+.filter-select, .filter-input {
+    background: white;
+    padding: 5px;
+    border: 1px solid white;
+    border-radius: 30px;
+    flex: 1;
+    
+}
+
+.apply-button-container {
+    text-align: start;
+    margin-top: 10px;
+}
+
+.apply-button {
+    background: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.apply-button:hover{
+    background:rgb(9, 99, 195);
+}
+.apply-button-green{
+    background-color: #4caf50;
+}
+.apply-button-green:hover{
+    background-color:#45a049;
+}
+@media (max-width: 576px) {
+body{
+    padding: 0;
+}
+.filter-button {
+    font-size: xx-small;
+    width: 75px;
+    height: 30px;
+}
+
+#date{
+    font-size: xx-small;
+}
+
+.filter-select, .filter-input {
+    font-size: xx-small;
+    width: 75px;
+    height: 30px;
+}
+
+.apply-button-container {
+    font-size: xx-small;
+    width: 75px;
+    height: 20px;
+}
+.apply-button-container {
+    margin-bottom: 10px;
+    margin-top: 0px;
+    height: 30px;
+    font-size: xx-small;
+}
+search-store{
+    max-width: 300px;
+}
+.radio-inputs{
+    display: none;
+}
+}
+</style>
 
 <!-- Main Content -->
 <main class="main-content1">  
@@ -54,6 +195,88 @@ $magasin = new Magasin($db);
     </div>
     <button id="addButton" class="add-store-btn" onclick="openModalLivraison()">Nouvelle Livraison</button>
   </div>
+  <div>
+        <?php 
+            try{
+                $query = "SELECT * FROM Magasin ORDER BY date_enregistrement DESC";
+                $stmt = $db->prepare($query);
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //var_dump($result);
+            } catch (Exception $e) {
+                                    // Annuler la transaction en cas d'erreur
+                                    $db->rollBack();
+                                    error_log($e->getMessage());
+                                    echo "Erreur capturée : " . $e->getMessage();
+                                    return false;
+            }       
+            
+            try{
+                $query = "SELECT DISTINCT groupe FROM Magasin";
+                $stmt = $db->prepare($query);
+                $stmt->execute();
+                $result_group = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //var_dump($result_group);
+            } catch (Exception $e) {
+                                    // Annuler la transaction en cas d'erreur
+                                    $db->rollBack();
+                                    error_log($e->getMessage());
+                                    echo "Erreur capturée : " . $e->getMessage();
+                                    return false;
+            }
+
+            //$prods = $produit->read();              
+        ?>        
+        <form method="GET" class="container">
+            <div class="filter-bar">
+                <button class="filter-button">🔍 Tout</button>
+                <select class="filter-select" id="ville" name="ville">
+                    <option value="">Ville</option>
+                    <option value="Douala">Douala</option>
+                    <option value="Yaounde">Yaounde</option>
+                </select>
+                <select class="filter-select" id="groupe" name="groupe" >
+                    <option value="">Groupe</option>
+                    <?php foreach($result_group as $index => $resg): 
+                        if(!empty($resg['groupe'])){
+                        ?>
+                        <option value="<?php echo htmlspecialchars($resg['groupe']); ?>">
+                                    <?php echo htmlspecialchars($resg['groupe']); ?>
+                        </option>
+                    <?php }
+                        endforeach; 
+                    ?>                    
+                </select>
+                <select class="filter-select" id="magasin" name="magasin" >
+                    <option value="">Magasin</option>
+                    <?php foreach($result as $res): ?>
+                        <option value="<?php echo htmlspecialchars($res['id_magasin']); ?>" <?php if ($nom == $res['nom']) echo 'selected'; ?>>
+                                    <?php echo htmlspecialchars($res['nom']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <!--<select class="filter-select" id="produit" name="produit">
+                    <option value="">Produit</option>
+                    <?php 
+                        foreach ($prods as $prod) { ?>
+                        <option value="<?php echo $prod['id_produit']; ?>">
+                            <?php echo $prod['nom_commercial']; ?>
+                        </option>
+                        <?php }  
+                    ?>
+                </select>-->
+                <select class="filter-select" id="date" name="date">
+                    <option value="">Date</option>
+                    <option value="ASC">Plus recent </option>
+                    <option value="DESC">Plus encien </option>
+                </select>
+            </div>
+            <div class="apply-button-container">
+                <button class="apply-button">Appliquer</button>
+            </div>
+        </form>
+
+    </div>
   <div id="containterFilter">
   <div id="elementsFilter">
     <!-- Filtre Par Magasin -->
@@ -113,7 +336,7 @@ $magasin = new Magasin($db);
   </div>
   
   <!-- Stores Table -->
-  <div class="container-scroll">
+  <div class="container-scroll" style="max-width:100%">
     <div class="table-section">
     <table>
       <thead>
@@ -143,8 +366,15 @@ $magasin = new Magasin($db);
                   <thead>
                       <tr>
                         <th>Nom</th>
-                        <th>Quantite</th>
-                        <th>Date</th>
+                        <th>Qte <br> Restante</th>
+                        <th>Qte</th>
+                        <th style="text-align:center">Date
+                                    <hr>
+                                    <div style="display:flex; font-weight: 10; gap:25px; justify-content: space-between ; ">
+                                        <span>Fab</span>
+                                        <span>Exp</span>
+                                    </div>
+                                </th>
                       </tr>
                   </thead>
                   <?php $prodsM = $livraison->getProduit( $liv['id_livraison'] );?>
@@ -158,8 +388,15 @@ $magasin = new Magasin($db);
                                   echo $name_produit;
                               ?>
                             </td>
+                            <td><?php echo htmlspecialchars($prodm['quantite_restante']); ?></td>
                             <td><?php echo htmlspecialchars($prodm['quantite']); ?></td>
-                            <td><?php echo "Fab: ". htmlspecialchars($prodm['date_fabrication'])."    Exp: ". htmlspecialchars($prodm['date_expiration']); ?></td>
+                            <td>
+                            <div style="display:flex; gap:25px; justify-content: space-between ; ">
+                              <span><?php echo htmlspecialchars($prodm['date_fabrication']) ?></span>
+                              <span><?php echo htmlspecialchars($prodm['date_expiration']) ?></span>
+                            </div>
+
+                            </td>
                         </tr>
                      <?php } ?> 
                   </tbody>
@@ -238,6 +475,10 @@ $magasin = new Magasin($db);
           ?>
           </select>         
       </div>   
+      <div>
+          <label for="quantiteR">Quantite Restante</label>
+          <input required="" id="quantiteR" name="quantiteR" type="number">
+      </div> 
       <div>
           <label for="Quantite">Quantite</label>
           <input required="" id="quantite" name="quantite" type="number">
@@ -327,6 +568,10 @@ $magasin = new Magasin($db);
           ?>
           </select>         
       </div>   
+      <div>
+          <label for="quantiteR">Quantite Restante</label>
+          <input required="" id="quantiteR" name="quantiteR" type="number">
+      </div>       
       <div>
           <label for="Quantite">Quantite</label>
           <input required="" id="quantite" name="quantite" type="number">

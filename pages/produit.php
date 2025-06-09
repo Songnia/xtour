@@ -1,3 +1,4 @@
+<link rel="icon" type="image/png" sizes="32x32" href="Visimags-carre1.png">
 <?php
 
 $titre = "produit";

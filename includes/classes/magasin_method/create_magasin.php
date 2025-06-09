@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $magasin->ville = htmlspecialchars(trim($_POST["ville"]));
     $magasin->nom = htmlspecialchars(trim($_POST["nom"]));
     $magasin->type = htmlspecialchars(trim($_POST["type"]));
+    $role = htmlspecialchars(trim($_POST["role"]));
+
     
     $name = htmlspecialchars(trim($_POST["name"]));
     $phone = htmlspecialchars(trim($_POST["phone"]));
@@ -38,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
       // Collecter les contacts supplémentaires
       $maga = $magasin->getIDMagasin($magasin->nom);
       echo $maga['id_magasin'];
-      if($magasin->addContact($maga['id_magasin'],$name,$phone,$relation)){
+      if($magasin->addContact($maga['id_magasin'], $role,$name,$phone,$relation)){
           echo" contact ajouter";
       }   
 

@@ -4,7 +4,7 @@
     private $host = "localhost";
     private $db_name = "xtour_db";
     private $username = "root";
-    private $password = "ton_mot_de_passe";
+    private $password = "";
     private $conn;
 
 

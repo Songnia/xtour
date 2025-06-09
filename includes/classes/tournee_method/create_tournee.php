@@ -15,12 +15,13 @@ $tour = new Tour($db);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Assainir et valider les données entrantes
+    $type_quik = isset($_POST['is_quick_tour']) && $_POST['is_quick_tour'] !== '' ? intval($_POST['is_quick_tour']) : 1;
     $nom_magasin = htmlspecialchars(trim($_POST['nom_magasin']));
     $date = htmlspecialchars(trim($_POST['date']));
-    $jour = htmlspecialchars(trim($_POST['jour']));
+    //$jour = htmlspecialchars(string: trim($_POST['jour']));
     $ville = htmlspecialchars(trim($_POST['ville']));
-    $objectif = htmlspecialchars(trim(string: $_POST['remarque']));
-    $id_commercial = htmlspecialchars(trim(string: $_POST['id_commercial']));
+    $objectif = trim($_POST['remarque']);
+    $id_commercial = trim($_POST['id_commercial']);
 
     if($role_utilisateur === "responsable_commercial"){
         $id_utilisateur = $id_commercial;
@@ -31,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "</pre>";
 
     // Vérifier si les champs sont remplis correctement
-    if (empty($nom_magasin) || empty($date) || empty($jour) || empty($ville)) {
+    if (empty($nom_magasin) || empty($date) || empty($ville)) {
         echo "Tous les champs sont obligatoires.";
         
         return;
@@ -40,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $code_tournee = substr($ville,0,3) ."".rand(0,100);
 
     // Affecter les valeurs aux propriétés de l'objet Tour
+    $tour->type = $type_quik ;
     $tour->nom_magasin = $nom_magasin;
     $tour->date = $date;
     $tour->jour = $jour;
@@ -64,14 +66,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $tour->updateTourneecode($new_code);
 
         echo "<pre>";
-            var_dump($new_code);
+            //var_dump($new_code);
         echo "</pre>";
         
         $tour->code = $new_code;
         $tour->create($tour->code);
         echo "La tournée a été créée avec succès. dernier ID enregistrer : ".$last_id;
 
-        switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
+        switch($_SESSION['role']) {
             case 'Admin': $location ="../../../pages/tournee-res-com.php"; 
                 break;
             case 'Commercial':$location ="../../../pages/tournee-com.php";

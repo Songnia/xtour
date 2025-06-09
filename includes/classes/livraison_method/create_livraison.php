@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ville = htmlspecialchars(trim($_POST['ville']));
     $nom_magasin = htmlspecialchars(trim($_POST['nom_magasin']));
     $id_produit = htmlspecialchars(trim($_POST['produit']));
+    $quantiteR = htmlspecialchars(trim($_POST['quantiteR']));
     $quantite = htmlspecialchars(trim($_POST['quantite']));
     $date_fabrication = htmlspecialchars(trim($_POST['dateFab']));
     $date_expiration = htmlspecialchars(trim($_POST['dateExp']));
@@ -48,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $livraison->produit_id = $id_produit;
     $livraison->nom_produit = $name_produit;
     $livraison->quantite = $quantite;
+    $livraison->quantite_restante = $quantiteR;
     $livraison->date_fabrication = $date_fabrication;
     $livraison->date_expiration = $date_expiration;
     $livraison->code = $code_livraison;
@@ -88,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $location = "../../../pages/livraison-res-com.php";
                 break;
         }
-        //header("Location:" . $location);
+        header("Location:" . $location);
     } else {
         echo "Une erreur s'est produite lors de la création de la livraison.";
     }

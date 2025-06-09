@@ -6,6 +6,7 @@ class Tour {
 
     public $id_tour;
     public $id_tournee;
+    public $type = 1;
     public $ville;
     public $nom_magasin;
     public $date;
@@ -30,12 +31,14 @@ class Tour {
             $this->conn->beginTransaction(); // Démarre une transaction
 
             $query = "INSERT INTO Tournee SET 
+                    type =:type,
                     ville =:ville,
                     utilisateur_id = :utilisateur_id,
                     code = :code";
 
             $stmt = $this->conn->prepare($query);
 
+            $stmt->bindParam(":type", $this->type);
             $stmt->bindParam(":utilisateur_id", $id_user);
             $stmt->bindParam(":code", $this->code);
             $stmt->bindParam(":ville", $this->ville);
@@ -74,14 +77,13 @@ class Tour {
     }
 
     // Modifier le statut d'une tournée
-    public function updateTourneeStatus() {
+    
+    public function updateTourneeStatus($statut) {
         try {
             $query = "UPDATE Tournee SET statut = :statut WHERE code = :code";
     
             $stmt = $this->conn->prepare($query);
     
-            // Mise à jour explicite du statut (1 ici pour actif)
-            $statut = 1;
             $stmt->bindParam(":statut", $statut, PDO::PARAM_INT);
             $stmt->bindParam(":code", $this->code, PDO::PARAM_STR);
     
@@ -195,7 +197,22 @@ class Tour {
         }
 
       }
+      public function readMagasin($codeTour){
+        try{
+            $query = "SELECT nom_magasin FROM " . $this->table_name . " WHERE code_tournee = :code ORDER BY date_enregistrement DESC";
+            $stmt = $this->conn->prepare($query);
 
+            $stmt->bindParam(":code", $codeTour);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            // Annuler la transaction en cas d'erreur
+            error_log($e->getMessage());
+            echo "Erreur capturée : " . $e->getMessage();
+            return false;
+        }
+
+      }
     // Supprimer un tour
     public function delete() {
         try {

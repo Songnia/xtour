@@ -1,11 +1,20 @@
-<?php $titre = "Rapport tournees"; 
-include_once("../includes/sidebar-mobile.php");
+<link rel="icon" type="image/png" sizes="32x32" href="Visimags-carre1.png">
+<?php
 
-// Insérer le header
+$titre = "Rapport tournees";
+//error_reporting(E_ALL);
+session_start();
+switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
+    case 'Admin': 
+    include_once("../includes/sidebar-mobile.php");
+    include_once("../includes/sidebar.php");
+    break;
+    
+    default:
+    include_once("../includes/sidebar-com.php");
+    include("../includes/sidebar-mobile-com.php");
+}
 include_once("../includes/header.php");
-
-// Insérer la Sidebar
-include_once("../includes/sidebar.php");
 include_once("../includes/classes/Database.php");
 include_once("../includes/classes/Magasin.php");
 include_once("../includes/classes/Produit.php");
@@ -15,29 +24,88 @@ $database = new Database();
 $db = $database->getConnection();
 $magasin = new Magasin($db);
 $produit = new Produit($db);
-$utilisateur = new Utilisateur($db);
+$user = new Utilisateur($db);
+
+// Récupération des filtres depuis l'URL
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $ville = isset($_GET['ville']) ? $_GET['ville'] : '';
+    $magasin_id = isset($_GET['magasin']) ? $_GET['magasin'] : '';
+    $groupe = isset($_GET['groupe']) ? $_GET['groupe'] : '';
+    $produit_id = isset($_GET['produit']) ? $_GET['produit'] : '';
+    $date = isset($_GET['date']) ? $_GET['date'] : '';
+}
+
+// Construire la clause WHERE dynamiquement
+$conditions = [];
+$params = [];
+
+if (!empty($ville)) {
+    $conditions[] = "v.ville = ?";
+    $params[] = $ville;
+}
+if (!empty($magasin_id)) {
+    $conditions[] = "v.magasin_id = ?";
+    $params[] = $magasin_id;
+}
+if (!empty($groupe)) {
+    $conditions[] = "m.groupe = ?";
+    $params[] = $groupe;
+}
+if (!empty($produit_id)) {
+    $conditions[] = "sp.produit_id = ?";
+    $params[] = $produit_id;
+}
+if (!empty($date)) {
+    //$conditions[] = "v.date_visite = ?";
+    $order = "ASC";
+    $order = $date;
+}
+//echo $order;
+$whereClause = count($conditions) > 0 ? ' WHERE ' . implode(' AND ', $conditions) : '';
+
 try {
     $query = "
-    SELECT DISTINCT 
-    v.id_visite,
-    v.codeTournee,
-    v.magasin_id,
-    v.ville,
-    v.date_visite,
-    v.feedback_value,
-    rv.etiquette,
-    rv.presence_promotrice,
-    rv.emplacement,
-    rv.visibilite_produit,
-    rv.prix_etiquette
-    FROM Visite v
-    LEFT JOIN reponses_verification rv ON v.id_visite = rv.visite_id
-    LEFT JOIN stocks_produits sp ON v.id_visite = sp.visite_id;
-
+    SELECT 
+        v.id_visite,
+        v.codeTournee,
+        v.magasin_id,
+        v.ville,
+        v.date_visite,
+        v.feedback,
+        v.feedback_value,
+        v.feedback_description,
+        sp.id_stock,
+        sp.produit_id,
+        sp.date_fabrication,
+        sp.date_expiration,
+        sp.etat AS stock_etat,
+        sp.quantite_rayon,
+        sp.quantite_stock,
+        sp.qts_rayon,
+        sp.qts_stock,
+        sp.image_path,
+        rv.id_reponse,
+        rv.etiquette,
+        rv.presence_promotrice,
+        rv.existance_promotrice,
+        rv.emplacement,
+        rv.visibilite_produit,
+        rv.prix_etiquette,
+        m.groupe
+    FROM 
+        Visite v
+    LEFT JOIN 
+        stocks_produits sp ON v.id_visite = sp.visite_id
+    LEFT JOIN 
+        reponses_verification rv ON v.id_visite = rv.visite_id
+    LEFT JOIN 
+        Magasin m ON m.id_magasin = v.magasin_id
+    $whereClause
+    ORDER BY v.date_visite $order;
     ";
 
     $stmt = $db->prepare($query);
-    $stmt->execute();
+    $stmt->execute($params);
 
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
@@ -46,41 +114,10 @@ try {
     return false;
 }
 
-
-try {
-    $query = "
-    SELECT DISTINCT 
-    v.id_visite,
-    v.codeTournee,
-    v.magasin_id,
-    v.ville,
-    v.date_visite,
-    v.feedback_value,
-    sp.produit_id,
-    sp.date_fabrication,
-    sp.date_expiration,
-    sp.quantite_rayon,
-    sp.quantite_stock,
-    sp.etat,
-    sp.image_path
-    FROM Visite v
-    LEFT JOIN reponses_verification rv ON v.id_visite = rv.visite_id
-    LEFT JOIN stocks_produits sp ON v.id_visite = sp.visite_id;
-    ";
-
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-
-    $results1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    error_log($e->getMessage());
-    echo "Erreur capturée : " . $e->getMessage();
-    return false;
-}
-
-echo"<pre>";
+// Afficher les résultats
+echo "<pre>";
 //var_dump($results);
-echo"</pre>";
+echo "</pre>";
 ?>
     <style>
     .radio-inputs {
@@ -230,8 +267,8 @@ echo"</pre>";
     /* The dots/bullets/indicators */
     .dot {
     cursor: pointer;
-    height: 15px;
-    width: 15px;
+    /*height: 15px;
+    width: 15px;*/
     margin: 0 2px;
     background-color: #bbb;
     border-radius: 50%;
@@ -259,6 +296,111 @@ echo"</pre>";
     .prev, .next,.text {font-size: 11px}
     }
 
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    }
+
+.container {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    overflow-x: auto;
+}
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    align-items: baseline;
+
+}
+
+.filter-button {
+    background: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px;
+    border-radius: 30px;
+    cursor: pointer;
+    min-width: 70px;
+}
+
+.filter-select, .filter-input {
+    background: white;
+    padding: 5px;
+    border: 1px solid white;
+    border-radius: 30px;
+    flex: 1;
+    
+}
+
+.apply-button-container {
+    text-align: start;
+    margin-top: 10px;
+}
+
+.apply-button {
+    background: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.apply-button:hover{
+    background:rgb(9, 99, 195);
+}
+.apply-button-green{
+    background-color: #4caf50;
+}
+.apply-button-green:hover{
+    background-color:#45a049;
+}
+@media (max-width: 576px) {
+body{
+    padding: 0;
+}
+.filter-button {
+    font-size: xx-small;
+    width: 75px;
+    height: 30px;
+}
+
+#date{
+    font-size: xx-small;
+}
+
+.filter-select, .filter-input {
+    font-size: xx-small;
+    width: 75px;
+    height: 30px;
+}
+
+.apply-button-container {
+    font-size: xx-small;
+    width: 75px;
+    height: 20px;
+}
+.apply-button-container {
+    margin-bottom: 10px;
+    margin-top: 0px;
+    height: 30px;
+    font-size: xx-small;
+}
+search-store{
+    max-width: 300px;
+}
+.radio-inputs{
+    display: none;
+}
+}
+
     </style>
 <div class="page-container-report">
     <div class="page-controls">
@@ -268,78 +410,106 @@ echo"</pre>";
                         <input id="liste" type="radio" name="radio" checked="">
                         <span class="name">Liste</span>
                     </label>
-                    <label class="radio" onclick="showDetail()">
+                    <!--<label class="radio" onclick="showDetail()">
                         <input id="detail" type="radio" name="radio">
                         <span class="name">plus de detaille</span>
-                    </label>
+                    </label>-->
                     </div>
                 </div>
                 <div id="filterContainer" class="filter-container">
                     <div id="selectedFilters" class="selected-filters">
-                    <!-- Les tags sélectionnés s'afficheront ici -->
+                    <!-- Les tags sélectionnés s'afficheront ici 
                         <div class="group1">
                             <input type="text" placeholder="Rechercher" class="search-store" id="searchInput">
                             <svg id="go" class="icon" aria-hidden="true" viewBox="0 0 24 24"><g><path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path></g></svg>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
+        <form method="POST" action="../includes/classes/export_csv.php">
+            <button class="apply-button apply-button-green" type="submit" >Télécharger le rapport en CSV</button>
+        </form></div>
     </div>
-    <div id="containterFilter">
-        <div id="elementsFilter">
-            <!-- Exemple avec des sélecteurs -->
-            <div class="divFilter">
-                <label for="filter2">Par Magasin :</label>
-                <div class="radio-inputs">
-                <label class="radio">
-                    <input type="radio" name="radio" checked="">
-                    <span class="name">Magasin1</span>
-                </label>
-                <label class="radio">
-                    <input type="radio" name="radio">
-                    <span class="name">Magasin2</span>
-                </label>
-                    
-                <label class="radio">
-                    <input type="radio" name="radio">
-                    <span class="name">Magasin3</span>
-                <label>
-                </div>        
-            </div>
+    <div>
+        <?php 
+            try{
+                $query = "SELECT * FROM Magasin ORDER BY date_enregistrement DESC";
+                $stmt = $db->prepare($query);
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //var_dump($result);
+            } catch (Exception $e) {
+                                    // Annuler la transaction en cas d'erreur
+                                    $db->rollBack();
+                                    error_log($e->getMessage());
+                                    echo "Erreur capturée : " . $e->getMessage();
+                                    return false;
+            }       
+            
+            try{
+                $query = "SELECT DISTINCT groupe FROM Magasin";
+                $stmt = $db->prepare($query);
+                $stmt->execute();
+                $result_group = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                //var_dump($result_group);
+            } catch (Exception $e) {
+                                    // Annuler la transaction en cas d'erreur
+                                    $db->rollBack();
+                                    error_log($e->getMessage());
+                                    echo "Erreur capturée : " . $e->getMessage();
+                                    return false;
+            }
 
-
-            <div class="divFilter">
-                <label for="filter2">Par Produit :</label>
-                <div class="radio-inputs">
-                <label class="radio">
-                    <input type="radio" name="radio" checked="">
-                    <span class="name">Produit1</span>
-                </label>
-                <label class="radio">
-                    <input type="radio" name="radio">
-                    <span class="name">Produit2</span>
-                </label>
-                    
-                <label class="radio">
-                    <input type="radio" name="radio">
-                    <span class="name">Produit3</span>
-                <label>
-                </div>        
+            $prods = $produit->read();              
+        ?>        
+        <form method="GET" class="container">
+            <div class="filter-bar">
+                <button class="filter-button">🔍 Tout</button>
+                <select class="filter-select" id="ville" name="ville">
+                    <option value="">Ville</option>
+                    <option value="Douala">Douala</option>
+                    <option value="Yaounde">Yaounde</option>
+                </select>
+                <select class="filter-select" id="groupe" name="groupe" >
+                    <option value="">Groupe</option>
+                    <?php foreach($result_group as $index => $resg): 
+                        if(!empty($resg['groupe'])){
+                        ?>
+                        <option value="<?php echo htmlspecialchars($resg['groupe']); ?>">
+                                    <?php echo htmlspecialchars($resg['groupe']); ?>
+                        </option>
+                    <?php }
+                        endforeach; 
+                    ?>                    
+                </select>
+                <select class="filter-select" id="magasin" name="magasin" >
+                    <option value="">Magasin</option>
+                    <?php foreach($result as $res): ?>
+                        <option value="<?php echo htmlspecialchars($res['id_magasin']); ?>" <?php if ($nom == $res['nom']) echo 'selected'; ?>>
+                                    <?php echo htmlspecialchars($res['nom']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <select class="filter-select" id="produit" name="produit">
+                    <option value="">Produit</option>
+                    <?php 
+                        foreach ($prods as $prod) { ?>
+                        <option value="<?php echo $prod['id_produit']; ?>">
+                            <?php echo $prod['nom_commercial']; ?>
+                        </option>
+                        <?php }  
+                    ?>
+                </select>
+                <select class="filter-select" id="date" name="date">
+                    <option value="">Date</option>
+                    <option value="DESC">Plus recent </option>
+                    <option value="ASC">Plus encien </option>
+                </select>
             </div>
-
-            <div class="divFilter">
-                <label for="filter2">Par Date :</label>
-                <div class="radio-inputs">
-                <label class="radio">
-                    <input type="radio" name="radio" checked="">
-                    <span class="name">Plus recent d'abord</span>
-                </label>
-                <label class="radio">
-                    <input type="radio" name="radio">
-                    <span class="name">mois recent d'abord</span>
-                </label>
-                </div>        
+            <div class="apply-button-container">
+                <button class="apply-button">Appliquer</button>
             </div>
-        </div>
+        </form>
+
     </div>
     <div class="content-body-report content-body">
 
@@ -398,29 +568,30 @@ echo"</pre>";
             <th>ville</th>
             <th>nom Magasin</th>
             <th>Nom du commercial</th>-->
-            <th>ID</th>
+            <th>code</th>
+            <th>Date</th>
             <th>ville</th>
             <th>nom Magasin</th>
+            <th>Nom Utilisateur</th>
             <th>Nom du Produit</th>
             <th>Visible</th>
             <th>Etiquette</th>
             <th>Prix</th>
             <th>Etat</th>
-            <th>Date de Fabrication</th>
-            <th>Date de Péremption</th>
-            <th>Quantité en rayon</th>
+            <th>Date de <br>Fabrication</th>
+            <th>Date de <br>Péremption</th>
+            <th>Quantité <br>en rayon</th>
+            <!--<th>Quantité <br>en vendue</th>-->
             <th>vendeurs</th>
             <th>Feedback</th>
             <th>images</th>
             </tr>
         </thead>
         <tbody>
-            <?php //foreach ($results as $result):
-                for($i = 0; $i < count($results); $i++){
-                                    $result = $results[$i];
-                                    $result1 = $results1[$i]; ?>
+            <?php foreach ($results as $result): ?>
             <tr>
-                <td><?php echo htmlspecialchars($result['id_visite']); ?></td>
+                <td><?php echo htmlspecialchars($result['codeTournee']); ?></td>
+                <td><?php echo htmlspecialchars($result['date_visite']); ?></td>
                 <td><?php echo  htmlspecialchars($result['ville']); ?></td>
                 <td>
                     <?php
@@ -428,25 +599,48 @@ echo"</pre>";
                         echo htmlspecialchars($magasinName); 
                     ?>
                 </td>
+                <th>
+                    <?php 
+                        try{
+                            //echo "ID magasin: ".$maga['id_magasin']."  :id P ".$prodm['id_produit'];
+                            
+                            $query = "SELECT utilisateur_id FROM Tournee WHERE code = :code";
+                            $stmt = $db->prepare($query); // Correction ici
+                            $stmt->bindParam(':code', $result['codeTournee'], PDO::PARAM_STR);
+                            $stmt->execute();
+                            $user_id = $stmt->fetch(PDO::FETCH_ASSOC);
+                          } catch (Exception $e) {
+                                error_log($e->getMessage());
+                                echo "Erreur capturée : " . $e->getMessage();
+                                return false;
+                          }
+                          if($user_id["utilisateur_id"]){
+                            $nameUser = $user->getNameCom($user_id["utilisateur_id"]);
+                            //var_dump($nameUser);    
+                            echo $nameUser[0]["nom"] ." ".$nameUser[0]["prenom"];                        
+                          }
+                    ?>
+                </th>
                 <td>
                     <?php 
-                        echo $produit->getNameProduit(htmlspecialchars($result1['produit_id'])); 
+                        echo $produit->getNameProduit(htmlspecialchars($result['produit_id'])); 
                     ?>
                 </td>
                 <td><?php echo htmlspecialchars($result['visibilite_produit']); ?></td>
                 <td><?php echo  htmlspecialchars($result['etiquette']); ?></td>
                 <td><?php echo htmlspecialchars($result['prix_etiquette']); ?></td>
-                <td><?php echo htmlspecialchars($result1['stock_etat']); ?></td>
-                <td><?php echo htmlspecialchars($result1['date_fabrication']); ?></td>
-                <td><?php echo  htmlspecialchars($result1['date_expiration']); ?></td>
+                <td><?php echo htmlspecialchars($result['stock_etat']); ?></td>
+                <td><?php echo htmlspecialchars($result['date_fabrication']); ?></td>
+                <td><?php echo  htmlspecialchars($result['date_expiration']); ?></td>
                 <td>
                     <?php
-                        if($result1['quantite_rayon']){
-                            echo htmlspecialchars($result1['quantite_rayon']);
-                        }else{
-                            echo htmlspecialchars($result1['qts_rayon']);
-                        }
-                        /*try{
+                        
+                        if($result['quantite_rayon']){
+                            echo htmlspecialchars($result['quantite_rayon']);
+                           }else{
+                                echo htmlspecialchars($result['qts_rayon']);
+                            }
+                        /*try{   
                             $query = "SELECT quantite_rayon
                             FROM stocks_produits
                             WHERE quantite_rayon > 0
@@ -471,91 +665,53 @@ echo"</pre>";
                 <td><?php echo htmlspecialchars($result['emplacement']); ?></td>
                 <td><?php echo htmlspecialchars($result['feedback_value']); ?></td>
                 <td>
-                    <img src="<?php echo $result1['image_path']; ?>" style='max-width:50px; max-height:50px;'>
-
-                    <?php foreach ($result1['image_path'] as $index => $res_img) { ?>
-                    <div class="slideshow-container" id="slide">
+                    <?php 
+                        $image = $result['image_path'];
+                        echo "<img onclick='openModalSlide()' src='$image' alt='Image téléchargée' style='max-width:30px; max-height:30px;'>"
+                        
+                    ?>
+                    <!-- Modal pour afficher les images -->
+                    <div class="slideshow-container" id="slide" style="display:none;">
                         <div class="modal-slide-content">
-                            <div class="mySlides fade">
-                                <div class="numbertext"><?php echo ($index + 1) . ' / ' . count($result1['image_path']); ?></div>
-                                <img src="<?php echo htmlspecialchars($res_img); ?>" style="max-width: 100%; height: auto;">
-                                <div class="text">Caption Text</div>
-                            </div>
+                            <?php
+                            // Boucle pour générer les slides
+                            foreach ($results as $index => $result) {
+                                $image = $result['image_path'];
+                                echo '
+                                <div class="mySlides fade">
+                                    <div class="numbertext">' . ($index + 1) . ' / ' . count($results) . '</div>
+                                    <img src="' . $image . '" style="max-width:500px; max-height:500px;">
+                                    <div class="text">Caption ' . ($index + 1) . '</div>
+                                </div>';
+                            }
+                            ?>
+
+                            <!-- Boutons précédent/suivant -->
                             <a class="prev" onclick="plusSlides(-1)">❮</a>
                             <a class="next" onclick="plusSlides(1)">❯</a>
 
-                            <br>
-
+                            <!-- Points indicateurs -->
                             <div style="text-align:center">
-                                <?php for ($i = 1; $i <= count($result1['image_path']); $i++) { ?>
-                                    <span class="dot" onclick="currentSlide(<?php echo $i; ?>)"></span>
-                                <?php } ?>
+                                <?php
+                                // Boucle pour générer les points indicateurs
+                                foreach ($results as $index => $result) {
+                                    echo '<span class="dot" onclick="currentSlide(' . ($index + 1) . ')"></span>';
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
-                    <?php } ?>
-
                 </td>
             </tr>
-            <?php //endforeach; 
-            } ?>
+            <?php endforeach; ?>
+            <!-- Ajouter d'autres lignes pour chaque Produit -->
         </tbody>
-                        
-        <!--<tbody>
-            <?php //foreach ($results as $result): 
-                for($i = 0; $i < count($results); $i++){
-                    $result = $results[$i];
-                    $result1 = $results1[$i];
-                $query = "SELECT utilisateur_id FROM Tournee WHERE code = :code";
-                $stmt = $db->prepare($query);
-                $stmt->bindParam(":code",$result['codeTournee']); 
-                $stmt->execute();
-                $users_id = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                echo"<pre>";
-                 //var_dump($users_id);
-                echo"</pre>";
-            ?>
-            <tr onclick="openModalSpecificMagasin('<?php echo htmlspecialchars($result['codeTournee']); ?>')">
-                <td><?php echo htmlspecialchars($result['id_visite']); ?></td>
-                <td><?php echo  htmlspecialchars($result['codeTournee']); ?></td>
-                <td><?php echo  htmlspecialchars($result['ville']); ?></td>
-                <td>
-                    <?php
-                        $magasinName = $magasin->getNameMagasin($result["magasin_id"]);
-                        echo htmlspecialchars($magasinName); 
-                    ?>
-                </td>
-                <td><?php
-                        $name = $utilisateur->getNameCom($users_id[0]['utilisateur_id']);
-                        if($name){
-                            echo $name[0]['nom']." ".$name[0]['prenom'];
-                        }
-                    ?>
-                 </td>
-            </tr>
-            
-                <div id="productModal" class="modal" style="width:100%; min-height:100vh; border-radius:0">
-                     <div id="scrolly">
-                        <div class="modal-content"style="width:98%; min-height:100vh">
-                                <span class="close-button" onclick="closeModal()">&times;</span>
-                                <?php 
-                                //echo"<pre>";
-                                    var_dump(value: $result);
-                                //echo"</pre>";
-                                ?>
-                        </div>  
-                    </div>
-                </div>
-
-            <?php //endforeach;
-            } ?>
-        </tbody> -->
-    </table>
+        </table>
     </div>
     </div>
 </div>
 
-    
 
-</div>
+<button id="addButton"></button>
+
 <?php include_once("../includes/footer.php");?>

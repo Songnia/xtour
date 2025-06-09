@@ -1,3 +1,4 @@
+<link rel="icon" type="image/png" sizes="32x32" href="Visimags-carre1.png">
 <?php $titre = "Tournées"; 
     $namePage = "tournee-res-com.php";
 
@@ -13,16 +14,21 @@ switch($_SESSION['role']) {/*'Admin', 'Commercial', 'responsable_commercia...	*/
         include("../includes/sidebar-mobile-com.php");
 }
 $id_utilisateur = $_SESSION['id_utilisateur'];
+//echo $id_utilisateur;
 // Insérer le header
 include("../includes/header.php");
 
 // Insérer la Sidebar commercial
 include_once("../includes/classes/Tournee.php");
 include_once("../includes/classes/Magasin.php");
+include_once("../includes/classes/User.php");
 include_once("../includes/classes/Database.php");
 
 $database = new Database();
 $db = $database->getConnection();
+
+$utilisateur = new Utilisateur($db);
+
 $tournee = new Tour($db);
 
 
@@ -69,22 +75,25 @@ $res = $utilisateur->getCommerciauxByResponsable($id_utilisateur);
     $stmt = $db->prepare($query);
     $stmt->execute();
     $tournees = $stmt->fetchAll(PDO::FETCH_ASSOC);    
+    echo "<pre>";
+    /*var_dump($tournees[0]);  // Affiche l'objet Tournee avec ses propriétés
+    echo"-----------------------------<br>";*/
+    //var_dump($tournees);
+echo "</pre>";
 ?>
-
-        <div class="table-container" id="tournee-actuel">
+            <div class="table-container" id="tournee-actuel">
                     <h3 style="display:inline" >Tournée <?php echo $tournees[0]['code'] ." ".$commercial['nom']." ".$commercial['prenom']; ?></h3>
                     <div class="toolbar">
                     <div class="heartool">
-                    <div>
-                        <button class="btn btn-green" onclick="openModalAddTour('<?php echo $tournees[0]['code']; ?>')">Ajouter un magasin</button>
-                        <button class="btn btn-green" onclick="openModalSetStatutTournee('<?php echo $tournees[0]['code']; ?>')" >Valider</button>
-                    </div>
-                    <span>
+                        <?php $statut = $tournees[0]['statut'];?>
+                        <button class=" btn <?php echo ($statut == 1) ? 'btn-green' : 'btn-yellow'; ?>" style="padding: 10px 60px;" onclick="openModalSetStatutTournee('<?php echo $tournees[0]['code']; ?>')"  >Valider</button>
+                        <button class="btn btn-yellow" onclick="openModalAddTour('<?php echo $tournees[0]['code']; ?>')">Ajouter un magasin</button>
+                    <!--<span>
                     <?php
-                                $statut = $tournees[0]['statut'];
+                               /* $statut = $tournees[0]['statut'];
                                 switch($statut){
                                     case 0: $html = "<span style='margin:5px; color:red;font-style:italic; border:1px solid red; padding:5px' >";
-                                                    echo $html."En attente </span>";
+                                                    //echo $html."En attente </span>";
                                                     break;
                                     case 1: $html = "<span style='margin:5px; color:green; border:1px solid green; padding:5px' >";
                                                     echo $html."Valider </span>";
@@ -93,13 +102,14 @@ $res = $utilisateur->getCommerciauxByResponsable($id_utilisateur);
                                                     echo $html."Effectuer </span>";
                                                     break;
                                     default: 
-                                            echo"En attente";
-                                }                            
+                                            //echo"En attente";
+                                } */                           
                             ?>
-                    </span>
+                    </span> -->
                         
                     </div>
                     </div>
+                    <div class="container-scroll">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -131,23 +141,27 @@ $res = $utilisateur->getCommerciauxByResponsable($id_utilisateur);
                                 <!-- Repeat rows as needed -->
                             </tbody>
                         </table>
+                    </div>   
+                    </div>
         </div>
+
     
         <?php foreach ($tournees as $tournee): ?>
                 <div class="table-container histo">
                         <h3 style="display:inline" >Tournée <?php echo $tournee['code']." ".$commercial['nom']." ".$commercial['prenom']; ?></h3>
                         <div class="toolbar">
                             <div class="heartool">
-                                <div>
+                                
                                     <button class="btn btn-green" onclick="openModalAddTour('<?php echo $tournee['code']; ?>')">Ajouter un magasin</button>
-                                    <button class=" btn btn-green" onclick="openModalSetStatutTournee('<?php echo $tournee['code']; ?>')">Valider</button>
-                                </div>
-                                <span>
+                                    <?php $statut = $tournee['statut'];?>
+                                     <button class=" btn <?php echo ($statut == 1) ? 'btn-green' : 'btn-yellow'; ?>" style="padding: 10px 60px;" onclick="openModalSetStatutTournee('<?php echo $tournees[0]['code']; ?>')"  >Valider</button>
+                                
+                               <!-- <span>
                                 <?php
-                                    $statut = $tournee['statut'];
+                                    /*$statut = $tournee['statut'];
                                     switch($statut){
                                         case 0: $html = "<span style='margin:5px; color:red;font-style:italic; border:1px solid red; padding:5px' >";
-                                        echo $html."En attente </span>";
+                                        //echo $html."En attente </span>";
                                         break;
                                         case 1: $html = "<span style='margin:5px; color:green; border:1px solid green; padding:5px' >";
                                                         echo $html."Valider </span>";
@@ -156,12 +170,13 @@ $res = $utilisateur->getCommerciauxByResponsable($id_utilisateur);
                                                         echo $html."Effectuer </span>";
                                                         break;
                                         default: 
-                                                echo"En attente";
-                                    }                  
+                                                //echo"En attente";
+                                    }  */                
                             ?>
-                                </span>
+                                </span>-->
                             </div>
                         </div>
+                        <div class="container-scroll">
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -197,7 +212,9 @@ $res = $utilisateur->getCommerciauxByResponsable($id_utilisateur);
                                 </tbody>
                             </table>
                         </div>
-                </div>
+            </div>
+
+            </div>
         <?php endforeach ?>
 </div>
 <?php } ?>
@@ -351,6 +368,7 @@ $res = $utilisateur->getCommerciauxByResponsable($id_utilisateur);
 <div class="modal" id="ModalStatut">
     <form method="POST" action="../includes/classes/tournee_method/setStatut.php">
         <input type="hidden" name="code_tournee2" id="code_tournee2">
+        <input type="hidden" name="statut" id="statut" value="1">
         <div class="card ">
             <div class="image">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20 7L9.00004 18L3.99994 13" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
